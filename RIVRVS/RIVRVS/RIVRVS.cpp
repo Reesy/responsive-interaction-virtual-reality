@@ -9,7 +9,7 @@
 #include <GL/glew.h>
 #include "Shader.h"
 #include "SerialClass.h"
-
+#include "Leap.h"
 // GLFW
 #include <GLFW/glfw3.h>
 
