@@ -8,13 +8,14 @@
 #define GLEW_STATIC
 #include <GL/glew.h>
 #include "Shader.h"
+#include "SerialClass.h"
 
 // GLFW
 #include <GLFW/glfw3.h>
 
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
+void arduinoTest();
 // The MAIN function, from here we start our application and run our Program/Game loop
 int main()
 {
@@ -68,7 +69,7 @@ int main()
 	glBindVertexArray(0); // Unbind VAO (it's always a good thing to unbind any buffer/array to prevent strange bugs)
 
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
+	
 	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -97,11 +98,30 @@ int main()
 	glfwTerminate();
 	return 0;
 }
+void arduinoTest(){
+	printf("Welcome to the serial test app!\n\n");
 
+	Serial* SP = new Serial("\\\\.\\COM3");    // adjust as needed
+
+	if (SP->IsConnected()){
+		std::cout << "We're connected" << std::endl;
+	}
+	else{
+		std::cout << "Failed to connect" << std::endl;
+	}
+
+	SP->WriteData("3", 256);
+
+
+};
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
 
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
+		std::cout << "BING" << std::endl;
+		arduinoTest();
+	}
 }
