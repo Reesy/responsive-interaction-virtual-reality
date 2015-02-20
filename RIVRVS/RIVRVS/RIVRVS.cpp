@@ -2,6 +2,7 @@
 
 
 #include "stdafx.h"
+#include <iostream>
 //using namespace std;
 
 // GLEW
@@ -12,13 +13,39 @@
 #include "Leap.h"
 // GLFW
 #include <GLFW/glfw3.h>
+#include <SOIL/SOIL.h>
 
+using namespace Leap;
 // Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void arduinoTest();
+void leapTest();
+
+
+
+
+
+class SampleListener : public Leap::Listener {
+public:
+	virtual void onConnect(const Leap::Controller&);
+	virtual void onFrame(const Leap::Controller&);
+};
+
+void SampleListener::onConnect(const Leap::Controller& controller) {
+	std::cout << "Connected" << std::endl;
+}
+
+void SampleListener::onFrame(const Leap::Controller& controller) {
+	//std::cout << "Frame available" << std::endl;
+}
+SampleListener listener;
+
+Controller controller;
 // The MAIN function, from here we start our application and run our Program/Game loop
 int main()
 {
+
+
 	// Init GLFW
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
@@ -70,6 +97,9 @@ int main()
 
 	// glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	
+
+	controller.setPolicy(Leap::Controller::POLICY_IMAGES);
+	controller.addListener(listener);
 	// Game loop
 	while (!glfwWindowShouldClose(window))
 	{
@@ -113,7 +143,25 @@ void arduinoTest(){
 	SP->WriteData("3", 256);
 
 
-};
+}
+
+void leapTest(){
+
+	Frame frame = controller.frame();
+
+	ImageList images = frame.images();
+
+	Image image = images[0];
+
+	const unsigned char* image_buffer = image.data();
+//	std::cout << "Image" << 0 << " : " << image.width() << std::endl;
+	std::cout << image << std::endl;
+	if (image.width() > 1){
+		std::cout << "width : " << image.width() << "  height: " << image.height() << std::endl;
+		SOIL_save_image("TestImage.bmp",1, image.width(), image.height(),1, image_buffer);
+	}
+
+}
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
@@ -121,7 +169,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, GL_TRUE);
 	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-		std::cout << "BING" << std::endl;
-		arduinoTest();
+		
+		//arduinoTest();
+		leapTest();
+	}
+	if (key == GLFW_KEY_M && action == GLFW_PRESS){
+
 	}
 }
