@@ -265,12 +265,19 @@ void LeapCamera::update(){
 		if (left.width() > 0) {
 			glBindTexture(GL_TEXTURE_2D, left_texture);
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RED, left.width(), left.height(), 0, GL_RED, GL_UNSIGNED_BYTE, left.data());
-			const unsigned char* intensities = left.data();
-			std::cout << (int)intensities[0];
+		
 		
 		}
 	
 	}
+    
+    HandList hands = frame.hands();
+    
+    Hand firstHand = hands[0];
+    
+    Vector position = firstHand.palmPosition();
+    
+    std::cout << "Position of detected hand: " << position << std::endl;
 }
 
 void LeapCamera::CreateTestImage(){
