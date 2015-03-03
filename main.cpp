@@ -50,6 +50,7 @@ void render();
 int main()
 {
     Controller controller;
+
     
     // Init GLFW
     glfwInit();
@@ -83,7 +84,7 @@ int main()
     
     
     // Build and compile our shader program
-    Shader ourShader("VertexShader.vert", "FragmentShader.frag");
+    Shader ourShader("/Users/JRees/Documents/workspace/RIVR/mainVertShader.vert", "/Users/JRees/Documents/workspace/RIVR/mainFragShader.frag");
     
     
     
@@ -134,7 +135,7 @@ int main()
     
     glm::vec3 cubePositions[] = {
         glm::vec3( 0.0f,  0.0f,  0.0f),
-       
+        glm::vec3(1, 1, 2)
     };
     
     
@@ -262,7 +263,7 @@ int main()
         
         // Draw container
         glBindVertexArray(VAO);
-        for(GLuint i = 0; i < 1; i++)
+        for(GLuint i = 0; i < 2; i++)
         {
             glm::mat4 model;
             model = glm::translate(model, cubePositions[i]);
@@ -301,6 +302,16 @@ void leapTest(){
     
 }
 
+glm::vec3 normalise(glm::vec3 inputVector){
+    
+    glm::vec3 outputVector;
+    
+    
+    inputVector.x;
+    
+    
+    return outputVector;
+}
 
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)

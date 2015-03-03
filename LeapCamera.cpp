@@ -10,7 +10,7 @@
 #include <SOIL.h>
 
 // Other includes
-#include "Shader_camera.h"
+#include "Shader.h"
 #include <GLM/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -39,6 +39,7 @@ void SampleListener::onFrame(const Controller& controller) {
 
 SampleListener listener;
 Controller controller;
+InteractionBox leapBox;
 ImageList images;
 Image LeftCam;
 Image RightCam;
@@ -66,6 +67,15 @@ LeapCamera::~LeapCamera(){
 
 
 }
+Vector leapToWorld(Vector leapPoint, InteractionBox iBox)
+{
+    leapPoint.z *= -1.0; //right-hand to left-hand rule
+    Vector normalized = iBox.normalizePoint(leapPoint, false);
+    normalized += Vector(0.5, 0, 0.5); //recenter origin
+    return normalized * 100.0; //scale
+}
+
+
 void LeapCamera::run(){
 		// Init GLFW
 		glfwInit();
@@ -88,7 +98,7 @@ void LeapCamera::run(){
 		glewInit();
 
 		// Build and compile our shader program
-		Shader ourShader("VertexShader.vert", "FragmentShader.frag");
+		Shader ourShader("/Users/JRees/Documents/workspace/RIVR/VertexShader.vert", "/Users/JRees/Documents/workspace/RIVR/FragmentShader.frag");
 
 		// Set up vertex data (and buffer(s)) and attribute pointers
 		GLfloat left_eye_verticies[] = {
@@ -277,8 +287,16 @@ void LeapCamera::update(){
     
     Vector position = firstHand.palmPosition();
     
-    std::cout << "Position of detected hand: " << position << std::endl;
+    InteractionBox mybox = controller.frame().interactionBox();
+    
+    Vector normalisedPosition = leapToWorld(position, mybox);
+    
+    
+  //  std::cout << "Position of detected hand: " << position << std::endl;
+    std::cout << "Normalised position: " << normalisedPosition << std::endl;
 }
+
+
 
 void LeapCamera::CreateTestImage(){
 

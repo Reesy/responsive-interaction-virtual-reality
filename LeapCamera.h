@@ -1,7 +1,7 @@
 #ifndef __LeapCamera_H__
 #define __LeapCamera_H__
 
-
+#include <LEAP/Leap.h>
 
 class LeapCamera{
 
@@ -16,7 +16,7 @@ public:
 	void render();
 	void update();
 	void CreateTestImage();
-
+   
 
 
 };
