@@ -1,6 +1,14 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+
+/****************************************************
+ **          Code found on learnopengl.com
+ **
+ **
+ ****************************************************/
+
+
 #include <string>
 #include <fstream>
 #include <sstream>

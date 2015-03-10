@@ -287,6 +287,7 @@ void LeapCamera::update(){
     
     Vector position = firstHand.palmPosition();
     
+    
     InteractionBox mybox = controller.frame().interactionBox();
     
     Vector normalisedPosition = leapToWorld(position, mybox);
