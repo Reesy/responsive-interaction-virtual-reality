@@ -10,7 +10,7 @@
 #define MODEL_H
 
 #include <GL/glew.h>
-
+#include <SOIL.h>
 class Model
 {
 public:
@@ -20,7 +20,9 @@ public:
     // Generates texture from image data
     void Draw();
     void LoadImage();
- 
+    
+    
+    
 };
 
 #endif

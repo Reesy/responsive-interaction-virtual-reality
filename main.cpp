@@ -20,14 +20,11 @@
 #include "TextureWrapper.h"
 //#include "Model.h"
 
-
 using namespace Leap;
 
-// Function prototypes
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 
 void leapTest();
-// Window dimensions
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 class SampleListener : public Listener {
@@ -113,20 +110,17 @@ int main()
     glewExperimental = GL_TRUE;
     // Initialize GLEW to setup the OpenGL Function pointers
     glewInit();
-    
     glEnable(GL_DEPTH_TEST);
     
     int windowWidth, windowHeight;
-    glfwGetFramebufferSize(window, &windowWidth, &windowHeight); // Mac specific, used for fixing normalised device co-ordiates
+    glfwGetFramebufferSize(window, &windowWidth, &windowHeight); // Mac specific, used for fixing NDC
     
     // Define the viewport dimensions
     glViewport(0, 0, windowWidth, windowHeight);
     
-    
     // Build and compile our shader program
-    Shader ourShader("/Users/JRees/Documents/workspace/glfwTest/VertexShader.vert", "/Users/JRees/Documents/workspace/glfwTest/FragmentShader.frag");
+    Shader ourShader("Resources/VertexShader.vert", "Resources/FragmentShader.frag");
 
-    
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
@@ -192,10 +186,7 @@ int main()
     };
     
     
-    glm::vec3 letterPositions[] = {
-        glm::vec3(0.0f, 0.0f, -2.0f),
-        glm::vec3(1.0f, 1.0f, 1.0f),
-    };
+
     
     
     GLuint VBOs[2], VAOs[2];
@@ -235,25 +226,17 @@ int main()
 
     int width, height;
     
-    unsigned char* image = SOIL_load_image("/Users/JRees/Documents/workspace/glfwTest/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    unsigned char* image = SOIL_load_image("Resources/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
     SOIL_free_image_data(image);
-    glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 
     TextureWrapper myTexture;
     myTexture.Generate(width, height, image);
 
-    image = SOIL_load_image("/Users/JRees/Documents/workspace/glfwTest/awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
-    glGenerateMipmap(GL_TEXTURE_2D);
+    image = SOIL_load_image("Resources/awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
     SOIL_free_image_data(image);
-    glBindTexture(GL_TEXTURE_2D, 0); // Unbind texture when done, so we won't accidentily mess up our texture.
 
     TextureWrapper myTexture2;
     myTexture2.Generate(width, height, image);
-    
-
     
     viewX = 0.0;
     viewY = 0.0;
@@ -266,11 +249,8 @@ int main()
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
-        // Check if any events have been activiated (key pressed, mouse moved etc.) and call corresponding response functions
-        glfwPollEvents();
         
-        // Render
-        // Clear the colorbuffer
+        glfwPollEvents();
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -285,16 +265,11 @@ int main()
         myTexture2.Bind();
         glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture2"), 1);
         
-        
         // Activate shader
         ourShader.Use();
         
         GLint mixUniformLocation = glGetUniformLocation(ourShader.Program, "mixVal");
         glUniform1f(mixUniformLocation, mixAmount);
-        
-        
-        
-        
         
         //resets matricies to identity.
         glm::mat4 trans;
@@ -310,8 +285,6 @@ int main()
         GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
         GLuint transformLoc = glGetUniformLocation(ourShader.Program, "transform");
         
-        
-        
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
         leapTest();
         
@@ -322,28 +295,19 @@ int main()
             glm::mat4 model; //resets model matrix to identify matrix
             model = glm::translate(model, cubePositions[i]);
             
-            if(i == 0){
-                
+            if(i == 0){  // Translations done to palm
                 model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
-                
                 model = glm::rotate(model,  -yaw, glm::vec3(0, 1, 0));
                 model = glm::rotate(model, roll , glm::vec3(0, 0, 1));
                 model = glm::rotate(model, pitch, glm::vec3(1, 0, 0));
-                
-                
                 model = glm::scale(model, glm::vec3(1, 0.25, 1));
-                
-                
-            }else if(i == 1){
-                
+            }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
-                
                 model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
             }
-            else{
+            else{  //Translations done to other fingers
                 model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
                 model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
-                
             }
             
             //Send uniforms to shader
@@ -354,11 +318,7 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
         glBindVertexArray(0);
-        
-   
-   
-        
-        
+
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
@@ -417,52 +377,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-        //arduinoTest();
-        leapTest();
+      
     }
-    if(key == GLFW_KEY_SPACE && action == GLFW_PRESS && CameraMove == true){
-        CameraMove = false;
-    }
-    else if(key == GLFW_KEY_SPACE && action == GLFW_PRESS && CameraMove == false){
-        CameraMove = true;
-    }
-    
-    if (CameraMove == true){
-        if (key == GLFW_KEY_UP && action == GLFW_PRESS){
-            viewY -= 0.1;
-        }
-        if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
-            viewY += 0.1;
-        }
-        if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-            viewX += 0.1;
-        }
-        if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
-            viewX -= 0.1;
-        }
-    }else if(CameraMove == false){
-        if (key == GLFW_KEY_UP && action == GLFW_PRESS){
-            modelY -= 0.1;
-            
-        }
-        if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
-            modelY += 0.1;
-            
-        }
-        if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-            modelX += 0.1;
-            
-        }
-        if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
-            modelX -= 0.1;
-        }
-        
-    }
-    
-    if (key == GLFW_KEY_COMMA && action == GLFW_PRESS){
-        mixAmount += 0.1;
-    }
-    if (key == GLFW_KEY_PERIOD && action == GLFW_PRESS){
-        mixAmount -= 0.1;
-    }
+
 }
