@@ -4,17 +4,18 @@
  **
  **
  ****************************************************/
-
 #include <iostream>
-#include "TextureWrapper.h"
 
-TextureWrapper::TextureWrapper()
+#include "TextureLoader.h"
+
+
+TextureLoader::TextureLoader()
 : Width(0), Height(0), Internal_Format(GL_RGB), Image_Format(GL_RGB), Wrap_S(GL_REPEAT), Wrap_T(GL_REPEAT), Filter_Min(GL_LINEAR), Filter_Max(GL_LINEAR)
 {
     glGenTextures(1, &this->ID);
 }
 
-void TextureWrapper::Generate(GLuint width, GLuint height, unsigned char* data)
+void TextureLoader::Generate(GLuint width, GLuint height, unsigned char* data)
 {
     this->Width = width;
     this->Height = height;
@@ -26,12 +27,11 @@ void TextureWrapper::Generate(GLuint width, GLuint height, unsigned char* data)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, this->Wrap_T);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, this->Filter_Min);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, this->Filter_Max);
-    glGenerateMipmap(GL_TEXTURE_2D);
     // Unbind texture
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void TextureWrapper::Bind() const
+void TextureLoader::Bind() const
 {
     glBindTexture(GL_TEXTURE_2D, this->ID);
 }

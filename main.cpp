@@ -15,7 +15,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <LEAP/Leap.h>
 #include <LEAP/LeapMath.h>
-#include "TextureWrapper.h"
+#include "TextureLoader.h"
 #include "Model.h"
 
 //#include "Model.h"
@@ -231,13 +231,13 @@ int main()
     unsigned char* image = SOIL_load_image("Resources/Textures/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
     SOIL_free_image_data(image);
 
-    TextureWrapper myTexture;
+    TextureLoader myTexture;
     myTexture.Generate(width, height, image);
 
     image = SOIL_load_image("Resources/Textures/awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
     SOIL_free_image_data(image);
 
-    TextureWrapper myTexture2;
+    TextureLoader myTexture2;
     myTexture2.Generate(width, height, image);
     
     viewX = 0.0;

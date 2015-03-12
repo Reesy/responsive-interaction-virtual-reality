@@ -9,7 +9,7 @@
 
 #include <GL/glew.h>
 
-class TextureWrapper
+class TextureLoader
 {
 public:
     // Holds the ID of the texture object, used for all texture operations to reference to this particlar texture
@@ -25,7 +25,7 @@ public:
     GLuint Filter_Min; // Filtering mode if texture pixels < screen pixels
     GLuint Filter_Max; // Filtering mode if texture pixels > screen pixels
     // Constructor (sets default texture modes)
-    TextureWrapper();
+    TextureLoader();
     // Generates texture from image data
     void Generate(GLuint width, GLuint height, unsigned char* data);
     // Binds the texture as the current active GL_TEXTURE_2D texture object
