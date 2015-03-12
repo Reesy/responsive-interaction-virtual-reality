@@ -1,5 +1,3 @@
-
-
 // GLEW
 #define GLEW_STATIC
 #include <GL/glew.h>
@@ -18,6 +16,8 @@
 #include <LEAP/Leap.h>
 #include <LEAP/LeapMath.h>
 #include "TextureWrapper.h"
+#include "Model.h"
+
 //#include "Model.h"
 
 using namespace Leap;
@@ -119,8 +119,10 @@ int main()
     glViewport(0, 0, windowWidth, windowHeight);
     
     // Build and compile our shader program
-    Shader ourShader("Resources/VertexShader.vert", "Resources/FragmentShader.frag");
+    Shader ourShader("Resources/Shaders/VertexShader.vert", "Resources/Shaders/FragmentShader.frag");
 
+    
+    Model suitModel("Resources/Models/nanosuit/nanosuit.obj");
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
@@ -226,13 +228,13 @@ int main()
 
     int width, height;
     
-    unsigned char* image = SOIL_load_image("Resources/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+    unsigned char* image = SOIL_load_image("Resources/Textures/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
     SOIL_free_image_data(image);
 
     TextureWrapper myTexture;
     myTexture.Generate(width, height, image);
 
-    image = SOIL_load_image("Resources/awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
+    image = SOIL_load_image("Resources/Textures/awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
     SOIL_free_image_data(image);
 
     TextureWrapper myTexture2;
@@ -318,7 +320,9 @@ int main()
             glDrawArrays(GL_TRIANGLES, 0, 36);
         }
         glBindVertexArray(0);
-
+        
+        
+        suitModel.Draw(ourShader);
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
