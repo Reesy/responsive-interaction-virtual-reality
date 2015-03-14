@@ -13,8 +13,13 @@
 class KeyBoardModelLoader{
 private:
     GLuint VAO, VBO;
-
-    
+    GLint modelLocation;
+    GLint viewLocation;
+    GLint projectionLocation;
+   // glm::mat4 model;
+    glm::mat4 model;
+    glm::mat4 view;
+    glm::mat4 projection;
     void generate_buffers()
     {
         GLfloat vertices[] = {
@@ -45,7 +50,12 @@ private:
         
         glBindVertexArray(0); // Unbind VAO
     }
-    void handle_shaders(Shader testShader){
+    void handle_shaders(Shader ourShader){
+        
+        //Define camera uniforms for shader.
+        modelLocation = glGetUniformLocation(ourShader.Program, "model");
+        viewLocation = glGetUniformLocation(ourShader.Program, "view");
+        projectionLocation = glGetUniformLocation(ourShader.Program, "projection");
         
         
         
@@ -56,18 +66,25 @@ private:
     
     
 public:
-   // Shader *myShader;
     
     
     KeyBoardModelLoader(GLfloat vertices[], Shader myShader){
         this->generate_buffers();
         this->handle_shaders(myShader);
-    
+        
+        
+        projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
     }
     
-    
-    
     void Draw(){
+        glm::mat4 model;
+        model = glm::translate(model, glm::vec3(0, 0, -6));
+        model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
+        
+        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+
         
         glBindVertexArray(this->VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
