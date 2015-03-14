@@ -1,5 +1,6 @@
 // GLEW
 #define GLEW_STATIC
+
 #include <GL/glew.h>
 
 // GLFW
@@ -13,10 +14,14 @@
 #include <GLM/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <GLM/gtx/quaternion.hpp>
 #include <LEAP/Leap.h>
 #include <LEAP/LeapMath.h>
 #include "TextureLoader.h"
 #include "Model.h"
+#include "CustomModelLoader.h"
+#include "KeyboardModelLoader.h"
 
 //#include "Model.h"
 
@@ -26,6 +31,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 
 void leapTest();
 const GLuint WIDTH = 800, HEIGHT = 600;
+
+
+
+glm::mat4 rotationbyquat(float x, float y, float z);
+
 
 class SampleListener : public Listener {
 public:
@@ -62,7 +72,6 @@ float viewZ;
 float pitch;
 float yaw;
 float roll;
-
 
 float modelX;
 float modelY;
@@ -120,9 +129,12 @@ int main()
     
     // Build and compile our shader program
     Shader ourShader("Resources/Shaders/VertexShader.vert", "Resources/Shaders/FragmentShader.frag");
-
-    
+   
+    //Loads a model
     Model suitModel("Resources/Models/nanosuit/nanosuit.obj");
+    
+  //  Model tempModel("Resources/Models/test/test.obj");
+    
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
@@ -167,6 +179,9 @@ int main()
         -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
     };
+
+    
+  
     
     glm::vec3 cubePositions[] = {
         glm::vec3( 0.0f,  0.0f,  0.0f), //hand
@@ -177,54 +192,13 @@ int main()
         glm::vec3( 1.0f,  0.0f, -0.80f), //pinky
         
     };
-    
-    GLfloat letterVerticies[] = {
-        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
-        0.5f, -0.5f, -0.5f,    1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,   0.0f, 0.0f
-    };
-    
-    
 
     
-    
-    GLuint VBOs[2], VAOs[2];
-    glGenVertexArrays(2, VAOs);
-    glGenBuffers(2, VBOs);
-    
-    
+    CustomModelLoader custom(vertices, ourShader);
+    KeyBoardModelLoader keyboard(vertices, ourShader);
    
     
-    //Crate-cube
-    glBindVertexArray(VAOs[0]);
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[0]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-    // TexCoord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
-    
-    glBindVertexArray(0); // Unbind VAO
-    
-    
-    //letters
-    glBindVertexArray(VAOs[1]);
-    glBindBuffer(GL_ARRAY_BUFFER, VBOs[1]);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(letterVerticies), letterVerticies, GL_STATIC_DRAW);
-    // Position attribute
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)0);
-    glEnableVertexAttribArray(0);
-    // TexCoord attribute
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(GLfloat), (GLvoid*)(3 * sizeof(GLfloat)));
-    glEnableVertexAttribArray(2);
-    
-    glBindVertexArray(0); // Unbind VAO
-    
+
 
     int width, height;
     
@@ -240,6 +214,8 @@ int main()
     TextureLoader myTexture2;
     myTexture2.Generate(width, height, image);
     
+ 
+    
     viewX = 0.0;
     viewY = 0.0;
     viewZ = -3.0;
@@ -247,6 +223,11 @@ int main()
     modelY = 0.0;
     modelZ = 0.0;
     
+    // Creates an identity quaternion (no rotation)
+    glm::quat MyQuaternion;
+    
+
+   
     
     // Game loop
     while (!glfwWindowShouldClose(window))
@@ -263,15 +244,10 @@ int main()
         myTexture.Bind();
         glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture1"), 0);
         
-        glActiveTexture(GL_TEXTURE1);
-        myTexture2.Bind();
-        glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture2"), 1);
         
         // Activate shader
         ourShader.Use();
-        
-        GLint mixUniformLocation = glGetUniformLocation(ourShader.Program, "mixVal");
-        glUniform1f(mixUniformLocation, mixAmount);
+     
         
         //resets matricies to identity.
         glm::mat4 trans;
@@ -289,9 +265,9 @@ int main()
         
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
         leapTest();
-        
+
         // Draw container
-        glBindVertexArray(VAOs[0]);
+      
         for(GLuint i = 0; i < 6; i++)
         {
             glm::mat4 model; //resets model matrix to identify matrix
@@ -299,9 +275,12 @@ int main()
             
             if(i == 0){  // Translations done to palm
                 model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
-                model = glm::rotate(model,  -yaw, glm::vec3(0, 1, 0));
-                model = glm::rotate(model, roll , glm::vec3(0, 0, 1));
-                model = glm::rotate(model, pitch, glm::vec3(1, 0, 0));
+                model = model * rotationbyquat(pitch, -yaw, roll);
+                                        //model = glm::rotate(rotationbyquat(pitch, yaw, roll));
+                                        //model = glm::rotate(model, rotationbyquat(pitch, yaw, roll));
+                                        //model = glm::rotate(model,  -yaw, glm::vec3(0, 1, 0));
+                                        //model = glm::rotate(model, roll , glm::vec3(0, 0, 1));
+                                        //model = glm::rotate(model, pitch, glm::vec3(1, 0, 0));
                 model = glm::scale(model, glm::vec3(1, 0.25, 1));
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
@@ -317,12 +296,26 @@ int main()
             glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
             glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
             glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-            glDrawArrays(GL_TRIANGLES, 0, 36);
+            custom.Draw();
+  
+            
         }
-        glBindVertexArray(0);
         
         
-        suitModel.Draw(ourShader);
+        glm::mat4 models;
+        
+        
+        glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(models));
+        glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+        glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+        keyboard.Draw();
+        
+        
+        
+        
+        
+        
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
@@ -365,7 +358,7 @@ void leapTest(){
     yaw = firstHand.direction().yaw();
     roll = firstHand.palmNormal().roll();
     
-    std::cout << pitch << std::endl;
+    
     
     //std::cout << palmNormal << std::endl;
     modelX += palmTranslation.x / 10;
@@ -373,6 +366,20 @@ void leapTest(){
     modelZ += palmTranslation.z / 10;
     
 }
+glm::mat4 rotationbyquat(float x, float y, float z){
+    
+    
+    // Creates an identity quaternion (no rotation)
+    glm::quat MyQuaternion;
+    
+    // Conversion from Euler angles (in radians) to Quaternion
+    glm::vec3 EulerAngles(x, y, z);
+    MyQuaternion = glm::quat(EulerAngles);
+    glm::mat4 rotMat = glm::toMat4(MyQuaternion);
+    
+    return rotMat;
+}
+
 
 
 // Is called whenever a key is pressed/released via GLFW
