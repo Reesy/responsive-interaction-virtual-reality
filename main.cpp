@@ -129,9 +129,10 @@ int main()
     
     // Build and compile our shader program
     Shader ourShader("Resources/Shaders/VertexShader.vert", "Resources/Shaders/FragmentShader.frag");
-   
+    
+    Shader letterShader("Resources/Shaders/KeyVertexShader.vert", "Resources/Shaders/KeyFragmentShader.frag");
     //Loads a model
-    Model suitModel("Resources/Models/nanosuit/nanosuit.obj");
+  //  Model suitModel("Resources/Models/nanosuit/nanosuit.obj");
     
   //  Model tempModel("Resources/Models/test/test.obj");
     
@@ -154,7 +155,7 @@ int main()
 
     
     CustomModelLoader custom(vertices, ourShader);
-    KeyBoardModelLoader keyboard(vertices, ourShader);
+    KeyBoardModelLoader keyboard(vertices, letterShader);
    
     
 

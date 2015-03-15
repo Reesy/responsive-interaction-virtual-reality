@@ -9,6 +9,13 @@
 #ifndef RIVR_KeyboardModelLoader_h
 #define RIVR_KeyboardModelLoader_h
 #include "Shader.h"
+#include <SOIL.h>
+struct keys{
+    std::string key;
+    bool collide;
+    
+};
+
 
 class KeyBoardModelLoader{
 private:
@@ -20,6 +27,9 @@ private:
     glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
+    
+    TextureLoader letterA;
+    
     void generate_buffers()
     {
         GLfloat vertices[] = {
@@ -49,6 +59,21 @@ private:
         glEnableVertexAttribArray(2);
         
         glBindVertexArray(0); // Unbind VAO
+        
+        
+        int width, height;
+        
+        unsigned char* image = SOIL_load_image("Resources/Textures/letterA.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+        SOIL_free_image_data(image);
+        
+      //  TextureLoader letterA;
+        letterA.Generate(width, height, image);
+        
+        
+        
+        
+        
+        
     }
     void handle_shaders(Shader ourShader){
         
@@ -77,6 +102,7 @@ public:
     }
     
     void Draw(){
+        
         glm::mat4 model;
         model = glm::translate(model, glm::vec3(0, 0, -6));
         model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
@@ -85,6 +111,7 @@ public:
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
+        letterA.Bind();
         
         glBindVertexArray(this->VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
