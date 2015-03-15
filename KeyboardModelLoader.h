@@ -128,13 +128,15 @@ public:
         std::string filePath;
         std::string currentLetter;
         
-        
+   /*
         for(int i = 97; i < 123; i++){
-            
+     
             currentLetter = "letter";
             currentLetter.push_back((char)i);
           
         }
+    
+    */
         letterA.Bind();
         
         glm::mat4 model;
@@ -145,11 +147,24 @@ public:
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-        
-        TextureLoader letterC;
         glBindVertexArray(this->VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
+        
+        letterB.Bind();
+        
+        model = glm::translate(model, glm::vec3(1, 0, 0));
+       
+        
+        glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
+        glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
+        glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+        
+        glBindVertexArray(this->VAO);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glBindVertexArray(0);
+        
+        
         
         
     }
