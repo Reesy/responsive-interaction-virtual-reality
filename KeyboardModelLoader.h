@@ -10,9 +10,12 @@
 #define RIVR_KeyboardModelLoader_h
 #include "Shader.h"
 #include <SOIL.h>
+
 struct keys{
-    std::string key;
-    bool collide;
+    int ID;
+    TextureLoader letter;
+    std::string Output;
+    int x, y;
     
 };
 
@@ -27,18 +30,30 @@ private:
     glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
+ 
     
     TextureLoader letterA;
+    TextureLoader letterB;
+    TextureLoader letterC;
+    TextureLoader letterD;
+    TextureLoader letterE;
+    TextureLoader letterF;
+    TextureLoader letterG;
+    TextureLoader letterH;
+    TextureLoader letterI;
+    TextureLoader letterJ;
+    
+    TextureLoader letterX;
     
     void generate_buffers()
     {
         GLfloat vertices[] = {
-            -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
-             0.5f, -0.5f, -0.5f,    1.0f, 0.0f,
-             0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
-             0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
+             0.5f, -0.5f, -0.5f,   1.0f, -0.0f,
+             0.5f,  0.5f, -0.5f,   1.0f, -1.0f,
+             0.5f,  0.5f, -0.5f,   1.0f, -1.0f,
+            -0.5f,  0.5f, -0.5f,   0.0f, -1.0f,
+            -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
             
       
         };
@@ -62,14 +77,22 @@ private:
         
         
         int width, height;
+        unsigned char* image;
         
-        unsigned char* image = SOIL_load_image("Resources/Textures/letterA.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+        
+        //Textues are loaded here.
+        
+        image = SOIL_load_image("Resources/Textures/lettera.png", &width, &height, 0, SOIL_LOAD_RGB);
         SOIL_free_image_data(image);
-        
-      //  TextureLoader letterA;
         letterA.Generate(width, height, image);
+       
+        image = SOIL_load_image("Resources/Textures/letterb.png", &width, &height, 0, SOIL_LOAD_RGB);
+        SOIL_free_image_data(image);
+        letterB.Generate(width, height, image);
         
-        
+        image = SOIL_load_image("Resources/Textures/letterx.png", &width, &height, 0, SOIL_LOAD_RGB);
+        SOIL_free_image_data(image);
+        letterX.Generate(width, height, image);
         
         
         
@@ -83,9 +106,6 @@ private:
         projectionLocation = glGetUniformLocation(ourShader.Program, "projection");
         
         
-        
-        
-        
     }
     
     
@@ -94,6 +114,7 @@ public:
     
     
     KeyBoardModelLoader(GLfloat vertices[], Shader myShader){
+       
         this->generate_buffers();
         this->handle_shaders(myShader);
         
@@ -103,6 +124,19 @@ public:
     
     void Draw(){
         
+        
+        std::string filePath;
+        std::string currentLetter;
+        
+        
+        for(int i = 97; i < 123; i++){
+            
+            currentLetter = "letter";
+            currentLetter.push_back((char)i);
+          
+        }
+        letterA.Bind();
+        
         glm::mat4 model;
         model = glm::translate(model, glm::vec3(0, 0, -6));
         model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
@@ -111,11 +145,13 @@ public:
         glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
 
-        letterA.Bind();
         
+        TextureLoader letterC;
         glBindVertexArray(this->VAO);
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
+        
+        
     }
     
     
