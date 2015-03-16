@@ -10,7 +10,7 @@
 #define RIVR_CustomModelLoader_h
 
 
-class CustomModelLoader{
+class HandModelLoader{
 private:
     GLuint VAO, VBO;
     GLfloat verts[];
@@ -87,7 +87,7 @@ private:
 
 
 public:
-    CustomModelLoader(GLfloat vertices[], Shader shader){
+    HandModelLoader(GLfloat vertices[], Shader shader){
 
         this->generate();
     }

@@ -20,7 +20,7 @@
 #include <LEAP/LeapMath.h>
 #include "TextureLoader.h"
 #include "Model.h"
-#include "CustomModelLoader.h"
+#include "HandModelLoader.h"
 #include "KeyboardModelLoader.h"
 
 //#include "Model.h"
@@ -28,7 +28,7 @@
 using namespace Leap;
 
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-
+void collision_detection();
 void leapTest();
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -131,10 +131,6 @@ int main()
     Shader ourShader("Resources/Shaders/VertexShader.vert", "Resources/Shaders/FragmentShader.frag");
     
     Shader letterShader("Resources/Shaders/KeyVertexShader.vert", "Resources/Shaders/KeyFragmentShader.frag");
-    //Loads a model
-  //  Model suitModel("Resources/Models/nanosuit/nanosuit.obj");
-    
-  //  Model tempModel("Resources/Models/test/test.obj");
     
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
@@ -154,7 +150,7 @@ int main()
     };
 
     
-    CustomModelLoader custom(vertices, ourShader);
+    HandModelLoader custom(vertices, ourShader);
     KeyBoardModelLoader keyboard(vertices, letterShader);
    
     
@@ -227,7 +223,7 @@ int main()
         leapTest();
 
         // Draw container
-      
+        
         for(GLuint i = 0; i < 6; i++)
         {
             glm::mat4 model; //resets model matrix to identify matrix
@@ -250,7 +246,7 @@ int main()
                 model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
                 model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
             }
-            
+         //   std::cout << model[0][0] << std::endl;
             //Send uniforms to shader
             glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
             glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -310,8 +306,6 @@ void leapTest(){
     yaw = firstHand.direction().yaw();
     roll = firstHand.palmNormal().roll();
     
-    
-    
     //std::cout << palmNormal << std::endl;
     modelX += palmTranslation.x / 10;
     modelY += palmTranslation.y / 10;
@@ -332,7 +326,12 @@ glm::mat4 rotationbyquat(float x, float y, float z){
     return rotMat;
 }
 
-
+void collisionDetection(){
+    
+    
+    
+    
+}
 
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
