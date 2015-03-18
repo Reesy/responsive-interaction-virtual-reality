@@ -22,6 +22,8 @@
 #include "Model.h"
 #include "HandModelLoader.h"
 #include "KeyboardModelLoader.h"
+#include "SceneObjects.h"
+
 
 //#include "Model.h"
 
@@ -30,13 +32,14 @@ using namespace Leap;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void collision_detection();
 void leapTest();
+float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 
 
 glm::mat4 rotationbyquat(float x, float y, float z);
 
-
+glm::vec3 properHandposition(Leap::Vector inputCoords);
 class SampleListener : public Listener {
 public:
     virtual void onConnect(const Controller&);
@@ -66,12 +69,23 @@ float viewX;
 float viewY;
 float viewZ;
 
-
-
+glm::vec3 EulerAngles;
+glm::mat4 rotMat;
 
 float pitch;
 float yaw;
 float roll;
+
+
+float testX;
+float testY;
+float testZ;
+
+//used for normalization of leap co-ords into scene co-ords
+int lowerPos = -200;        // leap lower range
+int higherPos = 200;        // leap upper range
+int lowerRange = -1;        //normalized lower range
+int higherRange = 1;        //normalized upper range
 
 float modelX;
 float modelY;
@@ -127,6 +141,10 @@ int main()
     // Define the viewport dimensions
     glViewport(0, 0, windowWidth, windowHeight);
     
+    //initialise hand-palm object.
+    SceneObjects handObj;
+    
+    
     // Build and compile our shader program
     Shader ourShader("Resources/Shaders/VertexShader.vert", "Resources/Shaders/FragmentShader.frag");
     
@@ -136,9 +154,6 @@ int main()
     GLfloat vertices[] = {
          };
 
-    
-  
-    
     glm::vec3 cubePositions[] = {
         glm::vec3( 0.0f,  0.0f,  0.0f), //hand
         glm::vec3(-1.0f,  0.0f, -0.25f), //thumb
@@ -153,9 +168,6 @@ int main()
     HandModelLoader custom(vertices, ourShader);
     KeyBoardModelLoader keyboard(vertices, letterShader);
    
-    
-
-
     int width, height;
     
     unsigned char* image = SOIL_load_image("Resources/Textures/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
@@ -204,7 +216,6 @@ int main()
         // Activate shader
         ourShader.Use();
      
-        
         //resets matricies to identity.
         glm::mat4 trans;
         glm::mat4 model;
@@ -213,7 +224,7 @@ int main()
         
         projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
         
-        //Define camera uniforms for shader.
+        // Define camera uniforms for shader.
         GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
         GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
         GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
@@ -230,7 +241,9 @@ int main()
             model = glm::translate(model, cubePositions[i]);
             
             if(i == 0){  // Translations done to palm
-                model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
+                //model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
+                model = glm::translate(model, glm::vec3(testX, testY, testZ));
+     
                 model = model * rotationbyquat(pitch, -yaw, roll);
                                         //model = glm::rotate(rotationbyquat(pitch, yaw, roll));
                                         //model = glm::rotate(model, rotationbyquat(pitch, yaw, roll));
@@ -253,16 +266,10 @@ int main()
             glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
             glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
             custom.Draw();
-  
             
         }
         
         keyboard.Draw();
-        
-        
-        
-        
-        
         
         // Swap the screen buffers
         glfwSwapBuffers(window);
@@ -294,34 +301,61 @@ void leapTest(){
     
     Hand firstHand = hands[0];
     
+
+   // std::cout << normalized << std::endl;
     palmTranslation = firstHand.translation(previousFrame);
     palmRotation = firstHand.rotationMatrix(previousFrame).toMatrix4x4<glm::mat4>();
     
-    // handRoll = firstHand.rotationAngle(previousFrame);
-    handRoll += firstHand.rotationAngle(previousFrame, Vector(0, 0, 1));
-    
-    palmNormal = firstHand.palmNormal();
-    
+    //used for rotation/orientation of the hand
     pitch = firstHand.direction().pitch();
     yaw = firstHand.direction().yaw();
     roll = firstHand.palmNormal().roll();
     
-    //std::cout << palmNormal << std::endl;
+    
+    testX = properHandposition(firstHand.palmPosition()).x;
+    testY = properHandposition(firstHand.palmPosition()).y;
+    testZ = properHandposition(firstHand.palmPosition()).z;
+    
+    //used for translation of the hand.
     modelX += palmTranslation.x / 10;
     modelY += palmTranslation.y / 10;
     modelZ += palmTranslation.z / 10;
     
+    
+    
+}
+
+glm::vec3 properHandposition(Leap::Vector inputCoords){
+
+    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z) * 10);
+    
+    
+}
+
+float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue){
+    
+    float inValNorm = inputValue - currentRangeA;
+    float aUpper = currentRangeB - currentRangeA;
+    float normPos = inValNorm / aUpper;
+    
+    float bUpperNorm = newRangeB - newRangeA;
+    float bValNorm = normPos * bUpperNorm;
+    
+    return newRangeA + bValNorm;
+    
 }
 glm::mat4 rotationbyquat(float x, float y, float z){
-    
     
     // Creates an identity quaternion (no rotation)
     glm::quat MyQuaternion;
     
     // Conversion from Euler angles (in radians) to Quaternion
-    glm::vec3 EulerAngles(x, y, z);
+    EulerAngles.x = x;
+    EulerAngles.y = y;
+    EulerAngles.z = z;
+
     MyQuaternion = glm::quat(EulerAngles);
-    glm::mat4 rotMat = glm::toMat4(MyQuaternion);
+    rotMat = glm::toMat4(MyQuaternion);
     
     return rotMat;
 }
