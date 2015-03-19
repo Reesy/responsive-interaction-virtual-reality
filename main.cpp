@@ -72,6 +72,7 @@ glm::mat4 rotMat;
 
 float pitch, yaw, roll, handX, handY, handZ;
 float thumbX, thumbY, thumbZ;
+float indexX, indexY, indexZ;
 
 //used for normalization of leap co-ords into scene co-ords
 int lowerPos = -200;        // leap lower range
@@ -143,17 +144,6 @@ int main()
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
          };
-
-    glm::vec3 cubePositions[] = {
-        glm::vec3( 0.0f,  0.0f,  0.0f), //hand
-        glm::vec3(-1.0f,  0.0f, -0.25f), //thumb
-        glm::vec3(-0.5f,  0.0f, -1.0f), //index finger
-        glm::vec3( 0.0f,  0.0f, -1.0f), //middle
-        glm::vec3( 0.5f,  0.0f, -1.0f), //ring finger
-        glm::vec3( 1.0f,  0.0f, -0.80f), //pinky
-        
-    };
-
     
     HandModelLoader custom(vertices, ourShader);
     KeyBoardModelLoader keyboard(vertices, letterShader);
@@ -217,19 +207,16 @@ int main()
         for(GLuint i = 0; i < 6; i++)
         {
             glm::mat4 model; //resets model matrix to identify matrix
-            model = glm::translate(model, cubePositions[i]);
             
             if(i == 0){  // Translations done to palm
                 model = glm::translate(model, glm::vec3(handX, handY, handZ));
                 model = model * rotationbyquat(pitch, -yaw, roll);
-                                        //model = glm::rotate(rotationbyquat(pitch, yaw, roll));
-                                        //model = glm::rotate(model, rotationbyquat(pitch, yaw, roll));
-                                        //model = glm::rotate(model,  -yaw, glm::vec3(0, 1, 0));
-                                        //model = glm::rotate(model, roll , glm::vec3(0, 0, 1));
-                                        //model = glm::rotate(model, pitch, glm::vec3(1, 0, 0));
                 model = glm::scale(model, glm::vec3(1, 0.25, 1));
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, glm::vec3(thumbX, thumbY, thumbZ));
+                model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
+            }else if(i == 2){
+                model = glm::translate(model, glm::vec3(indexX, indexY, indexZ));
                 model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
             }
             else{  //Translations done to other fingers
@@ -286,6 +273,13 @@ void leapTest(){
     thumbX = properHandPosition(firstHand.fingers()[0].tipPosition()).x;
     thumbY = properHandPosition(firstHand.fingers()[0].tipPosition()).y;
     thumbZ = properHandPosition(firstHand.fingers()[0].tipPosition()).z;
+    
+    indexX = properHandPosition(firstHand.fingers()[1].tipPosition()).x;
+    indexY = properHandPosition(firstHand.fingers()[1].tipPosition()).y;
+    indexZ = properHandPosition(firstHand.fingers()[1].tipPosition()).z;
+    
+    
+    
    // std::cout << thumbX << std::endl;
     //std::cout << firstHand.palmPosition().y - 200 << std::endl;
 }
