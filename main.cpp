@@ -35,8 +35,6 @@ void leapTest();
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
-
-
 glm::mat4 rotationbyquat(float x, float y, float z);
 
 glm::vec3 properHandposition(Leap::Vector inputCoords);
@@ -86,6 +84,13 @@ int lowerPos = -200;        // leap lower range
 int higherPos = 200;        // leap upper range
 int lowerRange = -1;        //normalized lower range
 int higherRange = 1;        //normalized upper range
+
+float inValNorm;
+float aUpper;
+float normPos;
+
+float bUpperNorm;
+float bValNorm;
 
 float modelX;
 float modelY;
@@ -182,8 +187,6 @@ int main()
     TextureLoader myTexture2;
     myTexture2.Generate(width, height, image);
     
- 
-    
     viewX = 0.0;
     viewY = 0.0;
     viewZ = -3.0;
@@ -194,24 +197,18 @@ int main()
     // Creates an identity quaternion (no rotation)
     glm::quat MyQuaternion;
     
-
-   
-    
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
-        
         glfwPollEvents();
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
-        
         // Bind Texture
         glActiveTexture(GL_TEXTURE0);
         myTexture.Bind();
         glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture1"), 0);
-        
         
         // Activate shader
         ourShader.Use();
@@ -281,15 +278,8 @@ int main()
 }
 
 void render(){
-    
 }
-
-
 void update(){
-    
-    
-    
-    
 }
 void leapTest(){
     
@@ -301,9 +291,6 @@ void leapTest(){
     
     Hand firstHand = hands[0];
     
-
-   // std::cout << normalized << std::endl;
-    palmTranslation = firstHand.translation(previousFrame);
     palmRotation = firstHand.rotationMatrix(previousFrame).toMatrix4x4<glm::mat4>();
     
     //used for rotation/orientation of the hand
@@ -311,38 +298,32 @@ void leapTest(){
     yaw = firstHand.direction().yaw();
     roll = firstHand.palmNormal().roll();
     
-    
     testX = properHandposition(firstHand.palmPosition()).x;
     testY = properHandposition(firstHand.palmPosition()).y;
     testZ = properHandposition(firstHand.palmPosition()).z;
+    
+    std::cout << firstHand.palmPosition().y - 200 << std::endl;
+    
     
     //used for translation of the hand.
     modelX += palmTranslation.x / 10;
     modelY += palmTranslation.y / 10;
     modelZ += palmTranslation.z / 10;
-    
-    
-    
 }
 
 glm::vec3 properHandposition(Leap::Vector inputCoords){
-
-    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z) * 10);
-    
-    
+    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z) * 10);
 }
 
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue){
+    inValNorm = inputValue - currentRangeA;
+    aUpper = currentRangeB - currentRangeA;
+    normPos = inValNorm / aUpper;
     
-    float inValNorm = inputValue - currentRangeA;
-    float aUpper = currentRangeB - currentRangeA;
-    float normPos = inValNorm / aUpper;
-    
-    float bUpperNorm = newRangeB - newRangeA;
-    float bValNorm = normPos * bUpperNorm;
+    bUpperNorm = newRangeB - newRangeA;
+    bValNorm = normPos * bUpperNorm;
     
     return newRangeA + bValNorm;
-    
 }
 glm::mat4 rotationbyquat(float x, float y, float z){
     
@@ -362,9 +343,6 @@ glm::mat4 rotationbyquat(float x, float y, float z){
 
 void collisionDetection(){
     
-    
-    
-    
 }
 
 // Is called whenever a key is pressed/released via GLFW
@@ -375,5 +353,4 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
       
     }
-
 }
