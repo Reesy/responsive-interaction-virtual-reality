@@ -36,8 +36,10 @@ float normalise(float currentRangeA, float currentRangeB, float newRangeA, float
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 glm::mat4 rotationbyquat(float x, float y, float z);
+glm::vec3 properHandPosition(Leap::Vector inputCoords);
+glm::vec3 properPosition(Leap::Vector inputCoords);
 
-glm::vec3 properHandposition(Leap::Vector inputCoords);
+
 class SampleListener : public Listener {
 public:
     virtual void onConnect(const Controller&);
@@ -63,21 +65,13 @@ Frame frame;
 GLuint left_texture;
 GLuint right_texture;
 
-float viewX;
-float viewY;
-float viewZ;
+float viewX, viewY, viewZ;
 
 glm::vec3 EulerAngles;
 glm::mat4 rotMat;
 
-float pitch;
-float yaw;
-float roll;
-
-
-float testX;
-float testY;
-float testZ;
+float pitch, yaw, roll, handX, handY, handZ;
+float thumbX, thumbY, thumbZ;
 
 //used for normalization of leap co-ords into scene co-ords
 int lowerPos = -200;        // leap lower range
@@ -85,21 +79,12 @@ int higherPos = 200;        // leap upper range
 int lowerRange = -1;        //normalized lower range
 int higherRange = 1;        //normalized upper range
 
-float inValNorm;
-float aUpper;
-float normPos;
+float inValNorm, aUpper, normPos, bUpperNorm, bValNorm;
 
-float bUpperNorm;
-float bValNorm;
-
-float modelX;
-float modelY;
-float modelZ;
 Vector palmTranslation;
 glm::mat4 palmRotation;
-float modelRotX;
-float palmAngle;
-float handRoll;
+
+float modelRotX, palmAngle, handRoll;
 bool CameraMove = false;
 Leap::Matrix rotationMatrix;
 Vector thumbTranslation;
@@ -190,9 +175,6 @@ int main()
     viewX = 0.0;
     viewY = 0.0;
     viewZ = -3.0;
-    modelX = 0.0;
-    modelY = 0.0;
-    modelZ = 0.0;
     
     // Creates an identity quaternion (no rotation)
     glm::quat MyQuaternion;
@@ -238,9 +220,7 @@ int main()
             model = glm::translate(model, cubePositions[i]);
             
             if(i == 0){  // Translations done to palm
-                //model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
-                model = glm::translate(model, glm::vec3(testX, testY, testZ));
-     
+                model = glm::translate(model, glm::vec3(handX, handY, handZ));
                 model = model * rotationbyquat(pitch, -yaw, roll);
                                         //model = glm::rotate(rotationbyquat(pitch, yaw, roll));
                                         //model = glm::rotate(model, rotationbyquat(pitch, yaw, roll));
@@ -249,11 +229,11 @@ int main()
                                         //model = glm::rotate(model, pitch, glm::vec3(1, 0, 0));
                 model = glm::scale(model, glm::vec3(1, 0.25, 1));
             }else if(i == 1){  //Translations done to thumb
-                model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
+                model = glm::translate(model, glm::vec3(thumbX, thumbY, thumbZ));
                 model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
             }
             else{  //Translations done to other fingers
-                model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
+           //     model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
                 model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
             }
          //   std::cout << model[0][0] << std::endl;
@@ -298,23 +278,24 @@ void leapTest(){
     yaw = firstHand.direction().yaw();
     roll = firstHand.palmNormal().roll();
     
-    testX = properHandposition(firstHand.palmPosition()).x;
-    testY = properHandposition(firstHand.palmPosition()).y;
-    testZ = properHandposition(firstHand.palmPosition()).z;
+    handX = properHandPosition(firstHand.palmPosition()).x;
+    handY = properHandPosition(firstHand.palmPosition()).y;
+    handZ = properHandPosition(firstHand.palmPosition()).z;
     
-    std::cout << firstHand.palmPosition().y - 200 << std::endl;
-    
-    
-    //used for translation of the hand.
-    modelX += palmTranslation.x / 10;
-    modelY += palmTranslation.y / 10;
-    modelZ += palmTranslation.z / 10;
+  //  thumbX = firstHand.fingers()[0].tipPosition().x;
+    thumbX = properHandPosition(firstHand.fingers()[0].tipPosition()).x;
+    thumbY = properHandPosition(firstHand.fingers()[0].tipPosition()).y;
+    thumbZ = properHandPosition(firstHand.fingers()[0].tipPosition()).z;
+   // std::cout << thumbX << std::endl;
+    //std::cout << firstHand.palmPosition().y - 200 << std::endl;
 }
 
-glm::vec3 properHandposition(Leap::Vector inputCoords){
+glm::vec3 properHandPosition(Leap::Vector inputCoords){
     return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z) * 10);
 }
-
+glm::vec3 properPosition(Leap::Vector inputCoords){
+    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z));
+}
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue){
     inValNorm = inputValue - currentRangeA;
     aUpper = currentRangeB - currentRangeA;
