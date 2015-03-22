@@ -92,7 +92,10 @@ public:
         this->generate();
     }
     
-    
+    void init(){
+        
+        
+    }
     
     void Draw(){
         glBindVertexArray(this->VAO);

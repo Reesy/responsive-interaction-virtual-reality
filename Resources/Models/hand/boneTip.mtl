@@ -1,0 +1,21 @@
+# Blender MTL File: 'boneTip.blend'
+# Material Count: 2
+
+newmtl Material.001
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.024715 0.018202 0.640000
+Ks 0.500000 0.500000 0.500000
+Ni 1.000000
+d 1.000000
+illum 2
+
+newmtl mat1
+Ns 96.078431
+Ka 0.000000 0.000000 0.000000
+Kd 0.064832 0.044057 0.640000
+Ks 0.007274 0.182785 0.500000
+Ni 1.000000
+d 1.000000
+illum 0
+map_Kd glass_dif.png

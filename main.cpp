@@ -94,6 +94,7 @@ Vector palmNormal;
 //forward declarations
 void update();
 void render();
+SceneObjects handObj;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -132,8 +133,13 @@ int main()
     // Define the viewport dimensions
     glViewport(0, 0, windowWidth, windowHeight);
     
-    //initialise hand-palm object.
-    SceneObjects handObj;
+    
+    
+    handObj.setPosition(glm::vec3(0, 0, 0));
+    
+    Model palm("Resources/Models/hand/palm.obj");
+    Model finger("Resources/Models/hand/bone.obj");
+    Model fingerTip("Resources/Models/hand/boneTip.obj");
     
     
     // Build and compile our shader program
@@ -169,6 +175,8 @@ int main()
     // Creates an identity quaternion (no rotation)
     glm::quat MyQuaternion;
     
+    
+    handObj.setScale(glm::vec3(1, 0.25, 1));
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -186,7 +194,7 @@ int main()
         ourShader.Use();
      
         //resets matricies to identity.
-        glm::mat4 trans;
+        
         glm::mat4 model;
         glm::mat4 view;
         glm::mat4 projection;
@@ -197,39 +205,67 @@ int main()
         GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
         GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
         GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
-        GLuint transformLoc = glGetUniformLocation(ourShader.Program, "transform");
+      
         
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
         leapTest();
-
+        
         // Draw container
         
-        for(GLuint i = 0; i < 6; i++)
+        for(GLuint i = 0; i < 3; i++)
         {
             glm::mat4 model; //resets model matrix to identify matrix
-            
+            model = glm::translate(model, handObj.getPosition());
             if(i == 0){  // Translations done to palm
-                model = glm::translate(model, glm::vec3(handX, handY, handZ));
-                model = model * rotationbyquat(pitch, -yaw, roll);
-                model = glm::scale(model, glm::vec3(1, 0.25, 1));
+                
+                model = model * rotationbyquat(handObj.getRotation().x, handObj.getRotation().y, handObj.getRotation().z);
+            
+            
+                glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+                glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+                glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+                
+                
+                palm.Draw(ourShader);
+            
+            
+            
+            
+            
+            
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, glm::vec3(thumbX, thumbY, thumbZ));
-                model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
+                
+                
+                
+                
+                glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+                glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+                glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+                
+                
+                fingerTip.Draw(ourShader);
+            
             }else if(i == 2){
                 model = glm::translate(model, glm::vec3(indexX, indexY, indexZ));
-                model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
+               
+                
+                
+                
+                
+                
+                glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+                glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+                glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+                
+                
+                fingerTip.Draw(ourShader);
+           
             }
-            else{  //Translations done to other fingers
-           //     model = glm::translate(model, glm::vec3(modelX, modelY, modelZ));
-                model = glm::scale(model, glm::vec3(0.25, 0.25, 0.25));
+            else{
+               
             }
-         //   std::cout << model[0][0] << std::endl;
-            //Send uniforms to shader
-            glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-            glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-            glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-            glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
-            custom.Draw();
+        
             
         }
         
@@ -257,6 +293,9 @@ void leapTest(){
     HandList hands = frame.hands();
     
     Hand firstHand = hands[0];
+   
+ 
+  //  Bone firstBone = firstHand.fingers()[0].bone(boneType);
     
     palmRotation = firstHand.rotationMatrix(previousFrame).toMatrix4x4<glm::mat4>();
     
@@ -265,30 +304,26 @@ void leapTest(){
     yaw = firstHand.direction().yaw();
     roll = firstHand.palmNormal().roll();
     
-    handX = properHandPosition(firstHand.palmPosition()).x;
-    handY = properHandPosition(firstHand.palmPosition()).y;
-    handZ = properHandPosition(firstHand.palmPosition()).z;
+    handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y, properHandPosition(firstHand.palmPosition()).z));
     
-  //  thumbX = firstHand.fingers()[0].tipPosition().x;
-    thumbX = properHandPosition(firstHand.fingers()[0].tipPosition()).x;
-    thumbY = properHandPosition(firstHand.fingers()[0].tipPosition()).y;
-    thumbZ = properHandPosition(firstHand.fingers()[0].tipPosition()).z;
-    
-    indexX = properHandPosition(firstHand.fingers()[1].tipPosition()).x;
-    indexY = properHandPosition(firstHand.fingers()[1].tipPosition()).y;
-    indexZ = properHandPosition(firstHand.fingers()[1].tipPosition()).z;
+    handObj.setRotation(glm::vec3(pitch, -yaw, roll));
+    thumbX = properPosition(firstHand.fingers()[0].tipPosition()).x;
+    thumbY = properPosition(firstHand.fingers()[0].tipPosition()).y;
+    thumbZ = properPosition(firstHand.fingers()[0].tipPosition()).z;
     
     
     
-   // std::cout << thumbX << std::endl;
-    //std::cout << firstHand.palmPosition().y - 200 << std::endl;
+    
+    
+    
+    
 }
 
 glm::vec3 properHandPosition(Leap::Vector inputCoords){
     return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z) * 10);
 }
 glm::vec3 properPosition(Leap::Vector inputCoords){
-    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z));
+    return glm::vec3(normalise(-100, 100, lowerRange, higherRange, inputCoords.x), normalise(-100, 100, lowerRange, higherRange, inputCoords.y - 200), normalise(-100, 100, lowerRange, higherRange, inputCoords.z));
 }
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue){
     inValNorm = inputValue - currentRangeA;
