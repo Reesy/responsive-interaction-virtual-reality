@@ -25,7 +25,7 @@
 
 class KeyObjects : public SceneObjects{
 
-    TextureLoader keyTexture;
+  public:
     char* textureFilePath;
     
     
@@ -38,11 +38,10 @@ class KeyObjects : public SceneObjects{
     glm::mat4 view;
     glm::mat4 projection;
   
-    
-public:
-    KeyObjects(char* filePath, GLfloat vertices[]);
+    TextureLoader keyTexture;
+    KeyObjects();
     void init();
-    void generate(GLfloat vertices[]);
+    void generate(char* filePath, GLfloat vertices[]);
     void Draw();
     void setShaderUniforms(Shader myShader);
 };

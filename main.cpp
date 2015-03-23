@@ -32,7 +32,7 @@ using namespace Leap;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void collision_detection();
 void leapTest();
-void generateScene();
+void generateScene(Shader ourShader);
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -98,6 +98,11 @@ void update();
 void render();
 SceneObjects handObj;
 SceneObjects thumbObj;
+
+KeyObjects keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
+keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ;
+
+
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -195,7 +200,7 @@ int main()
 
 
     HandModelLoader custom(vertices, ourShader);
-    
+    generateScene(ourShader);
 
     int width, height;
 
@@ -210,6 +215,7 @@ int main()
 
     TextureLoader myTexture2;
     myTexture2.Generate(width, height, image);
+    
     
     viewX = 0.0;
     viewY = 0.0;
@@ -267,7 +273,7 @@ int main()
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-                
+                 
                 
                 palm.Draw(ourShader);
             
@@ -318,9 +324,9 @@ int main()
                 fingerTip.Draw(ourShader);
                 
             }
-        
-            
+           
         }
+        keyA.Draw();
         
       //  keyboard.Draw();
         
@@ -412,7 +418,57 @@ void collisionDetection(){
     
 }
 
-void generateScene(){
+void generateScene(Shader ourShader){
+    GLfloat vertices[] = {
+        -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
+        0.5f, -0.5f, -0.5f,    1.0f, -0.0f,
+        0.5f,  0.5f, -0.5f,    1.0f, -1.0f,
+        0.5f,  0.5f, -0.5f,    1.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
+        
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,    1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+        
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+    
+    //generates keyboards
+     keyA.generate("Resources/Textures/lettera.png", vertices);
+     keyA.setShaderUniforms(ourShader);
+    
+    
+    
     
     
     

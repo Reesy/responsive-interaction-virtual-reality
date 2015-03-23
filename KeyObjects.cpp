@@ -7,15 +7,15 @@
 //
 
 #include "KeyObjects.h"
+#include "TextureLoader.h"
 
-
-KeyObjects::KeyObjects(char* filePath, GLfloat vertices[]){
-    this->textureFilePath = filePath;
+KeyObjects::KeyObjects(){
+    
 }
 
 
-void KeyObjects::generate(GLfloat vertices[]){
-    
+void KeyObjects::generate(char* filePath, GLfloat vertices[]){
+    this->textureFilePath = filePath;
     // Create buffers/arrays
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &this->VBO);
