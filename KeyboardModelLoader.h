@@ -47,7 +47,7 @@ private:
     
     void generate_buffers()
     {
-        GLfloat vertices[] = {
+        GLfloat vertices1[] = {
             -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
              0.5f, -0.5f, -0.5f,   1.0f, -0.0f,
              0.5f,  0.5f, -0.5f,   1.0f, -1.0f,
@@ -56,6 +56,50 @@ private:
             -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
             
       
+        };
+        
+        GLfloat vertices[] = {
+            -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
+            0.5f, -0.5f, -0.5f,    1.0f, -0.0f,
+            0.5f,  0.5f, -0.5f,    1.0f, -1.0f,
+            0.5f,  0.5f, -0.5f,    1.0f, -1.0f,
+            -0.5f,  0.5f, -0.5f,   0.0f, -1.0f,
+            -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
+            
+            -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,    1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,   0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+            
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+            
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
         // Create buffers/arrays
         glGenVertexArrays(1, &this->VAO);
@@ -151,8 +195,12 @@ public:
         glDrawArrays(GL_TRIANGLES, 0, 6);
         glBindVertexArray(0);
         
+        
+        
+        
         letterB.Bind();
         
+    
         model = glm::translate(model, glm::vec3(1, 0, 0));
        
         
@@ -161,7 +209,7 @@ public:
         glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
         
         glBindVertexArray(this->VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
         
         

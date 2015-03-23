@@ -21,9 +21,9 @@
 #include "TextureLoader.h"
 #include "Model.h"
 #include "HandModelLoader.h"
-#include "KeyboardModelLoader.h"
-#include "SceneObjects.h"
 
+#include "SceneObjects.h"
+#include "KeyObjects.h"
 
 //#include "Model.h"
 
@@ -32,6 +32,7 @@ using namespace Leap;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void collision_detection();
 void leapTest();
+void generateScene();
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -73,6 +74,7 @@ glm::mat4 rotMat;
 float pitch, yaw, roll, handX, handY, handZ;
 float thumbX, thumbY, thumbZ;
 float indexX, indexY, indexZ;
+float middleX, middleY, middleZ;
 
 //used for normalization of leap co-ords into scene co-ords
 int lowerPos = -200;        // leap lower range
@@ -95,6 +97,7 @@ Vector palmNormal;
 void update();
 void render();
 SceneObjects handObj;
+SceneObjects thumbObj;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -145,17 +148,57 @@ int main()
     // Build and compile our shader program
     Shader ourShader("Resources/Shaders/VertexShader.vert", "Resources/Shaders/FragmentShader.frag");
     
-    Shader letterShader("Resources/Shaders/KeyVertexShader.vert", "Resources/Shaders/KeyFragmentShader.frag");
-    
     // Set up vertex data (and buffer(s)) and attribute pointers
     GLfloat vertices[] = {
-         };
+        -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
+        0.5f, -0.5f, -0.5f,    1.0f, -0.0f,
+        0.5f,  0.5f, -0.5f,    1.0f, -1.0f,
+        0.5f,  0.5f, -0.5f,    1.0f, -1.0f,
+        -0.5f,  0.5f, -0.5f,   0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
     
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,    1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+    
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+    
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+    
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+    };
+
+
     HandModelLoader custom(vertices, ourShader);
-    KeyBoardModelLoader keyboard(vertices, letterShader);
-   
-    int width, height;
     
+
+    int width, height;
+
     unsigned char* image = SOIL_load_image("Resources/Textures/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
     SOIL_free_image_data(image);
 
@@ -174,7 +217,10 @@ int main()
     
     // Creates an identity quaternion (no rotation)
     glm::quat MyQuaternion;
-    
+    // Define camera uniforms for shader.
+    GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
+    GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
+    GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
     
     handObj.setScale(glm::vec3(1, 0.25, 1));
     // Game loop
@@ -201,10 +247,7 @@ int main()
         
         projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
         
-        // Define camera uniforms for shader.
-        GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
-        GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
-        GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
+        
       
         
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
@@ -212,13 +255,13 @@ int main()
         
         // Draw container
         
-        for(GLuint i = 0; i < 3; i++)
+        for(GLuint i = 0; i < 4; i++)
         {
             glm::mat4 model; //resets model matrix to identify matrix
             model = glm::translate(model, handObj.getPosition());
             if(i == 0){  // Translations done to palm
                 
-                model = model * rotationbyquat(handObj.getRotation().x, handObj.getRotation().y, handObj.getRotation().z);
+              //  model = model * rotationbyquat(handObj.getRotation().x, handObj.getRotation().y, handObj.getRotation().z);
             
             
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -262,14 +305,24 @@ int main()
                 fingerTip.Draw(ourShader);
            
             }
-            else{
-               
+            else if ( i == 3 ){
+                model = glm::translate(model, glm::vec3(middleX, middleY, middleZ));
+                
+                
+
+                glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+                glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+                glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
+                
+                
+                fingerTip.Draw(ourShader);
+                
             }
         
             
         }
         
-        keyboard.Draw();
+      //  keyboard.Draw();
         
         // Swap the screen buffers
         glfwSwapBuffers(window);
@@ -311,11 +364,13 @@ void leapTest(){
     thumbY = properPosition(firstHand.fingers()[0].tipPosition()).y;
     thumbZ = properPosition(firstHand.fingers()[0].tipPosition()).z;
     
+    indexX = properPosition(firstHand.fingers()[1].tipPosition()).x;
+    indexY = properPosition(firstHand.fingers()[1].tipPosition()).y;
+    indexZ = properPosition(firstHand.fingers()[1].tipPosition()).z;
     
-    
-    
-    
-    
+    middleX = properPosition(firstHand.fingers()[2].tipPosition()).x;
+    middleY = properPosition(firstHand.fingers()[2].tipPosition()).y;
+    middleZ = properPosition(firstHand.fingers()[2].tipPosition()).z;
     
 }
 
@@ -323,7 +378,7 @@ glm::vec3 properHandPosition(Leap::Vector inputCoords){
     return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z) * 10);
 }
 glm::vec3 properPosition(Leap::Vector inputCoords){
-    return glm::vec3(normalise(-100, 100, lowerRange, higherRange, inputCoords.x), normalise(-100, 100, lowerRange, higherRange, inputCoords.y - 200), normalise(-100, 100, lowerRange, higherRange, inputCoords.z));
+    return glm::vec3(normalise(-200, 200, lowerRange, higherRange, inputCoords.x) * 4, normalise(-200, 200, lowerRange, higherRange, inputCoords.y - 200)* 4, normalise(-200, 200, lowerRange, higherRange, inputCoords.z) * 4);
 }
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue){
     inValNorm = inputValue - currentRangeA;
@@ -335,6 +390,8 @@ float normalise(float currentRangeA, float currentRangeB, float newRangeA, float
     
     return newRangeA + bValNorm;
 }
+
+
 glm::mat4 rotationbyquat(float x, float y, float z){
     
     // Creates an identity quaternion (no rotation)
@@ -352,6 +409,12 @@ glm::mat4 rotationbyquat(float x, float y, float z){
 }
 
 void collisionDetection(){
+    
+}
+
+void generateScene(){
+    
+    
     
 }
 
