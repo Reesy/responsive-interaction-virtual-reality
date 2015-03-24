@@ -319,8 +319,7 @@ void render(){
 void update(){
     
     
-    std::cout << "Index finger  X, Y and Z:" << indexX << " " << indexY << " " << indexZ << std::endl;
-    std::cout << "A coordinates X, Y and Z:" << keyA.getPosition().x << " " << keyA.getPosition().y <<  " " << keyA.getPosition().z << std::endl;
+    
     
     
     
@@ -360,6 +359,11 @@ void leapTest(){
     middleX = properPosition(firstHand.fingers()[2].tipPosition()).x;
     middleY = properPosition(firstHand.fingers()[2].tipPosition()).y;
     middleZ = properPosition(firstHand.fingers()[2].tipPosition()).z;
+    
+    
+    
+    std::cout << "Index finger  X, Y and Z:" << handObj.getPosition().x << " " << handObj.getPosition().y << " " << handObj.getPosition().z <<  std::endl;
+    std::cout << "A coordinates X, Y and Z:" << keyA.getPosition().x << " " << keyA.getPosition().y <<  " " << keyA.getPosition().z << std::endl;
     
 }
 
