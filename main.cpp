@@ -32,6 +32,7 @@ using namespace Leap;
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
 void collision_detection();
 void leapTest();
+void update();
 void generateScene(Shader ourShader);
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 const GLuint WIDTH = 800, HEIGHT = 600;
@@ -253,6 +254,7 @@ int main()
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
         leapTest();
         
+        update();
         
         for(GLuint i = 0; i < 4; i++)
         {
@@ -315,6 +317,14 @@ int main()
 void render(){
 }
 void update(){
+    
+    
+    std::cout << "Index finger  X, Y and Z:" << indexX << " " << indexY << " " << indexZ << std::endl;
+    std::cout << "A coordinates X, Y and Z:" << keyA.getPosition().x << " " << keyA.getPosition().y <<  " " << keyA.getPosition().z << std::endl;
+    
+    
+    
+    
 }
 void leapTest(){
     
