@@ -14,7 +14,52 @@ KeyObjects::KeyObjects(){
 }
 
 
-void KeyObjects::generate(char* filePath, GLfloat vertices[]){
+void KeyObjects::generate(char* filePath, GLfloat verticess[]){
+    this->collidable = true;
+    GLfloat vertices[] = {
+        -0.5f, -0.5f, -0.5f,   -0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f,    -1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f,    -1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f,    -1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f,   -0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f,   -0.0f, 0.0f,
+        
+        -0.5f, -0.5f,  0.5f,   0.0f, -0.0f,
+        0.5f, -0.5f,  0.5f,    1.0f, -0.0f,
+        0.5f,  0.5f,  0.5f,    1.0f, -1.0f,
+        0.5f,  0.5f,  0.5f,    1.0f, -1.0f,
+        -0.5f,  0.5f,  0.5f,   0.0f, -1.0f,
+        -0.5f, -0.5f,  0.5f,   0.0f, -0.0f,
+        
+        -0.5f,  0.5f,  0.5f,  1.0f, -0.0f,
+        -0.5f,  0.5f, -0.5f,  1.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f, -0.0f,
+        -0.5f,  0.5f,  0.5f,  1.0f, -0.0f,
+        
+        0.5f,  0.5f,  0.5f,  1.0f, -0.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, -1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,
+        0.5f, -0.5f, -0.5f,  0.0f, -1.0f,
+        0.5f, -0.5f,  0.5f,  0.0f, -0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, -0.0f,
+        
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,
+        0.5f, -0.5f, -0.5f,  1.0f, -1.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, -0.0f,
+        0.5f, -0.5f,  0.5f,  1.0f, -0.0f,
+        -0.5f, -0.5f,  0.5f,  0.0f,- 0.0f,
+        -0.5f, -0.5f, -0.5f,  0.0f, -1.0f,
+        
+        -0.5f,  0.5f, -0.5f,  0.0f, -1.0f,
+        0.5f,  0.5f, -0.5f,  1.0f, -1.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, -0.0f,
+        0.5f,  0.5f,  0.5f,  1.0f, -0.0f,
+        -0.5f,  0.5f,  0.5f,  0.0f, -0.0f,
+        -0.5f,  0.5f, -0.5f,  0.0f, -1.0f
+    };
+    
     this->textureFilePath = filePath;
     // Create buffers/arrays
     glGenVertexArrays(1, &this->VAO);
@@ -38,7 +83,6 @@ void KeyObjects::generate(char* filePath, GLfloat vertices[]){
     int width, height;
     unsigned char* image;
     
-    
     //Textues are loaded here.
     
     image = SOIL_load_image(this->textureFilePath, &width, &height, 0, SOIL_LOAD_RGB);
@@ -50,11 +94,12 @@ void KeyObjects::generate(char* filePath, GLfloat vertices[]){
 }
 
 void KeyObjects::Draw(){
-    
-    this->keyTexture.Bind();
+    projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
+    keyTexture.Bind();
     
     glm::mat4 model;
     model = glm::translate(model, glm::vec3(this->getPosition().x, this->getPosition().y , this->getPosition().z));
+    model = glm::rotate(model, 20.f, glm::vec3(1, 0, 0));
     model = glm::scale(model, glm::vec3(this->getScale().x, this->getScale().y, this->getScale().z));
     
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));

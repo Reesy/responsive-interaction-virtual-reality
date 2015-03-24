@@ -202,19 +202,21 @@ int main()
     HandModelLoader custom(vertices, ourShader);
     generateScene(ourShader);
 
-    int width, height;
+    
+ 
+  //  int width, height;
 
-    unsigned char* image = SOIL_load_image("Resources/Textures/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-    SOIL_free_image_data(image);
+    //unsigned char* image = SOIL_load_image("Resources/Textures/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+  //  SOIL_free_image_data(image);
 
-    TextureLoader myTexture;
-    myTexture.Generate(width, height, image);
+   // TextureLoader myTexture;
+   // myTexture.Generate(width, height, image);
 
-    image = SOIL_load_image("Resources/Textures/awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
-    SOIL_free_image_data(image);
+ //   image = SOIL_load_image("Resources/Textures/awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
+   // SOIL_free_image_data(image);
 
-    TextureLoader myTexture2;
-    myTexture2.Generate(width, height, image);
+  //  TextureLoader myTexture2;
+//    myTexture2.Generate(width, height, image);
     
     
     viewX = 0.0;
@@ -236,12 +238,7 @@ int main()
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        // Bind Texture
-        glActiveTexture(GL_TEXTURE0);
-        myTexture.Bind();
-        glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture1"), 0);
-        
+
         // Activate shader
         ourShader.Use();
      
@@ -252,14 +249,10 @@ int main()
         glm::mat4 projection;
         
         projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
-        
-        
-      
-        
+  
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
         leapTest();
         
-        // Draw container
         
         for(GLuint i = 0; i < 4; i++)
         {
@@ -269,65 +262,45 @@ int main()
                 
               //  model = model * rotationbyquat(handObj.getRotation().x, handObj.getRotation().y, handObj.getRotation().z);
             
-            
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-                 
                 
                 palm.Draw(ourShader);
-            
-            
-            
-            
-            
-            
+
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, glm::vec3(thumbX, thumbY, thumbZ));
                 
-                
-                
-                
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-                
                 
                 fingerTip.Draw(ourShader);
             
             }else if(i == 2){
                 model = glm::translate(model, glm::vec3(indexX, indexY, indexZ));
-               
-                
-                
-                
-                
-                
+
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-                
-                
+           
                 fingerTip.Draw(ourShader);
            
             }
             else if ( i == 3 ){
                 model = glm::translate(model, glm::vec3(middleX, middleY, middleZ));
-                
-                
 
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-                
-                
+    
                 fingerTip.Draw(ourShader);
                 
             }
            
         }
         keyA.Draw();
-        
+        keyB.Draw();
       //  keyboard.Draw();
         
         // Swap the screen buffers
@@ -464,8 +437,20 @@ void generateScene(Shader ourShader){
     };
     
     //generates keyboards
-     keyA.generate("Resources/Textures/lettera.png", vertices);
-     keyA.setShaderUniforms(ourShader);
+    keyA.setShaderUniforms(ourShader);
+    
+    keyA.setPosition(glm::vec3(0, 0, -8));
+    keyA.setRotation(glm::vec3(1, 0, 0));
+    keyA.setScale(glm::vec3(0.6, 0.6, 0.6));
+    keyA.generate("Resources/Textures/lettera.png", vertices);
+    
+    
+    keyB.setShaderUniforms(ourShader);
+    
+    keyB.setPosition(glm::vec3(-0.7, 0, -8));
+    keyB.setRotation(glm::vec3(1, 0, 0));
+    keyB.setScale(glm::vec3(0.6, 0.6, 0.6));
+    keyB.generate("Resources/Textures/letterb.png", vertices);
     
     
     
