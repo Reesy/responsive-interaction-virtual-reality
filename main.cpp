@@ -303,6 +303,7 @@ int main()
         }
         keyA.Draw();
         keyB.Draw();
+        keyC.Draw();
       //  keyboard.Draw();
         
         // Swap the screen buffers
@@ -362,8 +363,8 @@ void leapTest(){
     
     
     
-    std::cout << "Index finger  X, Y and Z:" << handObj.getPosition().x << " " << handObj.getPosition().y << " " << handObj.getPosition().z <<  std::endl;
-    std::cout << "A coordinates X, Y and Z:" << keyA.getPosition().x << " " << keyA.getPosition().y <<  " " << keyA.getPosition().z << std::endl;
+    //std::cout << "Index finger  X, Y and Z:" << handObj.getPosition().x << " " << handObj.getPosition().y << " " << handObj.getPosition().z <<  std::endl;
+    //std::cout << "A coordinates X, Y and Z:" << keyA.getPosition().x << " " << keyA.getPosition().y <<  " " << keyA.getPosition().z << std::endl;
     
 }
 
@@ -463,9 +464,15 @@ void generateScene(Shader ourShader){
     
     keyB.setPosition(glm::vec3(-0.7, 0, -8));
     keyB.setRotation(glm::vec3(1, 0, 0));
-    keyB.setScale(glm::vec3(0.6, 0.6, 0.6));
+    keyB.setScale(glm::vec3(1, 1, 1));
     keyB.generate("Resources/Textures/letterb.png", vertices);
     
+    keyC.setShaderUniforms(ourShader);
+    
+    keyC.setPosition(glm::vec3(0.7, 0, -8));
+    keyC.setRotation(glm::vec3(1, 0, 0));
+    keyC.setScale(glm::vec3(0.6, 0.6, 0.6));
+    keyC.generate("Resources/Textures/letterb.png", vertices);
     
     
     
@@ -479,6 +486,20 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-      
+        std::cout << handObj.getPosition().x << std::endl;
+    }
+    if (key == GLFW_KEY_UP && action == GLFW_PRESS){
+        keyB.setPosition(glm::vec3(keyB.getPosition().x + 1, keyB.getPosition().y , keyB.getPosition().z ));
+        std::cout << keyB.getPosition().x << std::endl;
+    }
+    if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
+        keyB.setPosition(glm::vec3(keyB.getPosition().x - 1, keyB.getPosition().y , keyB.getPosition().z ));
+        std::cout << keyB.getPosition().x << std::endl;
+    }
+    if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
+        
+    }
+    if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
+        
     }
 }
