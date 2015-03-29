@@ -26,7 +26,7 @@
 class KeyObjects : public SceneObjects{
 
   public:
-    char* textureFilePath;
+    const char* textureFilePath;
     
     
     GLuint VAO, VBO;
@@ -41,7 +41,7 @@ class KeyObjects : public SceneObjects{
     TextureLoader keyTexture;
     KeyObjects();
     void init();
-    void generate(char* filePath, GLfloat vertices[]);
+    void generate(const char* filePath, GLfloat vertices[]);
     void Draw();
     void setShaderUniforms(Shader myShader);
 };

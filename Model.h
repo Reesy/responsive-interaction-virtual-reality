@@ -30,7 +30,7 @@ class Model
 public:
     /*  Functions   */
     // Constructor, expects a filepath to a 3D model.
-    Model(GLchar* path)
+    Model(const char* path)
     {
         this->loadModel(path);
     }
@@ -132,7 +132,9 @@ private:
                 indices.push_back(face.mIndices[j]);
         }
         // Process materials
-        if(mesh->mMaterialIndex >= 0)
+        
+        //if(mesh->mMaterialIndex >= 0)
+        if(mesh->mMaterialIndex)
         {
             aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
             // We assume a convention for sampler names in the shaders. Each diffuse texture should be named
@@ -148,7 +150,7 @@ private:
             // 2. Specular maps
             vector<Texture> specularMaps = this->loadMaterialTextures(material, aiTextureType_SPECULAR, "texture_specular");
             textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-        }
+       }
         
         // Return a mesh object created from the extracted mesh data
         return Mesh(vertices, indices, textures);

@@ -15,9 +15,12 @@
 
 class SceneObjects{
     
+    glm::vec3 rotation;
     glm::vec3 position;
     glm::vec3 scale;
-    glm::vec3 rotation;
+    float yaw;
+    float pitch;
+    float roll;
     
     
 public:
@@ -25,14 +28,24 @@ public:
     ~SceneObjects();
     
     //getters and setters
+    void setRotation(glm::vec3);
     void setPosition(glm::vec3);
     void setScale(glm::vec3);
-    void setRotation(glm::vec3);
+    void setYaw(float);
+    void setPitch(float);
+    void setRoll(float);
     void setCollidable(bool);
+    
     
     glm::vec3 getPosition();
     glm::vec3 getScale();
     glm::vec3 getRotation();
+    glm::vec3 getYawPitchRoll();
+    
+    
+    float getYaw();
+    float getPitch();
+    float getRoll();
     
     //move object returns a position via a vec3, given the vector to move towards it's will interploate to that point based on time.
     glm::vec3 movePosition(glm::vec3, double time);

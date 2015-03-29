@@ -14,7 +14,7 @@ KeyObjects::KeyObjects(){
 }
 
 
-void KeyObjects::generate(char* filePath, GLfloat verticess[]){
+void KeyObjects::generate(const char* filePath, GLfloat verticess[]){
     this->collidable = true;
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,   -0.0f, 0.0f,

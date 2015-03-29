@@ -73,6 +73,8 @@ glm::vec3 EulerAngles;
 glm::mat4 rotMat;
 
 float pitch, yaw, roll, handX, handY, handZ;
+float thumbPitch, thumbYaw;
+float finger1Pitch, finger1Yaw;
 float thumbX, thumbY, thumbZ;
 float indexX, indexY, indexZ;
 float middleX, middleY, middleZ;
@@ -274,7 +276,10 @@ int main()
                 fingerTip.Draw(ourShader);
 
             }else if(i == 1){  //Translations done to thumb
-                model = glm::translate(model, glm::vec3(thumbX, thumbY, thumbZ));
+                model = glm::translate(model, thumbObj.getPosition());
+                
+                model = model * glm::toMat4(CreateQuat(-thumbYaw, -thumbPitch, -roll));
+                
                 
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -284,7 +289,9 @@ int main()
             
             }else if(i == 2){
                 model = glm::translate(model, glm::vec3(indexX, indexY, indexZ));
-
+                
+                model = model * glm::toMat4(CreateQuat(-finger1Yaw, -finger1Pitch, -roll));
+                
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -299,7 +306,7 @@ int main()
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
     
-                fingerTip.Draw(ourShader);
+             //   fingerTip.Draw(ourShader);
                 
             }
            
@@ -319,15 +326,11 @@ int main()
 }
 
 void render(){
+
 }
 void update(){
-    
-    
-    
-    
-    
-    
-    
+        //this wil be used temporarily to test for collision
+
 }
 void leapTest(){
     
@@ -349,10 +352,12 @@ void leapTest(){
     yaw = firstHand.direction().yaw();
     roll = firstHand.palmNormal().roll();
     
-    
+    thumbPitch = firstHand.fingers()[0].direction().pitch();
+    thumbYaw = firstHand.fingers()[0].direction().yaw();
     //Use this code for finger orientation, perhaps abstract to class
     
-    
+    finger1Pitch = firstHand.fingers()[1].direction().pitch();
+    finger1Yaw = firstHand.fingers()[1].direction().yaw();
   //  Finger thumbFing = firstHand.fingers()[0];
     
     //float test = thumbFing.direction().pitch();
@@ -360,9 +365,15 @@ void leapTest(){
     handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y, properHandPosition(firstHand.palmPosition()).z));
     
   //  handObj.setRotation(glm::vec3(pitch, -yaw, roll));
+    
+    
     thumbX = properPosition(firstHand.fingers()[0].tipPosition()).x;
     thumbY = properPosition(firstHand.fingers()[0].tipPosition()).y;
     thumbZ = properPosition(firstHand.fingers()[0].tipPosition()).z;
+    
+    thumbObj.setPosition(glm::vec3(thumbX, thumbY, thumbZ));
+    
+    
     
     indexX = properPosition(firstHand.fingers()[1].tipPosition()).x;
     indexY = properPosition(firstHand.fingers()[1].tipPosition()).y;
@@ -371,6 +382,9 @@ void leapTest(){
     middleX = properPosition(firstHand.fingers()[2].tipPosition()).x;
     middleY = properPosition(firstHand.fingers()[2].tipPosition()).y;
     middleZ = properPosition(firstHand.fingers()[2].tipPosition()).z;
+    
+    
+    
     
     //std::cout << firstHand.rotationMatrix(previousFrame) << std::endl;
     
@@ -420,21 +434,6 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
     
 }
 
-glm::mat4 rotationbyquat(float x, float y, float z){
- 
-    // Creates an identity quaternion (no rotation)
-    glm::quat MyQuaternion;
-    
-    // Conversion from Euler angles (in radians) to Quaternion
-    EulerAngles.x = x;
-    EulerAngles.y = y;
-    EulerAngles.z = z;
-
-    MyQuaternion = glm::quat(EulerAngles);
-    rotMat = glm::toMat4(MyQuaternion);
-    
-    return rotMat;
-}
 
 void collisionDetection(){
     
@@ -502,7 +501,6 @@ void generateScene(Shader ourShader){
     keyB.generate("Resources/Textures/letterb.png", vertices);
     
     keyC.setShaderUniforms(ourShader);
-    
     keyC.setPosition(glm::vec3(0.7, 0, -8));
     keyC.setRotation(glm::vec3(1, 0, 0));
     keyC.setScale(glm::vec3(0.6, 0.6, 0.6));
