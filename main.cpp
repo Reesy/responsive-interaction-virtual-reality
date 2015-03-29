@@ -103,7 +103,7 @@ SceneObjects thumbObj;
 KeyObjects keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
 keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ;
 
-
+glm::quat CreateQuat(float pitch, float yaw, float roll);
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -145,7 +145,7 @@ int main()
     
     
     handObj.setPosition(glm::vec3(0, 0, 0));
-    
+  
     Model palm("Resources/Models/hand/palm.obj");
     Model finger("Resources/Models/hand/bone.obj");
     Model fingerTip("Resources/Models/hand/boneTip.obj");
@@ -260,15 +260,18 @@ int main()
         {
             glm::mat4 model; //resets model matrix to identify matrix
             model = glm::translate(model, handObj.getPosition());
+           
+          
             if(i == 0){  // Translations done to palm
+    
+                model = model * glm::toMat4(CreateQuat(-yaw, -pitch, -roll));
                 
-              //  model = model * rotationbyquat(handObj.getRotation().x, handObj.getRotation().y, handObj.getRotation().z);
-            
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 
                 palm.Draw(ourShader);
+                fingerTip.Draw(ourShader);
 
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, glm::vec3(thumbX, thumbY, thumbZ));
@@ -301,9 +304,9 @@ int main()
             }
            
         }
-        keyA.Draw();
-        keyB.Draw();
-        keyC.Draw();
+      //  keyA.Draw();
+       // keyB.Draw();
+       // keyC.Draw();
       //  keyboard.Draw();
         
         // Swap the screen buffers
@@ -346,9 +349,17 @@ void leapTest(){
     yaw = firstHand.direction().yaw();
     roll = firstHand.palmNormal().roll();
     
+    
+    //Use this code for finger orientation, perhaps abstract to class
+    
+    
+  //  Finger thumbFing = firstHand.fingers()[0];
+    
+    //float test = thumbFing.direction().pitch();
+    //float testYwa = thumbFing.
     handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y, properHandPosition(firstHand.palmPosition()).z));
     
-    handObj.setRotation(glm::vec3(pitch, -yaw, roll));
+  //  handObj.setRotation(glm::vec3(pitch, -yaw, roll));
     thumbX = properPosition(firstHand.fingers()[0].tipPosition()).x;
     thumbY = properPosition(firstHand.fingers()[0].tipPosition()).y;
     thumbZ = properPosition(firstHand.fingers()[0].tipPosition()).z;
@@ -361,7 +372,7 @@ void leapTest(){
     middleY = properPosition(firstHand.fingers()[2].tipPosition()).y;
     middleZ = properPosition(firstHand.fingers()[2].tipPosition()).z;
     
-    
+    //std::cout << firstHand.rotationMatrix(previousFrame) << std::endl;
     
     //std::cout << "Index finger  X, Y and Z:" << handObj.getPosition().x << " " << handObj.getPosition().y << " " << handObj.getPosition().z <<  std::endl;
     //std::cout << "A coordinates X, Y and Z:" << keyA.getPosition().x << " " << keyA.getPosition().y <<  " " << keyA.getPosition().z << std::endl;
@@ -386,8 +397,31 @@ float normalise(float currentRangeA, float currentRangeB, float newRangeA, float
 }
 
 
-glm::mat4 rotationbyquat(float x, float y, float z){
+
+glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
     
+    float fSinPitch(sin(inPitch*0.5f));
+    float fCosPitch(cos(inPitch*0.5f));
+    float fSinYaw(sin(inYaw*0.5f));
+    float fCosYaw(cos(inYaw*0.5f));
+    float fSinRoll(sin(inRoll*0.5f));
+    float fCosRoll(cos(inRoll*0.5f));
+    float fCosPitchCosYaw(fCosPitch*fCosYaw);
+    float fSinPitchSinYaw(fSinPitch*fSinYaw);
+    
+    float X = fSinRoll * fCosPitchCosYaw     - fCosRoll * fSinPitchSinYaw;
+    float Y = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
+    float Z = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
+    float W = fCosRoll * fCosPitchCosYaw     + fSinRoll * fSinPitchSinYaw;
+    
+    glm::quat myQuat(X, Y, Z, W);
+    
+   return myQuat;
+    
+}
+
+glm::mat4 rotationbyquat(float x, float y, float z){
+ 
     // Creates an identity quaternion (no rotation)
     glm::quat MyQuaternion;
     
