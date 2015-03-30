@@ -41,7 +41,7 @@ class KeyObjects : public SceneObjects{
     TextureLoader keyTexture;
     KeyObjects();
     void init();
-    void generate(const char* filePath, GLfloat vertices[]);
+    void generate(const char* filePath);
     void Draw();
     void setShaderUniforms(Shader myShader);
 };

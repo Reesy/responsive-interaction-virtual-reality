@@ -101,6 +101,7 @@ void update();
 void render();
 SceneObjects handObj;
 SceneObjects thumbObj;
+SceneObjects finger1Obj;
 
 KeyObjects keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
 keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ;
@@ -257,15 +258,15 @@ int main()
         leapTest();
         
         update();
-        
+      //  collision_detection();
         for(GLuint i = 0; i < 4; i++)
         {
             glm::mat4 model; //resets model matrix to identify matrix
-            model = glm::translate(model, handObj.getPosition());
+         //   model = glm::translate(model, handObj.getPosition());
            
           
             if(i == 0){  // Translations done to palm
-    
+                model = glm::translate(model, handObj.getPosition());
                 model = model * glm::toMat4(CreateQuat(-yaw, -pitch, -roll));
                 
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -288,6 +289,7 @@ int main()
                 fingerTip.Draw(ourShader);
             
             }else if(i == 2){
+                glm::mat4 model;
                 model = glm::translate(model, glm::vec3(indexX, indexY, indexZ));
                 
                 model = model * glm::toMat4(CreateQuat(-finger1Yaw, -finger1Pitch, -roll));
@@ -300,21 +302,22 @@ int main()
            
             }
             else if ( i == 3 ){
+                glm::mat4 model;
                 model = glm::translate(model, glm::vec3(middleX, middleY, middleZ));
 
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
     
-             //   fingerTip.Draw(ourShader);
+                fingerTip.Draw(ourShader);
                 
             }
            
         }
-      //  keyA.Draw();
-       // keyB.Draw();
-       // keyC.Draw();
-      //  keyboard.Draw();
+        keyA.Draw();
+        keyB.Draw();
+        keyC.Draw();
+     //   keyboard.Draw();
         
         // Swap the screen buffers
         glfwSwapBuffers(window);
@@ -330,6 +333,9 @@ void render(){
 }
 void update(){
         //this wil be used temporarily to test for collision
+     // std::cout << finger1Obj.getPosition().x << " " << finger1Obj.getPosition().y <<  " " << finger1Obj.getPosition().z << std::endl;
+    
+    std::cout << keyA.getPosition().x << " " << finger1Obj.getPosition().x << std::endl;
 
 }
 void leapTest(){
@@ -358,14 +364,10 @@ void leapTest(){
     
     finger1Pitch = firstHand.fingers()[1].direction().pitch();
     finger1Yaw = firstHand.fingers()[1].direction().yaw();
-  //  Finger thumbFing = firstHand.fingers()[0];
-    
-    //float test = thumbFing.direction().pitch();
-    //float testYwa = thumbFing.
-    handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y, properHandPosition(firstHand.palmPosition()).z));
-    
-  //  handObj.setRotation(glm::vec3(pitch, -yaw, roll));
-    
+
+    handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y,
+                                  properHandPosition(firstHand.palmPosition()).z));
+
     
     thumbX = properPosition(firstHand.fingers()[0].tipPosition()).x;
     thumbY = properPosition(firstHand.fingers()[0].tipPosition()).y;
@@ -379,26 +381,33 @@ void leapTest(){
     indexY = properPosition(firstHand.fingers()[1].tipPosition()).y;
     indexZ = properPosition(firstHand.fingers()[1].tipPosition()).z;
     
+    finger1Obj.setPosition(glm::vec3(indexX, indexY, indexZ));
     middleX = properPosition(firstHand.fingers()[2].tipPosition()).x;
     middleY = properPosition(firstHand.fingers()[2].tipPosition()).y;
     middleZ = properPosition(firstHand.fingers()[2].tipPosition()).z;
     
     
-    
-    
-    //std::cout << firstHand.rotationMatrix(previousFrame) << std::endl;
-    
-    //std::cout << "Index finger  X, Y and Z:" << handObj.getPosition().x << " " << handObj.getPosition().y << " " << handObj.getPosition().z <<  std::endl;
-    //std::cout << "A coordinates X, Y and Z:" << keyA.getPosition().x << " " << keyA.getPosition().y <<  " " << keyA.getPosition().z << std::endl;
-    
 }
+
+/* ORIGINAL
 
 glm::vec3 properHandPosition(Leap::Vector inputCoords){
     return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z) * 10);
 }
+*/
+
+
+glm::vec3 properHandPosition(Leap::Vector inputCoords){
+    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z));
+}
+
+
 glm::vec3 properPosition(Leap::Vector inputCoords){
     return glm::vec3(normalise(-200, 200, lowerRange, higherRange, inputCoords.x) * 4, normalise(-200, 200, lowerRange, higherRange, inputCoords.y - 200)* 4, normalise(-200, 200, lowerRange, higherRange, inputCoords.z) * 4);
 }
+
+
+
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue){
     inValNorm = inputValue - currentRangeA;
     aUpper = currentRangeB - currentRangeA;
@@ -430,13 +439,13 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
     
     glm::quat myQuat(X, Y, Z, W);
     
-   return myQuat;
+    return myQuat;
     
 }
 
 
 void collisionDetection(){
-    
+    std::cout << finger1Obj.getPosition().x << " " << finger1Obj.getPosition().y <<  " " << finger1Obj.getPosition().z << std::endl;
 }
 
 void generateScene(Shader ourShader){
@@ -490,7 +499,7 @@ void generateScene(Shader ourShader){
     keyA.setPosition(glm::vec3(0, 0, -8));
     keyA.setRotation(glm::vec3(1, 0, 0));
     keyA.setScale(glm::vec3(0.6, 0.6, 0.6));
-    keyA.generate("Resources/Textures/lettera.png", vertices);
+    keyA.generate("Resources/Textures/lettera.png");
     
     
     keyB.setShaderUniforms(ourShader);
@@ -498,13 +507,13 @@ void generateScene(Shader ourShader){
     keyB.setPosition(glm::vec3(-0.7, 0, -8));
     keyB.setRotation(glm::vec3(1, 0, 0));
     keyB.setScale(glm::vec3(1, 1, 1));
-    keyB.generate("Resources/Textures/letterb.png", vertices);
+    keyB.generate("Resources/Textures/letterb.png");
     
     keyC.setShaderUniforms(ourShader);
     keyC.setPosition(glm::vec3(0.7, 0, -8));
     keyC.setRotation(glm::vec3(1, 0, 0));
     keyC.setScale(glm::vec3(0.6, 0.6, 0.6));
-    keyC.generate("Resources/Textures/letterb.png", vertices);
+    keyC.generate("Resources/Textures/letterb.png");
     
     
     
