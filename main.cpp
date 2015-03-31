@@ -35,6 +35,7 @@ void leapTest();
 void update();
 void generateScene(Shader ourShader);
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
+Vector leapToWorld(Vector leapPoint, InteractionBox iBox);
 float leapWorld();
 const GLuint WIDTH = 800, HEIGHT = 600;
 
@@ -336,8 +337,16 @@ void update(){
         //this wil be used temporarily to test for collision
      // std::cout << finger1Obj.getPosition().x << " " << finger1Obj.getPosition().y <<  " " << finger1Obj.getPosition().z << std::endl;
     
-    std::cout << keyA.getPosition().x << " " << finger1Obj.getPosition().x << std::endl;
+   // std::cout << keyA.getPosition().x << " " << finger1Obj.getPosition().x << std::endl;
+    
 
+}
+Vector leapToWorld(Vector leapPoint, InteractionBox iBox)
+{
+    leapPoint.z *= -1.0; //right-hand to left-hand rule
+    Vector normalized = iBox.normalizePoint(leapPoint, false);
+    normalized += Vector(0.5, 0, 0.5); //recenter origin
+    return normalized * 100.0; //scale
 }
 void leapTest(){
     
@@ -345,10 +354,12 @@ void leapTest(){
     
     Frame frame = controller.frame();
     Frame previousFrame = controller.frame(1);
+    InteractionBox myBox = frame.interactionBox();
     HandList hands = frame.hands();
     
     Hand firstHand = hands[0];
-   
+    
+    
  
   //  Bone firstBone = firstHand.fingers()[0].bone(boneType);
     
@@ -365,7 +376,12 @@ void leapTest(){
     
     finger1Pitch = firstHand.fingers()[1].direction().pitch();
     finger1Yaw = firstHand.fingers()[1].direction().yaw();
-
+    
+  //  std::cout << firstHand.palmPosition().x << std::endl;
+    
+    std::cout << leapToWorld(firstHand.palmPosition(), myBox).x << std::endl;
+    
+    
     handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y,
                                   properHandPosition(firstHand.palmPosition()).z));
 
