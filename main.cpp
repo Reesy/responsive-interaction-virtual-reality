@@ -35,6 +35,7 @@ void leapTest();
 void update();
 void generateScene(Shader ourShader);
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
+float leapWorld();
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 glm::mat4 rotationbyquat(float x, float y, float z);
@@ -397,8 +398,15 @@ glm::vec3 properHandPosition(Leap::Vector inputCoords){
 */
 
 
+float leapWorld(float xLeap){
+    float firstResult = xLeap - 0;
+    
+    return 0.0;
+    
+}
+
 glm::vec3 properHandPosition(Leap::Vector inputCoords){
-    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z));
+    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z));
 }
 
 
@@ -449,51 +457,8 @@ void collisionDetection(){
 }
 
 void generateScene(Shader ourShader){
-    GLfloat vertices[] = {
-        -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
-        0.5f, -0.5f, -0.5f,    1.0f, -0.0f,
-        0.5f,  0.5f, -0.5f,    1.0f, -1.0f,
-        0.5f,  0.5f, -0.5f,    1.0f, -1.0f,
-        -0.5f,  0.5f, -0.5f,   0.0f, -1.0f,
-        -0.5f, -0.5f, -0.5f,   0.0f, -0.0f,
-        
-        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,    1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f,   0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
-        
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-        
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-        0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
-    };
-    
-    //generates keyboards
+
+        //generates keyboards
     keyA.setShaderUniforms(ourShader);
     
     keyA.setPosition(glm::vec3(0, 0, -8));
