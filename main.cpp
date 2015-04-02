@@ -36,7 +36,7 @@ void update();
 void generateScene(Shader ourShader);
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 Vector leapToWorld(Vector leapPoint, InteractionBox iBox);
-float leapWorld(float inVal);
+float worldToScreen(float inVal);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 glm::mat4 rotationbyquat(float x, float y, float z);
@@ -338,24 +338,32 @@ void update(){
      // std::cout << finger1Obj.getPosition().x << " " << finger1Obj.getPosition().y <<  " " << finger1Obj.getPosition().z << std::endl;
     
    // std::cout << keyA.getPosition().x << " " << finger1Obj.getPosition().x << std::endl;
-    std::cout << leapWorld(-100.0) << std::endl;
+   // std::cout << leapWorld(-210.0) << std::endl;
     
 
 }
 
 //This returns a value from the rift and maps it to the screen space
-float leapWorld(float xLeap){
+float worldToScreen(float xLeap){
     float leapStart = -200.0;
     float leapEnd = 200.0;
-    float AppStart = -10.0;
-    float AppEnd = 10.0; // this returns world co-ordinates
+    float AppStart = -1.0;
+    float AppEnd = 1.0; // this returns world co-ordinates
     float leapRange = leapEnd - leapStart; //400
     float AppRange  = AppEnd - AppStart; // 20
 
     float firstResult = xLeap - leapStart; //0.0 - - 200; = 200;
     float secondResult = AppRange / leapRange ;                    /// LeapRange / AppRange + app Start;
     
-    return firstResult * secondResult + AppStart;
+    float finalResult = firstResult * secondResult + AppStart;
+    
+    if(finalResult > AppEnd){
+       return AppEnd;
+    }else if(finalResult < AppStart){
+      return AppStart;
+    }
+    
+    return finalResult;
     
     
     /*
@@ -407,10 +415,11 @@ void leapTest(){
  //   std::cout << leapToWorld(firstHand.palmPosition(), myBox).x << std::endl;
     
     
-    handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y,
-                                  properHandPosition(firstHand.palmPosition()).z));
+    //handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y,
+      //                            properHandPosition(firstHand.palmPosition()).z));
 
-    
+    std::cout << worldToScreen(firstHand.palmPosition().x) << std::endl;
+   // handObj.setPosition(glm::vec3(leapWorld(firstHand.palmPosition().x), firstHand.palmPosition().y, firstHand.palmPosition().z));
     thumbX = properPosition(firstHand.fingers()[0].tipPosition()).x;
     thumbY = properPosition(firstHand.fingers()[0].tipPosition()).y;
     thumbZ = properPosition(firstHand.fingers()[0].tipPosition()).z;
