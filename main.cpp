@@ -36,7 +36,7 @@ void update();
 void generateScene(Shader ourShader);
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 Vector leapToWorld(Vector leapPoint, InteractionBox iBox);
-float leapWorld();
+float leapWorld(float inVal);
 const GLuint WIDTH = 800, HEIGHT = 600;
 
 glm::mat4 rotationbyquat(float x, float y, float z);
@@ -338,9 +338,34 @@ void update(){
      // std::cout << finger1Obj.getPosition().x << " " << finger1Obj.getPosition().y <<  " " << finger1Obj.getPosition().z << std::endl;
     
    // std::cout << keyA.getPosition().x << " " << finger1Obj.getPosition().x << std::endl;
+    std::cout << leapWorld(-100.0) << std::endl;
     
 
 }
+
+//This returns a value from the rift and maps it to the screen space
+float leapWorld(float xLeap){
+    float leapStart = -200.0;
+    float leapEnd = 200.0;
+    float AppStart = -10.0;
+    float AppEnd = 10.0; // this returns world co-ordinates
+    float leapRange = leapEnd - leapStart; //400
+    float AppRange  = AppEnd - AppStart; // 20
+
+    float firstResult = xLeap - leapStart; //0.0 - - 200; = 200;
+    float secondResult = AppRange / leapRange ;                    /// LeapRange / AppRange + app Start;
+    
+    return firstResult * secondResult + AppStart;
+    
+    
+    /*
+     Xapp = (xleap - LeapStart) * (Leaprange / AppRange + AppStart)
+     
+     LeapRange = LeapEnd - LeapStart
+     AppRange = AppEnd - AppStart
+     */
+}
+
 Vector leapToWorld(Vector leapPoint, InteractionBox iBox)
 {
     leapPoint.z *= -1.0; //right-hand to left-hand rule
@@ -379,7 +404,7 @@ void leapTest(){
     
   //  std::cout << firstHand.palmPosition().x << std::endl;
     
-    std::cout << leapToWorld(firstHand.palmPosition(), myBox).x << std::endl;
+ //   std::cout << leapToWorld(firstHand.palmPosition(), myBox).x << std::endl;
     
     
     handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y,
@@ -414,12 +439,6 @@ glm::vec3 properHandPosition(Leap::Vector inputCoords){
 */
 
 
-float leapWorld(float xLeap){
-    float firstResult = xLeap - 0;
-    
-    return 0.0;
-    
-}
 
 glm::vec3 properHandPosition(Leap::Vector inputCoords){
     return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z));
@@ -469,7 +488,7 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
 
 
 void collisionDetection(){
-    std::cout << finger1Obj.getPosition().x << " " << finger1Obj.getPosition().y <<  " " << finger1Obj.getPosition().z << std::endl;
+  //  std::cout << finger1Obj.getPosition().x << " " << finger1Obj.getPosition().y <<  " " << finger1Obj.getPosition().z << std::endl;
 }
 
 void generateScene(Shader ourShader){
