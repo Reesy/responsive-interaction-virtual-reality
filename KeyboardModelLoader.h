@@ -148,20 +148,12 @@ private:
         modelLocation = glGetUniformLocation(ourShader.Program, "model");
         viewLocation = glGetUniformLocation(ourShader.Program, "view");
         projectionLocation = glGetUniformLocation(ourShader.Program, "projection");
-        
-        
     }
-    
-    
-    
 public:
-    
-    
     KeyBoardModelLoader(GLfloat vertices[], Shader myShader){
        
         this->generate_buffers();
         this->handle_shaders(myShader);
-        
         
         projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
     }
@@ -216,14 +208,7 @@ public:
         
         
     }
-    
-    
-    
-    
-    
-    
-    
-    
+ 
     
 };
 

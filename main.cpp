@@ -33,7 +33,7 @@ using namespace Leap;
 void update();
 void render();
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-void collision_detection();
+void collision_detection(SceneObjects objA, SceneObjects objB);
 void leapUpdate();
 void update();
 void generateScene(Shader ourShader);
@@ -270,8 +270,27 @@ int main()
 }
 
 void render(){
+    
 }
 void update(){
+    
+    
+    
+    
+    
+    
+    
+    
+    
+}
+/* This checks to see if the object of the first parameter collides with the object of the second parameter */
+void collisionDetection(SceneObjects objA, SceneObjects objB){
+    
+    
+    
+    
+    
+    
 }
 
 //This returns a value from the rift and maps it to the screen space
