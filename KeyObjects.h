@@ -42,7 +42,7 @@ class KeyObjects : public SceneObjects{
     KeyObjects();
     void init();
     void generate(const char* filePath);
-    void Draw();
+    void Draw(glm::mat4 view, glm::mat4 projection);
     void setShaderUniforms(Shader myShader);
 };
 

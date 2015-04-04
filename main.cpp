@@ -105,6 +105,9 @@ SceneObjects handObj;
 SceneObjects thumbObj;
 SceneObjects finger1Obj;
 
+
+float testx, testy, testz;
+
 KeyObjects keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
 keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ;
 
@@ -149,7 +152,7 @@ int main()
     
     
     
-    handObj.setPosition(glm::vec3(0, 0, 0));
+    handObj.setPosition(glm::vec3(testx, testy, testz));
   
     Model palm("Resources/Models/hand/palm.obj");
     Model finger("Resources/Models/hand/bone.obj");
@@ -207,23 +210,6 @@ int main()
 
     HandModelLoader custom(vertices, ourShader);
     generateScene(ourShader);
-
-    
- 
-  //  int width, height;
-
-    //unsigned char* image = SOIL_load_image("Resources/Textures/container.jpg", &width, &height, 0, SOIL_LOAD_RGB);
-  //  SOIL_free_image_data(image);
-
-   // TextureLoader myTexture;
-   // myTexture.Generate(width, height, image);
-
- //   image = SOIL_load_image("Resources/Textures/awesomeface.png", &width, &height, 0, SOIL_LOAD_RGB);
-   // SOIL_free_image_data(image);
-
-  //  TextureLoader myTexture2;
-//    myTexture2.Generate(width, height, image);
-    
     
     viewX = 0.0;
     viewY = 0.0;
@@ -235,7 +221,11 @@ int main()
     GLint modelLoc = glGetUniformLocation(ourShader.Program, "model");
     GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
     GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
+    glm::mat4 test;
     
+    test.length();
+    
+   // std::cout << test[1] << std::endl;
     handObj.setScale(glm::vec3(1, 0.25, 1));
     // Game loop
     while (!glfwWindowShouldClose(window))
@@ -253,23 +243,38 @@ int main()
         glm::mat4 model;
         glm::mat4 view;
         glm::mat4 projection;
+        glm::vec4 myTest(0, 0, 0, 1);
+        glm::vec4 worldCoords;
+        glm::vec4 myView(viewX, viewY, viewZ, 1);
         
         projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
   
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
-        leapTest();
+       // leapTest();
         
         update();
       //  collision_detection();
+        /*
         for(GLuint i = 0; i < 4; i++)
         {
             glm::mat4 model; //resets model matrix to identify matrix
          //   model = glm::translate(model, handObj.getPosition());
-           
+           // glm::mat4 worldCoords;
           
+            
+            
+            
             if(i == 0){  // Translations done to palm
                 model = glm::translate(model, handObj.getPosition());
+              //  worldCoords = myView * model;
+             //   worldCoords = model * myView;
+                worldCoords = model * myTest;
                 model = model * glm::toMat4(CreateQuat(-yaw, -pitch, -roll));
+                
+               
+                std::cout << worldCoords.x << " " << worldCoords.y << " " << worldCoords.z << std::endl;
+               // std::cout << worldCoords << std::endl;
+              
                 
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -316,9 +321,14 @@ int main()
             }
            
         }
-        keyA.Draw();
-        keyB.Draw();
-        keyC.Draw();
+             
+        */
+        //keyA.setPosition(glm::vec3(1, 1, 1));
+        keyA.Draw(view, projection);
+        std::cout << keyA.getTestPosition().x << " " << keyA.getTestPosition().y << " " << keyA.getTestPosition().z <<  std::endl;
+        keyB.Draw(view, projection);
+        keyC.Draw(view, projection);
+        //keyX.Draw();
      //   keyboard.Draw();
         
         // Swap the screen buffers
@@ -348,12 +358,12 @@ float worldToScreen(float xLeap){
     float leapStart = -200.0;
     float leapEnd = 200.0;
     float AppStart = -1.0;
-    float AppEnd = 1.0; // this returns world co-ordinates
-    float leapRange = leapEnd - leapStart; //400
-    float AppRange  = AppEnd - AppStart; // 20
+    float AppEnd = 1.0;
+    float leapRange = leapEnd - leapStart;
+    float AppRange  = AppEnd - AppStart;
 
-    float firstResult = xLeap - leapStart; //0.0 - - 200; = 200;
-    float secondResult = AppRange / leapRange ;                    /// LeapRange / AppRange + app Start;
+    float firstResult = xLeap - leapStart;
+    float secondResult = AppRange / leapRange ;
     
     float finalResult = firstResult * secondResult + AppStart;
     
@@ -365,10 +375,8 @@ float worldToScreen(float xLeap){
     
     return finalResult;
     
-    
     /*
      Xapp = (xleap - LeapStart) * (Leaprange / AppRange + AppStart)
-     
      LeapRange = LeapEnd - LeapStart
      AppRange = AppEnd - AppStart
      */
@@ -409,67 +417,32 @@ void leapTest(){
     
     finger1Pitch = firstHand.fingers()[1].direction().pitch();
     finger1Yaw = firstHand.fingers()[1].direction().yaw();
-    
-  //  std::cout << firstHand.palmPosition().x << std::endl;
-    
- //   std::cout << leapToWorld(firstHand.palmPosition(), myBox).x << std::endl;
-    
-    
-    //handObj.setPosition(glm::vec3(properHandPosition(firstHand.palmPosition()).x, properHandPosition(firstHand.palmPosition()).y,
-      //                            properHandPosition(firstHand.palmPosition()).z));
 
-    std::cout << worldToScreen(firstHand.palmPosition().x) << std::endl;
-   // handObj.setPosition(glm::vec3(leapWorld(firstHand.palmPosition().x), firstHand.palmPosition().y, firstHand.palmPosition().z));
-    thumbX = properPosition(firstHand.fingers()[0].tipPosition()).x;
-    thumbY = properPosition(firstHand.fingers()[0].tipPosition()).y;
-    thumbZ = properPosition(firstHand.fingers()[0].tipPosition()).z;
-    
-    thumbObj.setPosition(glm::vec3(thumbX, thumbY, thumbZ));
+    //std::cout << worldToScreen(firstHand.palmPosition().x) << std::endl;
     
     
     
-    indexX = properPosition(firstHand.fingers()[1].tipPosition()).x;
-    indexY = properPosition(firstHand.fingers()[1].tipPosition()).y;
-    indexZ = properPosition(firstHand.fingers()[1].tipPosition()).z;
+    handObj.setPosition(glm::vec3(worldToScreen(firstHand.palmPosition().x), worldToScreen(firstHand.palmPosition().y - 200), worldToScreen(firstHand.palmPosition().z)));
+   // thumbX = properPosition(firstHand.fingers()[0].tipPosition()).x;
+    //thumbY = properPosition(firstHand.fingers()[0].tipPosition()).y;
+   // thumbZ = properPosition(firstHand.fingers()[0].tipPosition()).z;
     
-    finger1Obj.setPosition(glm::vec3(indexX, indexY, indexZ));
-    middleX = properPosition(firstHand.fingers()[2].tipPosition()).x;
-    middleY = properPosition(firstHand.fingers()[2].tipPosition()).y;
-    middleZ = properPosition(firstHand.fingers()[2].tipPosition()).z;
+    //thumbObj.setPosition(glm::vec3(thumbX, thumbY, thumbZ));
+    
+    
+    
+    //indexX = properPosition(firstHand.fingers()[1].tipPosition()).x;
+    //indexY = properPosition(firstHand.fingers()[1].tipPosition()).y;
+    //indexZ = properPosition(firstHand.fingers()[1].tipPosition()).z;
+    
+   // finger1Obj.setPosition(glm::vec3(indexX, indexY, indexZ));
+    //middleX = properPosition(firstHand.fingers()[2].tipPosition()).x;
+   // middleY = properPosition(firstHand.fingers()[2].tipPosition()).y;
+    //middleZ = properPosition(firstHand.fingers()[2].tipPosition()).z;
     
     
 }
 
-/* ORIGINAL
-
-glm::vec3 properHandPosition(Leap::Vector inputCoords){
-    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y - 200) * 10, normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z) * 10);
-}
-*/
-
-
-
-glm::vec3 properHandPosition(Leap::Vector inputCoords){
-    return glm::vec3(normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.x), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.y), normalise(lowerPos, higherPos, lowerRange, higherRange, inputCoords.z));
-}
-
-
-glm::vec3 properPosition(Leap::Vector inputCoords){
-    return glm::vec3(normalise(-200, 200, lowerRange, higherRange, inputCoords.x) * 4, normalise(-200, 200, lowerRange, higherRange, inputCoords.y - 200)* 4, normalise(-200, 200, lowerRange, higherRange, inputCoords.z) * 4);
-}
-
-
-
-float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue){
-    inValNorm = inputValue - currentRangeA;
-    aUpper = currentRangeB - currentRangeA;
-    normPos = inValNorm / aUpper;
-    
-    bUpperNorm = newRangeB - newRangeA;
-    bValNorm = normPos * bUpperNorm;
-    
-    return newRangeA + bValNorm;
-}
 
 
 
@@ -495,11 +468,6 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
     
 }
 
-
-void collisionDetection(){
-  //  std::cout << finger1Obj.getPosition().x << " " << finger1Obj.getPosition().y <<  " " << finger1Obj.getPosition().z << std::endl;
-}
-
 void generateScene(Shader ourShader){
 
         //generates keyboards
@@ -515,7 +483,7 @@ void generateScene(Shader ourShader){
     
     keyB.setPosition(glm::vec3(-0.7, 0, -8));
     keyB.setRotation(glm::vec3(1, 0, 0));
-    keyB.setScale(glm::vec3(1, 1, 1));
+    keyB.setScale(glm::vec3(0.6, 0.6, 0.6));
     keyB.generate("Resources/Textures/letterb.png");
     
     keyC.setShaderUniforms(ourShader);
@@ -524,6 +492,12 @@ void generateScene(Shader ourShader){
     keyC.setScale(glm::vec3(0.6, 0.6, 0.6));
     keyC.generate("Resources/Textures/letterb.png");
     
+    keyX.setShaderUniforms(ourShader);
+    
+    keyX.setPosition(glm::vec3(0, 0, -8));
+    keyX.setRotation(glm::vec3(1, 0, 0));
+    keyX.setScale(glm::vec3(0.6, 0.6, 0.6));
+    keyX.generate("Resources/Textures/letterx.png");
     
     
     
@@ -536,15 +510,15 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-        std::cout << handObj.getPosition().x << std::endl;
+       
     }
     if (key == GLFW_KEY_UP && action == GLFW_PRESS){
-        keyB.setPosition(glm::vec3(keyB.getPosition().x + 1, keyB.getPosition().y , keyB.getPosition().z ));
-        std::cout << keyB.getPosition().x << std::endl;
+        testz += 0.1;
+        keyA.setPosition(glm::vec3(keyA.getPosition().x, keyA.getPosition().y, keyA.getPosition().z + testz));
     }
     if (key == GLFW_KEY_DOWN && action == GLFW_PRESS){
-        keyB.setPosition(glm::vec3(keyB.getPosition().x - 1, keyB.getPosition().y , keyB.getPosition().z ));
-        std::cout << keyB.getPosition().x << std::endl;
+        testz -= 0.1;
+        keyA.setPosition(glm::vec3(keyA.getPosition().x, keyA.getPosition().y, keyA.getPosition().z + testz));
     }
     if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
         

@@ -18,9 +18,11 @@ class SceneObjects{
     glm::vec3 rotation;
     glm::vec3 position;
     glm::vec3 scale;
+    glm::vec4 testPosition;
     float yaw;
     float pitch;
     float roll;
+    
     
     
 public:
@@ -35,13 +37,14 @@ public:
     void setPitch(float);
     void setRoll(float);
     void setCollidable(bool);
-    
+    void setTestPosition(glm::vec4);
+ 
     
     glm::vec3 getPosition();
     glm::vec3 getScale();
     glm::vec3 getRotation();
     glm::vec3 getYawPitchRoll();
-    
+    glm::vec4 getTestPosition();
     
     float getYaw();
     float getPitch();

@@ -60,3 +60,9 @@ glm::vec3 SceneObjects::movePosition(glm::vec3 startPosition, double time){
     return glm::vec3(0, 0, 0);
 }
 
+glm::vec4 SceneObjects::getTestPosition(){
+    return this->testPosition;
+}
+void SceneObjects::setTestPosition(glm::vec4 inTest){
+    this->testPosition = inTest;
+}

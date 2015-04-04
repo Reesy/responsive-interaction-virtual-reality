@@ -93,12 +93,19 @@ void KeyObjects::generate(const char* filePath){
 
 }
 
-void KeyObjects::Draw(){
-    projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
+void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
+    
     keyTexture.Bind();
     
+    glm::vec4 myTest(0, 0, 0, 1);
+    
     glm::mat4 model;
+    
+    
     model = glm::translate(model, glm::vec3(this->getPosition().x, this->getPosition().y , this->getPosition().z));
+    this->setTestPosition(model * myTest);
+    
+    
     model = glm::rotate(model, 20.f, glm::vec3(1, 0, 0));
     model = glm::scale(model, glm::vec3(this->getScale().x, this->getScale().y, this->getScale().z));
     
