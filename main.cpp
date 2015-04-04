@@ -39,7 +39,6 @@ void update();
 void generateScene(Shader ourShader);
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 float worldToScreen(float inVal);
-Vector leapToWorld(Vector leapPoint, InteractionBox iBox);
 glm::mat4 rotationbyquat(float x, float y, float z);
 glm::vec3 properHandPosition(Leap::Vector inputCoords);
 glm::vec3 properPosition(Leap::Vector inputCoords);
@@ -68,7 +67,6 @@ void SampleListener::onFrame(const Controller& controller) {
 const GLuint WIDTH = 800, HEIGHT = 600;
 SampleListener listener;
 Controller controller;
-InteractionBox leapBox;
 ImageList images;
 Image LeftCam;
 Image RightCam;
@@ -204,20 +202,12 @@ int main()
           //  model = glm::translate(model, handObj.getPosition());
            // glm::mat4 worldCoords;
           
-            
-            
-            
             if(i == 0){  // Translations done to palm
                 model = glm::translate(model, handObj.getPosition());
               //  worldCoords = myView * model;
              //   worldCoords = model * myView;
                 //worldCoords = model * myTest;
                 model = model * glm::toMat4(CreateQuat(-yaw, -pitch, -roll));
-                
-               
-            //    std::cout << worldCoords.x << " " << worldCoords.y << " " << worldCoords.z << std::endl;
-               // std::cout << worldCoords << std::endl;
-              
                 
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -267,24 +257,13 @@ int main()
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
             }
-           
         }
-             
-        
         //keyA.setPosition(glm::vec3(1, 1, 1));
         keyA.Draw(view, projection);
       //  std::cout << keyA.getTestPosition().x << " " << keyA.getTestPosition().y << " " << keyA.getTestPosition().z <<  std::endl;
-     
-        
-        
-        
-        
-        
-        
         //  keyB.Draw(view, projection);
        // keyC.Draw(view, projection);
         //keyX.Draw();
-     //   keyboard.Draw();
         
         // Swap the screen buffers
         glfwSwapBuffers(window);
@@ -323,13 +302,6 @@ float worldToScreen(float xLeap){
     return finalResult;
 }
 
-Vector leapToWorld(Vector leapPoint, InteractionBox iBox)
-{
-    leapPoint.z *= -1.0; //right-hand to left-hand rule
-    Vector normalized = iBox.normalizePoint(leapPoint, false);
-    normalized += Vector(0.5, 0, 0.5); //recenter origin
-    return normalized * 100.0; //scale
-}
 void leapUpdate(){
     
     controller.setPolicyFlags(Controller::POLICY_IMAGES);
@@ -412,9 +384,9 @@ void generateScene(Shader ourShader){
         //generates keyboards
     keyA.setShaderUniforms(ourShader);
     
-    //keyA.setPosition(glm::vec3(0, 0, -8));
-   // keyA.setRotation(glm::vec3(1, 0, 0));
-    //keyA.setScale(glm::vec3(0.6, 0.6, 0.6));
+    keyA.setPosition(glm::vec3(0, 0, -8));
+    keyA.setRotation(glm::vec3(1, 0, 0));
+    keyA.setScale(glm::vec3(0.6, 0.6, 0.6));
     keyA.generate("Resources/Textures/lettera.png");
     
    /*
