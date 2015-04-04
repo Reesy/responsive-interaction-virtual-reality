@@ -169,7 +169,6 @@ int main()
     GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
     glm::mat4 test;
 
-    handObj.setScale(glm::vec3(1, 0.25, 1));
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -204,6 +203,7 @@ int main()
           
             if(i == 0){  // Translations done to palm
                 model = glm::translate(model, handObj.getPosition());
+                model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
               //  worldCoords = myView * model;
              //   worldCoords = model * myView;
                 //worldCoords = model * myTest;
@@ -218,6 +218,7 @@ int main()
 
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, thumbObj.getPosition());
+                model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-thumbYaw, -thumbPitch, -roll));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -226,6 +227,7 @@ int main()
             
             }else if(i == 2){
                 model = glm::translate(model, finger1Obj.getPosition());
+                model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger1Yaw, -finger1Pitch, -roll));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -235,6 +237,7 @@ int main()
             }
             else if ( i == 3 ){
                 model = glm::translate(model, finger2Obj.getPosition());
+                model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger2Yaw, -finger2Pitch, -roll));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -243,6 +246,7 @@ int main()
             }
             else if(i == 4){
                 model = glm::translate(model, finger3Obj.getPosition());
+                model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger3Yaw, -finger3Pitch, -roll));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -251,6 +255,7 @@ int main()
             }
             else if(i == 5){
                 model = glm::translate(model, finger4Obj.getPosition());
+                model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger4Yaw, -finger4Pitch, -roll));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -313,12 +318,6 @@ void leapUpdate(){
     
     Hand firstHand = hands[0];
     
-    
- 
-  //  Bone firstBone = firstHand.fingers()[0].bone(boneType);
-    
- //   palmRotation = firstHand.rotationMatrix(previousFrame).toMatrix4x4<glm::mat4>();
-    
     //used for rotation/orientation of the hand
     pitch = firstHand.direction().pitch();
     yaw = firstHand.direction().yaw();
@@ -354,9 +353,6 @@ void leapUpdate(){
     
 }
 
-
-
-
 glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
     
     float fSinPitch(sin(inPitch*0.5f));
@@ -381,7 +377,7 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
 
 void generateScene(Shader ourShader){
 
-        //generates keyboards
+    //generates keyboards
     keyA.setShaderUniforms(ourShader);
     
     keyA.setPosition(glm::vec3(0, 0, -8));
