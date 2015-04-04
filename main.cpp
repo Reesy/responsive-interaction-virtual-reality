@@ -211,7 +211,6 @@ int main()
                 
                 palm.Draw(ourShader);
                 fingerTip.Draw(ourShader);
-
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, thumbObj.getPosition());
                 model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
@@ -220,7 +219,6 @@ int main()
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
-            
             }else if(i == 2){
                 model = glm::translate(model, finger1Obj.getPosition());
                 model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
@@ -229,9 +227,7 @@ int main()
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
-           
-            }
-            else if ( i == 3 ){
+            }else if ( i == 3 ){
                 model = glm::translate(model, finger2Obj.getPosition());
                 model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger2Yaw, -finger2Pitch, -roll));
@@ -239,8 +235,7 @@ int main()
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
-            }
-            else if(i == 4){
+            }else if(i == 4){
                 model = glm::translate(model, finger3Obj.getPosition());
                 model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger3Yaw, -finger3Pitch, -roll));
@@ -248,8 +243,7 @@ int main()
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
-            }
-            else if(i == 5){
+            }else if(i == 5){
                 model = glm::translate(model, finger4Obj.getPosition());
                 model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger4Yaw, -finger4Pitch, -roll));
@@ -376,7 +370,7 @@ void generateScene(Shader ourShader){
     //generates keyboards
     keyA.setShaderUniforms(ourShader);
     
-    keyA.setPosition(glm::vec3(0, 0, -8));
+    keyA.setPosition(glm::vec3(0, 0, 0));
     keyA.setRotation(glm::vec3(1, 0, 0));
     keyA.setScale(glm::vec3(0.6, 0.6, 0.6));
     keyA.generate("Resources/Textures/lettera.png");
