@@ -63,18 +63,21 @@ glm::vec3 SceneObjects::movePosition(glm::vec3 startPosition, double time){
 glm::vec4 SceneObjects::getTestPosition(){
     return this->testPosition;
 }
+
+
 AABB SceneObjects::getAABB(){
     return this->boundingBox;
 }
-void SceneObjects::setAABB(float xminIN,float xmaxIN, float yminIN, float ymaxIN, float zminIN, float zmaxIN){
-    this->boundingBox.xmin = xminIN;
-    this->boundingBox.xmax = xmaxIN;
+
+void SceneObjects::setAABB(float inSize){
+    this->boundingBox.xmin = this->getPosition().x - (inSize / 2);
+    this->boundingBox.xmax = this->getPosition().x + (inSize / 2);
     
-    this->boundingBox.ymin = yminIN;
-    this->boundingBox.ymax = ymaxIN;
+    this->boundingBox.ymin = this->getPosition().y - (inSize / 2);
+    this->boundingBox.ymax = this->getPosition().y + (inSize / 2);
     
-    this->boundingBox.zmin = zminIN;
-    this->boundingBox.zmax = zmaxIN;
+    this->boundingBox.zmin = this->getPosition().z - (inSize / 2);
+    this->boundingBox.zmax = this->getPosition().z + (inSize / 2);
 }
 void SceneObjects::setTestPosition(glm::vec4 inTest){
     this->testPosition = inTest;

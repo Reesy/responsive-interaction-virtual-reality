@@ -33,6 +33,7 @@ class SceneObjects{
     float pitch;
     float roll;
     float yaw;
+    float size; //for AABB
     
 public:
     SceneObjects();
@@ -47,7 +48,8 @@ public:
     void setRoll(float);
     void setCollidable(bool);
     void setTestPosition(glm::vec4);
-    void setAABB(float, float, float, float, float, float);
+    void setAABB(float); //given size value for bounding box;
+    
     
     glm::vec3 getPosition();
     glm::vec3 getScale();

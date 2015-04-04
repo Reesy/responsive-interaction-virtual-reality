@@ -168,7 +168,7 @@ int main()
     GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
     GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
     glm::mat4 test;
-
+   
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
@@ -190,8 +190,10 @@ int main()
         projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
   
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
-        //calls leapMotion update
-        leapUpdate();
+       
+        
+        update();
+       
         
         for(GLuint i = 0; i < 6; i++)
         {
@@ -202,7 +204,7 @@ int main()
             //    model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
            
                 worldCoords = model * glm::vec4(0, 0, 0, 1);
-                std::cout << worldCoords.x << std::endl;
+             //   std::cout << worldCoords.x << std::endl;
                 model = model * glm::toMat4(CreateQuat(-yaw, -pitch, -roll));
                 
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
@@ -274,8 +276,12 @@ void render(){
 }
 void update(){
     
+    //calls leapMotion update
+    leapUpdate();
+   
     
     
+    collision_detection(keyA, handObj);
     
     
     
@@ -284,11 +290,14 @@ void update(){
     
 }
 /* This checks to see if the object of the first parameter collides with the object of the second parameter */
-void collisionDetection(SceneObjects objA, SceneObjects objB){
+void collision_detection(SceneObjects objA, SceneObjects objB){
     
     
-    
-    
+  //  std::cout << objA.getPosition().x << " " << objA.getPosition().y << " " << objA.getPosition().z << std::endl;
+   // std::cout << objA.getAABB().xmin << " This should be 0.5 " << std::endl;
+    //std::cout << objA.getAABB().xmax << " This should be 1.5 " << std::endl;
+    //setting the diameter
+        
     
     
 }
@@ -360,6 +369,8 @@ void leapUpdate(){
     
     finger4Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[4].tipPosition().x), worldToScreen(firstHand.fingers()[4].tipPosition().y - 200), worldToScreen(firstHand.fingers()[4].tipPosition().z)));
     
+     handObj.setAABB(1);
+    
 }
 
 glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
@@ -388,8 +399,8 @@ void generateScene(Shader ourShader){
 
     //generates keyboards
     keyA.setShaderUniforms(ourShader);
-    
     keyA.setPosition(glm::vec3(1, 1, -3));
+    keyA.setAABB(1); //Must be called after position;
     keyA.setRotation(glm::vec3(1, 0, 0));
     keyA.setScale(glm::vec3(1, 1, 1));
     keyA.generate("Resources/Textures/lettera.png");

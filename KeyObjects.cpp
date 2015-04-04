@@ -94,13 +94,24 @@ void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
     
     keyTexture.Bind();
     glm::mat4 model;
-    glm::mat4 mv;
+// glm::mat4 mv;
     model = glm::translate(model, glm::vec3(this->getPosition().x, this->getPosition().y , this->getPosition().z));
 
-    mv = model * view;
+ //   mv = model * view;
     model = glm::scale(model, glm::vec3(this->getScale().x, this->getScale().y, this->getScale().z));
     
-    this->setTestPosition(mv * glm::vec4(0, 0, 0, 1));
+   // this->setTestPosition(mv * glm::vec4(0, 0, 0, 1));
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
