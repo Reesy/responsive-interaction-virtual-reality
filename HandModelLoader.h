@@ -9,7 +9,6 @@
 #ifndef RIVR_CustomModelLoader_h
 #define RIVR_CustomModelLoader_h
 
-
 class HandModelLoader{
 private:
     GLuint VAO, VBO;
@@ -18,19 +17,21 @@ private:
     void generate()
     {
         GLfloat vertices[] = {
-            -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,    1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,    1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,   0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,   0.0f, 0.0f,
             
-            -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,    1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,    1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,   0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,   0.0f, 0.0f,
+    //coords  x      y      x       colors
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+             0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
             
             -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
             -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
@@ -39,34 +40,32 @@ private:
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
             -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
             
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+             0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
             
             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
             -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
             -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
             
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+             0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
             -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
             -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
         };
-        
-        
+
         // Create buffers/arrays
         glGenVertexArrays(1, &this->VAO);
         glGenBuffers(1, &this->VBO);
-        
-        
+ 
         glBindVertexArray(VAO);
         
         glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -79,22 +78,13 @@ private:
         glEnableVertexAttribArray(2);
         
         glBindVertexArray(0); // Unbind VAO
-        
-    
     }
-
-
-
-
 public:
     HandModelLoader(Shader shader){
-
         this->generate();
     }
     
     void init(){
-        
-        
     }
     
     void Draw(){
@@ -102,21 +92,6 @@ public:
         glDrawArrays(GL_TRIANGLES, 0, 36);
         glBindVertexArray(0);
     }
-        
-    
 
-    
-    
-    
-    
-    
-    
 };
-
-
-
-
-
-
-
 #endif

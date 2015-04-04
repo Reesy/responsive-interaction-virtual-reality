@@ -19,8 +19,6 @@ struct AABB{
     float ymax;
     float zmin;
     float zmax;
-    
-
 };
 
 class SceneObjects{
