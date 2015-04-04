@@ -185,9 +185,7 @@ int main()
         glm::mat4 model;
         glm::mat4 view;
         glm::mat4 projection;
-        glm::vec4 myTest(0, 0, 0, 1);
         glm::vec4 worldCoords;
-        glm::vec4 myView(viewX, viewY, viewZ, 1);
         
         projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
   
@@ -198,15 +196,13 @@ int main()
         for(GLuint i = 0; i < 6; i++)
         {
             glm::mat4 model; //resets model matrix to identify matrix
-          //  model = glm::translate(model, handObj.getPosition());
-           // glm::mat4 worldCoords;
-          
+
             if(i == 0){  // Translations done to palm
                 model = glm::translate(model, handObj.getPosition());
                 model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-              //  worldCoords = myView * model;
-             //   worldCoords = model * myView;
-                //worldCoords = model * myTest;
+           
+                worldCoords = model * glm::vec4(0, 0, 0, 1);
+                std::cout << worldCoords.x << std::endl;
                 model = model * glm::toMat4(CreateQuat(-yaw, -pitch, -roll));
                 
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
