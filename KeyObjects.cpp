@@ -101,13 +101,18 @@ void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
     
     glm::mat4 model;
     
-    
+    glm::mat4 mv;
     model = glm::translate(model, glm::vec3(this->getPosition().x, this->getPosition().y , this->getPosition().z));
-    this->setTestPosition(model * myTest);
+  
+  //  this->setTestPosition(model * myTest);
+  
     
-    
-    model = glm::rotate(model, 20.f, glm::vec3(1, 0, 0));
+  //  model = glm::rotate(model, 20.f, glm::vec3(1, 0, 0));
+    mv = model * view;
     model = glm::scale(model, glm::vec3(this->getScale().x, this->getScale().y, this->getScale().z));
+    
+    
+    this->setTestPosition(mv * myTest);
     
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));

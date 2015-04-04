@@ -87,7 +87,7 @@ private:
 
 
 public:
-    HandModelLoader(GLfloat vertices[], Shader shader){
+    HandModelLoader(Shader shader){
 
         this->generate();
     }
