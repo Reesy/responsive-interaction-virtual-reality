@@ -88,31 +88,19 @@ void KeyObjects::generate(const char* filePath){
     image = SOIL_load_image(this->textureFilePath, &width, &height, 0, SOIL_LOAD_RGB);
     SOIL_free_image_data(image);
     this->keyTexture.Generate(width, height, image);
-
-    
-
 }
 
 void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
     
     keyTexture.Bind();
-    
-    glm::vec4 myTest(0, 0, 0, 1);
-    
     glm::mat4 model;
-    
     glm::mat4 mv;
     model = glm::translate(model, glm::vec3(this->getPosition().x, this->getPosition().y , this->getPosition().z));
-  
-  //  this->setTestPosition(model * myTest);
-  
-    
-  //  model = glm::rotate(model, 20.f, glm::vec3(1, 0, 0));
+
     mv = model * view;
     model = glm::scale(model, glm::vec3(this->getScale().x, this->getScale().y, this->getScale().z));
     
-    
-    this->setTestPosition(mv * myTest);
+    this->setTestPosition(mv * glm::vec4(0, 0, 0, 1));
     
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
@@ -121,10 +109,6 @@ void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
     glBindVertexArray(this->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
     glBindVertexArray(0);
-    
-    
-    
-
 }
 
 void KeyObjects::setShaderUniforms(Shader ourShader){
