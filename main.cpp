@@ -297,8 +297,15 @@ void collision_detection(SceneObjects objA, SceneObjects objB){
    // std::cout << objA.getAABB().xmin << " This should be 0.5 " << std::endl;
     //std::cout << objA.getAABB().xmax << " This should be 1.5 " << std::endl;
     //setting the diameter
-        
     
+  //  std::cout << objB.getPosition().x << std::endl;
+  //  std::cout << objB.getAABB().xmin << " This should be the above -0.5 " << std::endl;
+    if(objB.getPosition().x > objA.getAABB().xmin && objB.getPosition().x < objA.getAABB().xmax){
+        std::cout << "INSIDE X" << std::endl;
+        
+    }else{
+        std::cout << "OUTSIDE " << std::endl;
+    }
     
 }
 
