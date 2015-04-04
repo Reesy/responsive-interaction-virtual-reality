@@ -12,6 +12,16 @@
 #include <stdio.h>
 #include <glm/glm.hpp>
 
+struct AABB{
+    float xmin;
+    float xmax;
+    float ymin;
+    float ymax;
+    float zmin;
+    float zmax;
+    
+
+};
 
 class SceneObjects{
     
@@ -19,11 +29,12 @@ class SceneObjects{
     glm::vec3 position;
     glm::vec3 scale;
     glm::vec4 testPosition;
-    float yaw;
+    
+    AABB boundingBox;
+    
     float pitch;
     float roll;
-    
-    
+    float yaw;
     
 public:
     SceneObjects();
@@ -38,13 +49,15 @@ public:
     void setRoll(float);
     void setCollidable(bool);
     void setTestPosition(glm::vec4);
- 
+    void setAABB(float, float, float, float, float, float);
     
     glm::vec3 getPosition();
     glm::vec3 getScale();
     glm::vec3 getRotation();
     glm::vec3 getYawPitchRoll();
     glm::vec4 getTestPosition();
+    AABB getAABB();
+    
     
     float getYaw();
     float getPitch();
