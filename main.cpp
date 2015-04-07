@@ -33,7 +33,7 @@ using namespace Leap;
 void update();
 void render();
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-void collision_detection(SceneObjects objA, SceneObjects objB);
+void collision_detection(KeyObjects objA, SceneObjects objB);
 void leapUpdate();
 void update();
 void generateScene(Shader ourShader);
@@ -278,33 +278,25 @@ void update(){
     
     //calls leapMotion update
     leapUpdate();
-   
-    
-    
+
     collision_detection(keyA, handObj);
-    
-    
-    
-    
-    
-    
+
 }
 /* This checks to see if the object of the first parameter collides with the object of the second parameter */
-void collision_detection(SceneObjects objA, SceneObjects objB){
+void collision_detection(KeyObjects objA, SceneObjects objB){
     
     
-  //  std::cout << objA.getPosition().x << " " << objA.getPosition().y << " " << objA.getPosition().z << std::endl;
-   // std::cout << objA.getAABB().xmin << " This should be 0.5 " << std::endl;
-    //std::cout << objA.getAABB().xmax << " This should be 1.5 " << std::endl;
-    //setting the diameter
+    //obja is keyA //objb us handObj
     
-  //  std::cout << objB.getPosition().x << std::endl;
-  //  std::cout << objB.getAABB().xmin << " This should be the above -0.5 " << std::endl;
-    if(objB.getPosition().x > objA.getAABB().xmin && objB.getPosition().x < objA.getAABB().xmax){
-        std::cout << "INSIDE X" << std::endl;
+    if(objB.getPosition().x > objA.getAABB().xmin && objB.getPosition().x < objA.getAABB().xmax &&
+       objB.getPosition().y > objA.getAABB().ymin && objB.getPosition().y < objA.getAABB().ymax &&
+       objB.getPosition().z > objA.getAABB().zmin && objB.getPosition().z < objA.getAABB().zmax)
+    {
+        std::cout << objA.getLetter() << std::endl;
+        std::cout << "bing" << std::endl;
         
     }else{
-        std::cout << "OUTSIDE " << std::endl;
+       // std::cout << "OUTSIDE " << std::endl;
     }
     
 }
@@ -376,7 +368,8 @@ void leapUpdate(){
     
     finger4Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[4].tipPosition().x), worldToScreen(firstHand.fingers()[4].tipPosition().y - 200), worldToScreen(firstHand.fingers()[4].tipPosition().z)));
     
-     handObj.setAABB(1);
+    //this resets the AABB to the current position of the hand.
+    handObj.setAABB(1);
     
 }
 
@@ -410,6 +403,7 @@ void generateScene(Shader ourShader){
     keyA.setAABB(1); //Must be called after position;
     keyA.setRotation(glm::vec3(1, 0, 0));
     keyA.setScale(glm::vec3(1, 1, 1));
+    keyA.setLetter('a');
     keyA.generate("Resources/Textures/lettera.png");
     
    /*

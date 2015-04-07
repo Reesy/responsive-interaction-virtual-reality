@@ -20,14 +20,12 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-
-
-
 class KeyObjects : public SceneObjects{
 
   public:
     const char* textureFilePath;
     
+    char letter;
     
     GLuint VAO, VBO;
     GLint modelLocation;
@@ -37,16 +35,15 @@ class KeyObjects : public SceneObjects{
     glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
-  
+    
     TextureLoader keyTexture;
     KeyObjects();
     void init();
     void generate(const char* filePath);
     void Draw(glm::mat4 view, glm::mat4 projection);
     void setShaderUniforms(Shader myShader);
+    void setLetter(char inLetter);
+    
+    char getLetter();
 };
-
-
-
-
 #endif /* defined(__RIVR__KeyObjects__) */
