@@ -293,8 +293,6 @@ void collision_detection(KeyObjects objA, SceneObjects objB){
        objB.getPosition().z > objA.getAABB().zmin && objB.getPosition().z < objA.getAABB().zmax)
     {
         std::cout << objA.getLetter() << std::endl;
-        std::cout << "bing" << std::endl;
-        
     }else{
        // std::cout << "OUTSIDE " << std::endl;
     }
@@ -314,13 +312,7 @@ float worldToScreen(float xLeap){
     float secondResult = AppRange / leapRange ;
     
     float finalResult = firstResult * secondResult + AppStart;
-        /*
-    if(finalResult > AppEnd){
-       return AppEnd;
-    }else if(finalResult < AppStart){
-      return AppStart;
-    }
-         */
+
     return finalResult;
 }
 
