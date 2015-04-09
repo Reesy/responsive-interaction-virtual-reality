@@ -137,9 +137,6 @@ const char* lowerCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-m_simple-black_512x512.png"
 };
 
-
-
-
 const char* upperCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_uppercase-letter-q_simple-black_512x512.png",
     "Resources/Textures/letterTexture/alphanum_uppercase-letter-w_simple-black_512x512.png",
@@ -173,7 +170,16 @@ KeyObjects KeyBoard[26] = {keyQ, keyW, keyE, keyR, keyT, keyY, keyU, keyI, keyO,
                             keyA, keyS, keyD, keyF, keyG, keyH, keyJ, keyK, keyL,
                               keyZ, keyX, keyC, keyV, keyB, keyN, keyM};
 
+char UpperKeys[26] = {'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
+                              'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
+                                'Z', 'X', 'C', 'V', 'B', 'N', 'M'};
 
+char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
+                              'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
+                                'z', 'x', 'c', 'v', 'b', 'n', 'm'};
+
+
+ 
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -346,7 +352,7 @@ void update(){
     //calls leapMotion update
     leapUpdate();
 
-    collision_detection(keyA, handObj);
+    collision_detection(KeyBoard[0], handObj);
 
 }
 /* This checks to see if the object of the first parameter collides with the object of the second parameter */
@@ -481,7 +487,7 @@ void generateScene(Shader ourShader){
     KeyBoard[0].setAABB(1); //Must be called after position;
     KeyBoard[0].setRotation(glm::vec3(1, 0, 0));
     KeyBoard[0].setScale(glm::vec3(1, 1, 1));
-    KeyBoard[0].setKey('a', 'A');
+    KeyBoard[0].setKey(UpperKeys[0], 'A');
     KeyBoard[0].setCase(true);
     KeyBoard[0].setLowerImage(lowerCaseImages[0]);
     KeyBoard[0].setUpperImage(upperCaseImages[0]);
@@ -519,9 +525,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
         
-        std::cout << "ding " << std::endl;
-        KeyBoard[0].isUpper = !keyQ.isUpper;
+        
+        KeyBoard[0].isUpper = !KeyBoard[0].isUpper;
         KeyBoard[0].update();
+        std::cout << KeyBoard[0].getKey() << std::endl;
         
     }
     if (key == GLFW_KEY_UP && action == GLFW_PRESS){
