@@ -126,8 +126,8 @@ char KeyObjects::getKey(){
 
 void KeyObjects::setKey(char inChar, char inChar2){
 
-    this->key = inChar;
-    this->key2 = inChar2;
+        this->key = inChar;
+        this->key2 = inChar2;
     
 }
 void KeyObjects::setCase(bool letterCase){
