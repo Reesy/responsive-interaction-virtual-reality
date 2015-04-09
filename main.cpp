@@ -356,8 +356,15 @@ void update(){
     
     //calls leapMotion update
     leapUpdate();
+    
     for(int i = 0; i < 26; i ++){
         collision_detection(KeyBoard[i], handObj);
+        collision_detection(KeyBoard[i], thumbObj);
+        collision_detection(KeyBoard[i], finger1Obj);
+        collision_detection(KeyBoard[i], finger2Obj);
+        collision_detection(KeyBoard[i], finger3Obj);
+        collision_detection(KeyBoard[i], finger4Obj);
+        
     }
 
 }
