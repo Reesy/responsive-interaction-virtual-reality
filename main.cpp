@@ -399,7 +399,10 @@ void generateScene(Shader ourShader){
     keyA.setRotation(glm::vec3(1, 0, 0));
     keyA.setScale(glm::vec3(1, 1, 1));
     keyA.setLetter('a');
-    keyA.generate("Resources/Textures/lettera.png");
+    keyA.setCase(true);
+    keyA.setLowerImage("Resources/Textures/letterTexture/alphanum_lowercase-letter-a_simple-black_512x512.png");
+    keyA.setUpperImage("Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png");
+    keyA.generate();
     
    /*
     keyB.setShaderUniforms(ourShader);

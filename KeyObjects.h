@@ -24,6 +24,10 @@ class KeyObjects : public SceneObjects{
 
   public:
     const char* textureFilePath;
+    const char* lowerImagePath;
+    const char* upperImagePath;
+    
+    bool isUpper;
     
     char letter;
     
@@ -36,14 +40,22 @@ class KeyObjects : public SceneObjects{
     glm::mat4 view;
     glm::mat4 projection;
     
+    
     TextureLoader keyTexture;
     KeyObjects();
     void init();
-    void generate(const char* filePath);
+    void generate();
     void Draw(glm::mat4 view, glm::mat4 projection);
     void setShaderUniforms(Shader myShader);
     void setLetter(char inLetter);
-    
     char getLetter();
+    
+    void setCase(bool letterCase);
+    void setUpperImage(char* image1);
+    void setLowerImage(char* image2);
+        
+        
+        
+    
 };
 #endif /* defined(__RIVR__KeyObjects__) */

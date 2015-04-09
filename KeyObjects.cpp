@@ -14,7 +14,7 @@ KeyObjects::KeyObjects(){
 }
 
 
-void KeyObjects::generate(const char* filePath){
+void KeyObjects::generate(){
     this->collidable = true;
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,   -0.0f, 0.0f,
@@ -59,8 +59,11 @@ void KeyObjects::generate(const char* filePath){
         -0.5f,  0.5f,  0.5f,  0.0f, -0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f, -1.0f
     };
-    
-    this->textureFilePath = filePath;
+    if(this->isUpper == true){
+        this->textureFilePath = this->upperImagePath;
+    }else{
+        this->textureFilePath = this->lowerImagePath;
+    }
     // Create buffers/arrays
     glGenVertexArrays(1, &this->VAO);
     glGenBuffers(1, &this->VBO);
@@ -119,7 +122,19 @@ char KeyObjects::getLetter(){
 void KeyObjects::setLetter(char inChar){
     this->letter = inChar;
 }
-
+void KeyObjects::setCase(bool letterCase){
+    
+    this->isUpper = letterCase;
+    
+}
+void KeyObjects::setUpperImage(char* image1){
+    this->upperImagePath = image1;
+}
+void KeyObjects::setLowerImage(char* image2){
+    
+    this->lowerImagePath = image2;
+    
+}
 void KeyObjects::setShaderUniforms(Shader ourShader){
     modelLocation = glGetUniformLocation(ourShader.Program, "model");
     viewLocation = glGetUniformLocation(ourShader.Program, "view");
