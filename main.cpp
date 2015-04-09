@@ -178,9 +178,6 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
                               'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
                                 'z', 'x', 'c', 'v', 'b', 'n', 'm'};
 
-
- 
-
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
@@ -289,7 +286,7 @@ int main()
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, thumbObj.getPosition());
           //      model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-                model = model * glm::toMat4(CreateQuat(-thumbYaw, -thumbPitch, -roll));
+                model = model * glm::toMat4(CreateQuat(-thumbYaw, -thumbPitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -297,7 +294,7 @@ int main()
             }else if(i == 2){
                 model = glm::translate(model, finger1Obj.getPosition());
               //  model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-                model = model * glm::toMat4(CreateQuat(-finger1Yaw, -finger1Pitch, -roll));
+                model = model * glm::toMat4(CreateQuat(-finger1Yaw, -finger1Pitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -305,7 +302,7 @@ int main()
             }else if ( i == 3 ){
                 model = glm::translate(model, finger2Obj.getPosition());
                // model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-                model = model * glm::toMat4(CreateQuat(-finger2Yaw, -finger2Pitch, -roll));
+                model = model * glm::toMat4(CreateQuat(-finger2Yaw, -finger2Pitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -313,7 +310,7 @@ int main()
             }else if(i == 4){
                 model = glm::translate(model, finger3Obj.getPosition());
                // model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-                model = model * glm::toMat4(CreateQuat(-finger3Yaw, -finger3Pitch, -roll));
+                model = model * glm::toMat4(CreateQuat(-finger3Yaw, -finger3Pitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -321,7 +318,7 @@ int main()
             }else if(i == 5){
                 model = glm::translate(model, finger4Obj.getPosition());
                // model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-                model = model * glm::toMat4(CreateQuat(-finger4Yaw, -finger4Pitch, -roll));
+                model = model * glm::toMat4(CreateQuat(-finger4Yaw, -finger4Pitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
@@ -416,6 +413,7 @@ void leapUpdate(){
     
     thumbPitch = firstHand.fingers()[0].direction().pitch();
     thumbYaw = firstHand.fingers()[0].direction().yaw();
+    
     //Use this code for finger orientation, perhaps abstract to class
     
     finger1Pitch = firstHand.fingers()[1].direction().pitch();
