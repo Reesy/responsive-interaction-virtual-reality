@@ -115,12 +115,20 @@ void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
     glBindVertexArray(0);
 }
 
-char KeyObjects::getLetter(){
-    return this->letter;
+char KeyObjects::getKey(){
+   
+    if(this->isUpper == true){
+        return this->key2;
+    }else{
+        return this->key;
+    }
 }
 
-void KeyObjects::setLetter(char inChar){
-    this->letter = inChar;
+void KeyObjects::setKey(char inChar, char inChar2){
+
+    this->key = inChar;
+    this->key2 = inChar2;
+    
 }
 void KeyObjects::setCase(bool letterCase){
     

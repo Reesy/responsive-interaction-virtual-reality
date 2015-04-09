@@ -29,7 +29,7 @@ class KeyObjects : public SceneObjects{
     
     bool isUpper;
     
-    char letter;
+    char key, key2;
     
     GLuint VAO, VBO;
     GLint modelLocation;
@@ -47,8 +47,8 @@ class KeyObjects : public SceneObjects{
     void generate();
     void Draw(glm::mat4 view, glm::mat4 projection);
     void setShaderUniforms(Shader myShader);
-    void setLetter(char inLetter);
-    char getLetter();
+    void setKey(char inLetter, char inLetter2);
+    char getKey();
     
     void setCase(bool letterCase);
     void setUpperImage(char* image1);

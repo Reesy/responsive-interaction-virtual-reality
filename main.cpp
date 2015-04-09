@@ -295,9 +295,11 @@ void collision_detection(KeyObjects objA, SceneObjects objB){
        objB.getPosition().y > objA.getAABB().ymin && objB.getPosition().y < objA.getAABB().ymax &&
        objB.getPosition().z > objA.getAABB().zmin && objB.getPosition().z < objA.getAABB().zmax)
     {
-        std::cout << objA.getLetter() << std::endl;
+        std::cout << objA.getKey() << std::endl;
     }else{
        // std::cout << "OUTSIDE " << std::endl;
+        std::cout << objA.getKey() << std::endl;
+      
     }
     
 }
@@ -398,7 +400,7 @@ void generateScene(Shader ourShader){
     keyA.setAABB(1); //Must be called after position;
     keyA.setRotation(glm::vec3(1, 0, 0));
     keyA.setScale(glm::vec3(1, 1, 1));
-    keyA.setLetter('a');
+    keyA.setKey('a', 'A');
     keyA.setCase(true);
     keyA.setLowerImage("Resources/Textures/letterTexture/alphanum_lowercase-letter-a_simple-black_512x512.png");
     keyA.setUpperImage("Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png");
@@ -436,7 +438,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-       
+        keyA.isUpper = !keyA.isUpper;
     }
     if (key == GLFW_KEY_UP && action == GLFW_PRESS){
         testz += 0.1;
