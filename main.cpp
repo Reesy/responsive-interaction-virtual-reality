@@ -469,34 +469,32 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
 //initialise scene
 void generateScene(Shader ourShader){
 
-    float keyPosX = -3.5; // left post position
+    float keyPosX = -2.5; // left post position
     float keyPosY = 1;
     for(int i = 0; i < 26; i++){
         //generates keyboards
         KeyBoard[i].setShaderUniforms(ourShader);
         KeyBoard[i].setPosition(glm::vec3(keyPosX, keyPosY, -2));
-        KeyBoard[i].setAABB(1); //Must be called after position;
+        KeyBoard[i].setAABB(0.5); //Must be called after position;
         KeyBoard[i].setRotation(glm::vec3(1, 0, 0));
-        KeyBoard[i].setScale(glm::vec3(1, 1, 1));
+        KeyBoard[i].setScale(glm::vec3(0.5, 0.5, 0.5));
         KeyBoard[i].setKey(LowerKeys[i], UpperKeys[i]);
         KeyBoard[i].setCase(true);
         KeyBoard[i].setLowerImage(lowerCaseImages[i]);
         KeyBoard[i].setUpperImage(upperCaseImages[i]);
         KeyBoard[i].generate();
-        keyPosX += 1.2;
+        keyPosX += 0.6;
         if(i == 9){
-            keyPosY -= 1.1;
+            keyPosY -= 0.6;
             //resets key for newline
-            keyPosX = -3.2;
+            keyPosX = -2.2;
         }else if(i == 18){
-            keyPosY -= 1.1;
+            keyPosY -= 0.6;
             //resets key for newline
-            keyPosX = -3.2;
+            keyPosX = -1.8;
         }
         
     }
-    
-    
 }
 
 // Is called whenever a key is pressed/released via GLFW
