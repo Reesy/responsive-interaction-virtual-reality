@@ -356,8 +356,9 @@ void update(){
     
     //calls leapMotion update
     leapUpdate();
-
-    collision_detection(KeyBoard[13], handObj);
+    for(int i = 0; i < 26; i ++){
+        collision_detection(KeyBoard[i], handObj);
+    }
 
 }
 /* This checks to see if the object of the first parameter collides with the object of the second parameter */
