@@ -357,7 +357,7 @@ void update(){
     //calls leapMotion update
     leapUpdate();
 
-    collision_detection(KeyBoard[0], handObj);
+    collision_detection(KeyBoard[13], handObj);
 
 }
 /* This checks to see if the object of the first parameter collides with the object of the second parameter */
@@ -474,7 +474,7 @@ void generateScene(Shader ourShader){
     for(int i = 0; i < 26; i++){
         //generates keyboards
         KeyBoard[i].setShaderUniforms(ourShader);
-        KeyBoard[i].setPosition(glm::vec3(keyPosX, keyPosY, -3));
+        KeyBoard[i].setPosition(glm::vec3(keyPosX, keyPosY, -2));
         KeyBoard[i].setAABB(1); //Must be called after position;
         KeyBoard[i].setRotation(glm::vec3(1, 0, 0));
         KeyBoard[i].setScale(glm::vec3(1, 1, 1));
