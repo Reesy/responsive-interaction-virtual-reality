@@ -108,8 +108,72 @@ SceneObjects finger4Obj;
 KeyObjects keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
 keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ;
 
-KeyObjects KeyBoard[26] = {keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
-    keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ};
+string lowerCaseImages[26] = {
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-q_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-w_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-e_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-r_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-t_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-y_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-u_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-i_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-o_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-p_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-a_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-s_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-d_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-f_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-g_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-h_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-j_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-k_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-l_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-z_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-x_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-c_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-v_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-b_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-n_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_lowercase-letter-m_simple-black_512x512.png"
+};
+
+
+
+
+string upperCaseImages[26] = {
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-q_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-w_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-e_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-r_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-t_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-y_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-u_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-i_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-o_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-p_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-s_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-d_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-f_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-g_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-h_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-j_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-k_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-l_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-z_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-x_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-c_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-v_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-b_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-n_simple-black_512x512.png",
+    "Resources/Textures/letterTexture/alphanum_uppercase-letter-m_simple-black_512x512.png"
+};
+
+KeyObjects KeyBoard[26] = {keyQ, keyW, keyE, keyR, keyT, keyY, keyU, keyI, keyO, keyP,
+                            keyA, keyS, keyD, keyF, keyG, keyH, keyJ, keyK, keyL,
+                              keyZ, keyX, keyC, keyV, keyB, keyN, keyM};
+
+
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -391,12 +455,12 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
     return myQuat;
     
 }
-
+//initialise scene
 void generateScene(Shader ourShader){
-
+/*
     //generates keyboards
     keyA.setShaderUniforms(ourShader);
-    keyA.setPosition(glm::vec3(1, 1, -3));
+    keyA.setPosition(glm::vec3(-3, 1, -3));
     keyA.setAABB(1); //Must be called after position;
     keyA.setRotation(glm::vec3(1, 0, 0));
     keyA.setScale(glm::vec3(1, 1, 1));
@@ -406,29 +470,46 @@ void generateScene(Shader ourShader){
     keyA.setUpperImage("Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png");
     keyA.generate();
     
-   /*
-    keyB.setShaderUniforms(ourShader);
     
-   // keyB.setPosition(glm::vec3(-0.7, 0, -8));
-    keyB.setRotation(glm::vec3(1, 0, 0));
-    keyB.setScale(glm::vec3(0.6, 0.6, 0.6));
-    keyB.generate("Resources/Textures/letterb.png");
+ 
+ 
+ 
+ */
     
-  //  keyC.setShaderUniforms(ourShader);
-    keyC.setPosition(glm::vec3(0.7, 0, -8));
-    keyC.setRotation(glm::vec3(1, 0, 0));
-    keyC.setScale(glm::vec3(0.6, 0.6, 0.6));
-    keyC.generate("Resources/Textures/letterb.png");
     
-    keyX.setShaderUniforms(ourShader);
+    KeyBoard[0].setShaderUniforms(ourShader);
+    KeyBoard[0].setPosition(glm::vec3(-3, 1, -3));
+    KeyBoard[0].setAABB(1); //Must be called after position;
+    KeyBoard[0].setRotation(glm::vec3(1, 0, 0));
+    KeyBoard[0].setScale(glm::vec3(1, 1, 1));
+    KeyBoard[0].setKey('a', 'A');
+    KeyBoard[0].setCase(true);
+    KeyBoard[0].setLowerImage("Resources/Textures/letterTexture/alphanum_lowercase-letter-a_simple-black_512x512.png");
+    KeyBoard[0].setUpperImage("Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png");
+    KeyBoard[0].generate();
     
-    keyX.setPosition(glm::vec3(0, 0, -8));
-    keyX.setRotation(glm::vec3(1, 0, 0));
-    keyX.setScale(glm::vec3(0.6, 0.6, 0.6));
-    keyX.generate("Resources/Textures/letterx.png");
     
-    */
     
+    
+    
+    
+    /*
+    float keyPos = 0; // left post position
+    for(int i = 0; i < 26; i++){
+        //generates keyboards
+        KeyBoard[i].setShaderUniforms(ourShader);
+        KeyBoard[i].setPosition(glm::vec3(1, 1, -3));
+        KeyBoard[i].setAABB(1); //Must be called after position;
+        KeyBoard[i].setRotation(glm::vec3(1, 0, 0));
+        KeyBoard[i].setScale(glm::vec3(1, 1, 1));
+        KeyBoard[i].setKey('a', 'A');
+        KeyBoard[i].setCase(true);
+        KeyBoard[i].setLowerImage("Resources/Textures/letterTexture/alphanum_lowercase-letter-a_simple-black_512x512.png");
+        KeyBoard[i].setUpperImage("Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png");
+        KeyBoard[i].generate();
+      //  keyPos += 0.5;
+    }
+     */
     
 }
 
