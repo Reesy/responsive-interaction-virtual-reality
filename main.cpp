@@ -439,6 +439,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
         keyA.isUpper = !keyA.isUpper;
+         keyA.generate();
     }
     if (key == GLFW_KEY_UP && action == GLFW_PRESS){
         testz += 0.1;
