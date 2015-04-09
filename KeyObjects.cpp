@@ -10,12 +10,12 @@
 #include "TextureLoader.h"
 
 KeyObjects::KeyObjects(){
-    
+    this->collidable = true;
 }
 
 
 void KeyObjects::generate(){
-    this->collidable = true;
+    
     GLfloat vertices[] = {
         -0.5f, -0.5f, -0.5f,   -0.0f, 0.0f,
         0.5f, -0.5f, -0.5f,    -1.0f, 0.0f,
@@ -92,7 +92,27 @@ void KeyObjects::generate(){
     SOIL_free_image_data(image);
     this->keyTexture.Generate(width, height, image);
 }
-
+void KeyObjects::update(){
+    
+    
+    
+    
+    if(this->isUpper == true){
+        this->textureFilePath = this->upperImagePath;
+    }else{
+        this->textureFilePath = this->lowerImagePath;
+    }
+    int width, height;
+    unsigned char* image;
+    
+    //Textues are loaded here.
+    
+    image = SOIL_load_image(this->textureFilePath, &width, &height, 0, SOIL_LOAD_RGB);
+    SOIL_free_image_data(image);
+    this->keyTexture.Generate(width, height, image);
+    
+    
+}
 void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
     
     keyTexture.Bind();

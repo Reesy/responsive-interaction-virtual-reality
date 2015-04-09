@@ -45,6 +45,7 @@ class KeyObjects : public SceneObjects{
     KeyObjects();
     void init();
     void generate();
+    void update();
     void Draw(glm::mat4 view, glm::mat4 projection);
     void setShaderUniforms(Shader myShader);
     void setKey(char inLetter, char inLetter2);
