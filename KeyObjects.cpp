@@ -155,10 +155,10 @@ void KeyObjects::setCase(bool letterCase){
     this->isUpper = letterCase;
     
 }
-void KeyObjects::setUpperImage(char* image1){
+void KeyObjects::setUpperImage(const char* image1){
     this->upperImagePath = image1;
 }
-void KeyObjects::setLowerImage(char* image2){
+void KeyObjects::setLowerImage(const char* image2){
     
     this->lowerImagePath = image2;
     

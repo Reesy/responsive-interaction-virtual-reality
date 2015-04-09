@@ -52,8 +52,8 @@ class KeyObjects : public SceneObjects{
     char getKey();
     
     void setCase(bool letterCase);
-    void setUpperImage(char* image1);
-    void setLowerImage(char* image2);
+    void setUpperImage(const char* image1);
+    void setLowerImage(const char* image2);
         
         
         

@@ -10,6 +10,7 @@
 #include <SOIL.h>
 
 // Other includes
+#include <string>
 #include "Shader.h"
 #include <GLM/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -21,7 +22,6 @@
 #include "TextureLoader.h"
 #include "Model.h"
 #include "HandModelLoader.h"
-
 #include "SceneObjects.h"
 #include "KeyObjects.h"
 
@@ -108,7 +108,7 @@ SceneObjects finger4Obj;
 KeyObjects keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
 keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ;
 
-string lowerCaseImages[26] = {
+const char* lowerCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-q_simple-black_512x512.png",
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-w_simple-black_512x512.png",
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-e_simple-black_512x512.png",
@@ -140,7 +140,7 @@ string lowerCaseImages[26] = {
 
 
 
-string upperCaseImages[26] = {
+const char* upperCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_uppercase-letter-q_simple-black_512x512.png",
     "Resources/Textures/letterTexture/alphanum_uppercase-letter-w_simple-black_512x512.png",
     "Resources/Textures/letterTexture/alphanum_uppercase-letter-e_simple-black_512x512.png",
@@ -323,7 +323,7 @@ int main()
             }
         }
         //keyA.setPosition(glm::vec3(1, 1, 1));
-        keyA.Draw(view, projection);
+        KeyBoard[0].Draw(view, projection);
       //  std::cout << keyA.getTestPosition().x << " " << keyA.getTestPosition().y << " " << keyA.getTestPosition().z <<  std::endl;
         //  keyB.Draw(view, projection);
        // keyC.Draw(view, projection);
@@ -361,8 +361,7 @@ void collision_detection(KeyObjects objA, SceneObjects objB){
     {
         std::cout << objA.getKey() << std::endl;
     }else{
-       // std::cout << "OUTSIDE " << std::endl;
-        std::cout << objA.getKey() << std::endl;
+   
       
     }
     
@@ -484,8 +483,8 @@ void generateScene(Shader ourShader){
     KeyBoard[0].setScale(glm::vec3(1, 1, 1));
     KeyBoard[0].setKey('a', 'A');
     KeyBoard[0].setCase(true);
-    KeyBoard[0].setLowerImage("Resources/Textures/letterTexture/alphanum_lowercase-letter-a_simple-black_512x512.png");
-    KeyBoard[0].setUpperImage("Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png");
+    KeyBoard[0].setLowerImage(lowerCaseImages[0]);
+    KeyBoard[0].setUpperImage(upperCaseImages[0]);
     KeyBoard[0].generate();
     
     
@@ -519,8 +518,11 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-        keyA.isUpper = !keyA.isUpper;
-         keyA.update();
+        
+        std::cout << "ding " << std::endl;
+        KeyBoard[0].isUpper = !keyQ.isUpper;
+        KeyBoard[0].update();
+        
     }
     if (key == GLFW_KEY_UP && action == GLFW_PRESS){
         testz += 0.1;
