@@ -329,7 +329,15 @@ int main()
             }
         }
         //keyA.setPosition(glm::vec3(1, 1, 1));
-        KeyBoard[0].Draw(view, projection);
+        
+        
+        for(int i = 0; i < 26; i++){
+             KeyBoard[i].Draw(view, projection);
+            
+        }
+        
+       
+  
       //  std::cout << keyA.getTestPosition().x << " " << keyA.getTestPosition().y << " " << keyA.getTestPosition().z <<  std::endl;
         //  keyB.Draw(view, projection);
        // keyC.Draw(view, projection);
@@ -462,59 +470,34 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
 }
 //initialise scene
 void generateScene(Shader ourShader){
-/*
-    //generates keyboards
-    keyA.setShaderUniforms(ourShader);
-    keyA.setPosition(glm::vec3(-3, 1, -3));
-    keyA.setAABB(1); //Must be called after position;
-    keyA.setRotation(glm::vec3(1, 0, 0));
-    keyA.setScale(glm::vec3(1, 1, 1));
-    keyA.setKey('a', 'A');
-    keyA.setCase(true);
-    keyA.setLowerImage("Resources/Textures/letterTexture/alphanum_lowercase-letter-a_simple-black_512x512.png");
-    keyA.setUpperImage("Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png");
-    keyA.generate();
-    
-    
- 
- 
- 
- */
-    
-    
-    KeyBoard[0].setShaderUniforms(ourShader);
-    KeyBoard[0].setPosition(glm::vec3(-3, 1, -3));
-    KeyBoard[0].setAABB(1); //Must be called after position;
-    KeyBoard[0].setRotation(glm::vec3(1, 0, 0));
-    KeyBoard[0].setScale(glm::vec3(1, 1, 1));
-    KeyBoard[0].setKey(UpperKeys[0], 'A');
-    KeyBoard[0].setCase(true);
-    KeyBoard[0].setLowerImage(lowerCaseImages[0]);
-    KeyBoard[0].setUpperImage(upperCaseImages[0]);
-    KeyBoard[0].generate();
-    
-    
-    
-    
-    
-    
-    /*
-    float keyPos = 0; // left post position
+
+    float keyPosX = -3.5; // left post position
+    float keyPosY = 1;
     for(int i = 0; i < 26; i++){
         //generates keyboards
         KeyBoard[i].setShaderUniforms(ourShader);
-        KeyBoard[i].setPosition(glm::vec3(1, 1, -3));
+        KeyBoard[i].setPosition(glm::vec3(keyPosX, keyPosY, -3));
         KeyBoard[i].setAABB(1); //Must be called after position;
         KeyBoard[i].setRotation(glm::vec3(1, 0, 0));
         KeyBoard[i].setScale(glm::vec3(1, 1, 1));
-        KeyBoard[i].setKey('a', 'A');
+        KeyBoard[i].setKey(LowerKeys[i], UpperKeys[i]);
         KeyBoard[i].setCase(true);
-        KeyBoard[i].setLowerImage("Resources/Textures/letterTexture/alphanum_lowercase-letter-a_simple-black_512x512.png");
-        KeyBoard[i].setUpperImage("Resources/Textures/letterTexture/alphanum_uppercase-letter-a_simple-black_512x512.png");
+        KeyBoard[i].setLowerImage(lowerCaseImages[i]);
+        KeyBoard[i].setUpperImage(upperCaseImages[i]);
         KeyBoard[i].generate();
-      //  keyPos += 0.5;
+        keyPosX += 1.2;
+        if(i == 9){
+            keyPosY -= 1.1;
+            //resets key for newline
+            keyPosX = -3.2;
+        }else if(i == 18){
+            keyPosY -= 1.1;
+            //resets key for newline
+            keyPosX = -3.2;
+        }
+        
     }
-     */
+    
     
 }
 
@@ -525,10 +508,12 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
         
+        for(int i = 0; i < 26; i++){
+            KeyBoard[i].isUpper = !KeyBoard[i].isUpper;
+            KeyBoard[i].update();
+            std::cout << KeyBoard[i].getKey() << std::endl;
+        }
         
-        KeyBoard[0].isUpper = !KeyBoard[0].isUpper;
-        KeyBoard[0].update();
-        std::cout << KeyBoard[0].getKey() << std::endl;
         
     }
     if (key == GLFW_KEY_UP && action == GLFW_PRESS){
