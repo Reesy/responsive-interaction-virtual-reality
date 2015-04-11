@@ -371,9 +371,6 @@ void update(){
 /* This checks to see if the object of the first parameter collides with the object of the second parameter */
 void collision_detection(KeyObjects objA, SceneObjects objB){
     
-    
-    //obja is keyA //objb us handObj
-    
     if(objB.getPosition().x > objA.getAABB().xmin && objB.getPosition().x < objA.getAABB().xmax &&
        objB.getPosition().y > objA.getAABB().ymin && objB.getPosition().y < objA.getAABB().ymax &&
        objB.getPosition().z > objA.getAABB().zmin && objB.getPosition().z < objA.getAABB().zmax)
