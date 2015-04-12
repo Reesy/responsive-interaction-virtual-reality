@@ -10,21 +10,19 @@
 #define __RIVR__GloveController__
 
 #include <stdio.h>
+#include <iostream>
 
 class GloveController{
     
+    FILE* file;
+    
     //initialise the arduino
     GloveController();
-    
-    
+
     void write(int arduinoNumber, int pin, int value);
-    
-    
+    void open();
+    void close();
     
 };
-
-
-
-
 
 #endif /* defined(__RIVR__GloveController__) */
