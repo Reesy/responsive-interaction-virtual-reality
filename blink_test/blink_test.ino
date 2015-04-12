@@ -10,10 +10,14 @@ void loop()
     if(Serial.available()>0)
     {
       digitalWrite(9, HIGH);   // turn the LED on (HIGH is the voltage level)
-      delay(1000);  
-      digitalWrite(9, LOW);    // turn the LED off by making the voltage LOW
-      delay(1000);              // wait for a second
-    }else{
         
+    }else{
+      digitalWrite(9, LOW);
     }
+}
+
+void serialEvent(){
+  
+  
+  
 }

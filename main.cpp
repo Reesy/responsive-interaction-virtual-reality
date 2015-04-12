@@ -183,12 +183,16 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
 
 
  FILE* file;
-
+ GloveController glove;
 
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
+   
+    
+    glove.open();
+    
     
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
@@ -248,16 +252,11 @@ int main()
     glm::mat4 test;
    
     
-    
-    GloveController glove;
-    
-    glove.open();
-    
-    
+  
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
-        glove.write(0, 0, 0);
+        
         glfwPollEvents();
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -341,21 +340,13 @@ int main()
                 fingerTip.Draw(ourShader);
             }
         }
-        //keyA.setPosition(glm::vec3(1, 1, 1));
         
         
         for(int i = 0; i < 26; i++){
              KeyBoard[i].Draw(view, projection);
             
         }
-        
-       
-  
-      //  std::cout << keyA.getTestPosition().x << " " << keyA.getTestPosition().y << " " << keyA.getTestPosition().z <<  std::endl;
-        //  keyB.Draw(view, projection);
-       // keyC.Draw(view, projection);
-        //keyX.Draw();
-        
+          glove.write(0, 0, 0);
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
