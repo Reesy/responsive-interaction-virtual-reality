@@ -180,6 +180,12 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
                               'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l',
                                 'z', 'x', 'c', 'v', 'b', 'n', 'm'};
 
+
+
+ FILE* file;
+
+
+
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
@@ -353,10 +359,10 @@ int main()
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
-    
+    glove.close();
     // Terminate GLFW, clearing any resources allocated by GLFW.
     glfwTerminate();
-    glove.close();
+   
     return 0;
 }
 

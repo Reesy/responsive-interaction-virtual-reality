@@ -14,8 +14,9 @@
 
 class GloveController{
     
-    FILE* file;
+    
 public:
+    FILE* file;
     //initialise the arduino
     GloveController();
 

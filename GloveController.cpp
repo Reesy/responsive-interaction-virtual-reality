@@ -13,6 +13,7 @@ GloveController::GloveController(){
 }
 
 void GloveController::write(int arduinoNumber, int pin, int value){
+   // std::cout << "The file is: " << file << std::endl;
     fprintf(file,"%d", 9); //Writing to the file
 }
 
