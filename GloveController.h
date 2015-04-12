@@ -15,7 +15,7 @@
 class GloveController{
     
     FILE* file;
-    
+public:
     //initialise the arduino
     GloveController();
 

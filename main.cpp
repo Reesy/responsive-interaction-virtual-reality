@@ -24,6 +24,8 @@
 #include "HandModelLoader.h"
 #include "SceneObjects.h"
 #include "KeyObjects.h"
+#include "GloveController.h"
+
 
 //#include "Model.h"
 
@@ -239,9 +241,17 @@ int main()
     GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
     glm::mat4 test;
    
+    
+    
+    GloveController glove;
+    
+    glove.open();
+    
+    
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
+        glove.write(0, 0, 0);
         glfwPollEvents();
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -346,6 +356,7 @@ int main()
     
     // Terminate GLFW, clearing any resources allocated by GLFW.
     glfwTerminate();
+    glove.close();
     return 0;
 }
 
