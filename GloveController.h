@@ -21,7 +21,7 @@ public:
     GloveController();
 
     void write(int arduinoNumber, int pin, int value);
-    void open();
+
     void close();
     
 };

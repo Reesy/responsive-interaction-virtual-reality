@@ -10,6 +10,7 @@
 #include <SOIL.h>
 
 // Other includes
+#include <iostream>
 #include <string>
 #include "Shader.h"
 #include <GLM/glm.hpp>
@@ -182,18 +183,15 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
 
 
 
- FILE* file;
- GloveController glove;
+
+FILE* ardFile;
+//ardFile = fopen("/dev/cu.usbmodem1411","w");
 
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
-   
-    
-    glove.open();
-    
-    
+    ardFile = fopen("/dev/cu.usbmodem1411","w");
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
     
@@ -252,11 +250,17 @@ int main()
     glm::mat4 test;
    
     
-  
+    while(!glfwWindowShouldClose(window)){
+        fprintf(ardFile, "%d", 'a'); //Writing to the file
+      
+        
+        
+    }
     // Game loop
     while (!glfwWindowShouldClose(window))
     {
-        
+        fprintf(ardFile,"%d",'a'); //Writing to the file
+        fprintf(ardFile,"%d", 'a'); //Writing to the file
         glfwPollEvents();
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
@@ -346,11 +350,11 @@ int main()
              KeyBoard[i].Draw(view, projection);
             
         }
-          glove.write(0, 0, 0);
+       
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
-    glove.close();
+    //glove.close();
     // Terminate GLFW, clearing any resources allocated by GLFW.
     glfwTerminate();
    
@@ -534,7 +538,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         keyA.setPosition(glm::vec3(keyA.getPosition().x, keyA.getPosition().y, keyA.getPosition().z + testz));
     }
     if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-        
+      
     }
     if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
         
