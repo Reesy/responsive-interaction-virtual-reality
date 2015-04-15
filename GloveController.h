@@ -11,12 +11,15 @@
 
 #include <stdio.h>
 #include <iostream>
-
+#include <unistd.h>
+#include "arduino-serial-lib.h"
 class GloveController{
     
-    
-public:
-    FILE* file;
+  
+    public:
+    arduinoSerialLib mySerial;
+    int port;
+   
     //initialise the arduino
     GloveController();
 

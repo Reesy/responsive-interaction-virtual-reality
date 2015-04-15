@@ -183,17 +183,16 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
 
 
 
-
-FILE* ardFile;
-//ardFile = fopen("/dev/cu.usbmodem1411","w");
-
+GloveController myglove;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
-    ardFile = fopen("/dev/cu.usbmodem1411","w");
+   // myglove.write(0, 0, 0);
+ 
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
+    
     
     // Init GLFW
     glfwInit();
@@ -249,18 +248,9 @@ int main()
     GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
     glm::mat4 test;
    
-    
-    while(!glfwWindowShouldClose(window)){
-        fprintf(ardFile, "%d", 'a'); //Writing to the file
-      
-        
-        
-    }
     // Game loop
-    while (!glfwWindowShouldClose(window))
-    {
-        fprintf(ardFile,"%d",'a'); //Writing to the file
-        fprintf(ardFile,"%d", 'a'); //Writing to the file
+    while (!glfwWindowShouldClose(window)){
+        
         glfwPollEvents();
         
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
