@@ -17,8 +17,8 @@ int val = 0;
 void setup() {
     Serial.begin(9600);
     pinMode(ledPin, OUTPUT);
-    result = map(4, 1, 9, 1, 255);
-    result2 = map(9, 1, 9, 1, 255);
+    
+   
 }
 
 void loop () {
@@ -36,16 +36,35 @@ void loop () {
         if(currentlyReading == true){
            
             if(val == '1'){
-                //digitalWrite(ledPin, HIGH);
-                
-                 analogWrite(ledPin, result);
+                result = map(1, 1, 9, 1, 255);
             }
             if(val == '2'){
-               // digitalWrite(ledPin, LOW);
-                
-                 analogWrite(ledPin, result2);
-             }
-        }
+                result = map(2, 1, 9, 1, 255);
+            }
+            if(val == '3'){
+                result = map(3, 1, 9, 1, 255);
+            }
+            if(val == '4'){
+                result = map(4, 1, 9, 1, 255);
+            }
+            if(val == '5'){
+                result = map(5, 1, 9, 1, 255);
+            }
+            if(val == '6'){
+                result = map(6, 1, 9, 1, 255);
+            }
+            if(val == '7'){
+                result = map(7, 1, 9, 1, 255);
+            }
+            if(val == '8'){
+                result = map(8, 1, 9, 1, 255);
+            }
+            if(val == '9'){
+                result = map(9, 1, 9, 1, 255);
+            }
+            
+             analogWrite(ledPin, result);  
+      }
       
     }
 }
