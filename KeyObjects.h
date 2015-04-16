@@ -28,7 +28,7 @@ class KeyObjects : public SceneObjects{
     const char* upperImagePath;
     
     bool isUpper;
-    
+    bool isColliding;
     char key, key2;
     
     GLuint VAO, VBO;
@@ -43,6 +43,7 @@ class KeyObjects : public SceneObjects{
     
     TextureLoader keyTexture;
     KeyObjects();
+    
     void init();
     void generate();
     void update();
@@ -51,6 +52,7 @@ class KeyObjects : public SceneObjects{
     void setKey(char inLetter, char inLetter2);
     char getKey();
     
+    void setColliding(bool inCollision);
     void setCase(bool letterCase);
     void setUpperImage(const char* image1);
     void setLowerImage(const char* image2);

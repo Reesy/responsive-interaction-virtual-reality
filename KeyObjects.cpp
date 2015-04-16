@@ -11,6 +11,7 @@
 
 KeyObjects::KeyObjects(){
     this->collidable = true;
+    this->isColliding = false;
 }
 
 
@@ -143,7 +144,9 @@ char KeyObjects::getKey(){
         return this->key;
     }
 }
-
+void KeyObjects::setColliding(bool inCollision){
+    this->isColliding = inCollision;
+}
 void KeyObjects::setKey(char inChar, char inChar2){
 
         this->key = inChar;
