@@ -188,7 +188,7 @@ GloveController myglove;
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
-   // myglove.write(0, 0, 0);
+    myglove.write(10, 0, 0, 0, 0);
  
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
@@ -247,12 +247,12 @@ int main()
     GLint viewLoc = glGetUniformLocation(ourShader.Program, "view");
     GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
     glm::mat4 test;
-   
+ 
     // Game loop
     while (!glfwWindowShouldClose(window)){
         
         glfwPollEvents();
-        
+        myglove.write(9, 1, 9, 0, 0);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 

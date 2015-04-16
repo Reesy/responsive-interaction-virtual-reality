@@ -36,15 +36,14 @@ void loop () {
             currentlyReading = true;
             Serial.println("Reading engaged");
         }
-        if(val == ':'){
-            currentlyReading = false;
-            Serial.println("Reading disengaged");
-        }
+       
         if(val == ','){
-            current++;
-            if(current == 3){
-              current = 0;
-            }
+             current++;
+         }
+         if(val == ':'){
+           // currentlyReading = false;
+         //   Serial.println("Reading disengaged");
+           current = 0;
         }
         if(currentlyReading == true){
            
