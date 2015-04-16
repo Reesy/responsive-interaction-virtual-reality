@@ -35,22 +35,25 @@ class KeyObjects : public SceneObjects{
     GLint modelLocation;
     GLint viewLocation;
     GLint projectionLocation;
+    
+    GLint collideLocation;
     // glm::mat4 model;
     glm::mat4 model;
     glm::mat4 view;
     glm::mat4 projection;
-    
-    
+  
+
     TextureLoader keyTexture;
     KeyObjects();
     
     void init();
     void generate();
     void update();
-    void Draw(glm::mat4 view, glm::mat4 projection);
+    void Draw(glm::mat4 view, glm::mat4 projection, Shader ourShader);
     void setShaderUniforms(Shader myShader);
     void setKey(char inLetter, char inLetter2);
     char getKey();
+    bool getColliding();
     
     void setColliding(bool inCollision);
     void setCase(bool letterCase);

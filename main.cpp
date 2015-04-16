@@ -228,10 +228,12 @@ int main()
     Model finger("Resources/Models/hand/bone.obj");
     Model fingerTip("Resources/Models/hand/boneTip.obj");
     
-    // Build and compile our shader program
+    //shader for hand model
     Shader ourShader("Resources/Shaders/VertexShader.vert", "Resources/Shaders/FragmentShader.frag");
 
-    generateScene(ourShader);
+    Shader sceneShader("Resources/Shaders/KeyVertexShader.vert", "Resources/Shaders/KeyFragmentShader.frag");
+    
+    generateScene(sceneShader);
     
     //this sets the camera
     viewX = 0.0;
@@ -335,7 +337,8 @@ int main()
         
         
         for(int i = 0; i < 26; i++){
-             KeyBoard[i].Draw(view, projection);
+            
+             KeyBoard[i].Draw(view, projection, sceneShader);
             
         }
        
@@ -373,6 +376,7 @@ void collision_detection(KeyObjects objA, SceneObjects objB){
        objB.getPosition().z > objA.getAABB().zmin && objB.getPosition().z < objA.getAABB().zmax)
     {
         std::cout << objA.getKey() << std::endl;
+        objA.setColliding(true);
     }else{
    
       

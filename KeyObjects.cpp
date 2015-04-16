@@ -114,8 +114,10 @@ void KeyObjects::update(){
     
     
 }
-void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
+void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection, Shader ourShader){
     
+    
+    ourShader.Use();
     keyTexture.Bind();
     glm::mat4 model;
 // glm::mat4 mv;
@@ -127,9 +129,22 @@ void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection){
    // this->setTestPosition(mv * glm::vec4(0, 0, 0, 1));
     
 
+    
+  //  glUniform4f(collidableColorLocation, 1000.0f, 1.5f, 1.0f, 1.0f);
     glUniformMatrix4fv(modelLocation, 1, GL_FALSE, glm::value_ptr(model));
     glUniformMatrix4fv(viewLocation, 1, GL_FALSE, glm::value_ptr(view));
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
+   
+    if(this->isColliding == true){
+        glUniform1f(glGetUniformLocation(ourShader.Program, "collide"), 1000.0f);
+    }else{
+        glUniform1f(glGetUniformLocation(ourShader.Program, "collide"), 1.0f);
+    }
+
+    //glUniformMatrix4fv(collidableColorLocation, 1, GL_FALSE, glm::value_ptr(colColor));
+   // glUniform3fv(collidableColorLocation, 1, GL_FALSE, glm::value_ptr(colColor));
+   
+ 
     
     glBindVertexArray(this->VAO);
     glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -144,8 +159,14 @@ char KeyObjects::getKey(){
         return this->key;
     }
 }
+
+bool KeyObjects::getColliding(){
+    return this->isColliding;
+}
 void KeyObjects::setColliding(bool inCollision){
     this->isColliding = inCollision;
+  
+
 }
 void KeyObjects::setKey(char inChar, char inChar2){
 
@@ -167,8 +188,10 @@ void KeyObjects::setLowerImage(const char* image2){
     
 }
 void KeyObjects::setShaderUniforms(Shader ourShader){
+    collideLocation = glGetUniformLocation(ourShader.Program, "collide");
     modelLocation = glGetUniformLocation(ourShader.Program, "model");
     viewLocation = glGetUniformLocation(ourShader.Program, "view");
     projectionLocation = glGetUniformLocation(ourShader.Program, "projection");
-    
+
+   
 }
