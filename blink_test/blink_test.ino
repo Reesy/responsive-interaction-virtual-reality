@@ -1,29 +1,22 @@
 bool currentlyReading = false;
-bool finishedReading = false;
-
-//values 1-9 for sensitivity of each pin. PWM
-int inVal1 = 0; // pin 9
-int inVal2 = 0; // pin 10
-int inVal3 = 0; // pin 11
-int inVal4 = 0; // pin 3
-int inVal5 = 0; // pin 5
 
 int result = 0;
 int result2 = 0;
 
-int ledPin = 9;
-int ledPin2 = 6;
-int ledPin3 = 3;
+int ledPin1 = 11;
+int ledPin2 = 10;
+int ledPin3 = 9;
+int ledPin4 = 6;
+int ledPin5 = 3;
 int val = 0;   
-int pins[3] = {9, 6, 3};
-int vals[3];
+int vals[5];
 
 
 int current = 0;
 void setup() {
     
     Serial.begin(9600);
-    pinMode(ledPin, OUTPUT);
+    pinMode(ledPin1, OUTPUT);
     
    
 }
@@ -34,19 +27,17 @@ void loop () {
         val = Serial.read();
         if(val == '>'){
             currentlyReading = true;
-            Serial.println("Reading engaged");
         }
-       
         if(val == ','){
              current++;
-         }
-         if(val == ':'){
-           // currentlyReading = false;
-         //   Serial.println("Reading disengaged");
-           current = 0;
+        }
+        if(val == ':'){
+             current = 0;
         }
         if(currentlyReading == true){
-           
+            if(val == '0'){
+                vals[current] = 0;
+            }
             if(val == '1'){
                 vals[current] = map(1, 1, 9, 1, 255);
             }
@@ -75,9 +66,11 @@ void loop () {
                 vals[current] = map(9, 1, 9, 1, 255);
             }
             
-             analogWrite(ledPin, vals[0]);  
+             analogWrite(ledPin1, vals[0]);  
              analogWrite(ledPin2, vals[1]);  
              analogWrite(ledPin3, vals[2]);  
+             analogWrite(ledPin4, vals[3]);
+             analogWrite(ledPin5, vals[4]);
       }
       
     }
