@@ -26,8 +26,10 @@ void GloveController::write(int pin1, int pin2, int pin3, int pin4, int pin5){
         std::string s1 = std::to_string(pin1);
         std::string s2 = std::to_string(pin2);
         std::string s3 = std::to_string(pin3);
+        std::string s4 = std::to_string(pin4);
+        std::string s5 = std::to_string(pin5);
     
-        std::string message = s1 + "," + s2  + "," + s3 + ":";
+        std::string message = s1 + "," + s2  + "," + s3 + "," + s4 + "," + s5 + ":";
     
       //  mySerial.serialport_write(port, s1.c_str() << s2.c_str());
        // mySerial.serialport_write(port, ",");
