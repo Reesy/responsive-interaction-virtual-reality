@@ -181,7 +181,7 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
 
 
 
-//GloveController myglove;
+GloveController myglove;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
@@ -356,9 +356,9 @@ void update(){
     
     //calls leapMotion update
     leapUpdate();
-    
+    myglove.write(0, 0, 0, 0, 0);
     for(int i = 0; i < 26; i ++){
-      
+        
         if(collision_detection(KeyBoard[i], handObj) == true){
             KeyBoard[i].setColliding(true);
         }
@@ -367,18 +367,22 @@ void update(){
         }
         else if(collision_detection(KeyBoard[i], finger1Obj) == true){
             KeyBoard[i].setColliding(true);
+            myglove.write(9, 0, 0, 0, 0);
         }
         else if(collision_detection(KeyBoard[i], finger2Obj) == true){
             KeyBoard[i].setColliding(true);
+             myglove.write(0, 9, 0, 0, 0);
         }
         else if(collision_detection(KeyBoard[i], finger3Obj) == true){
             KeyBoard[i].setColliding(true);
+             myglove.write(0, 0, 9, 0, 0);
         }
         else if(collision_detection(KeyBoard[i], finger4Obj) == true){
             KeyBoard[i].setColliding(true);
         }
         else{
              KeyBoard[i].setColliding(false);
+             myglove.write(0, 0, 0, 0, 0);
         }
 
     }
