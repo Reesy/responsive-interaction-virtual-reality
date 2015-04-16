@@ -34,7 +34,7 @@ using namespace Leap;
 void update();
 void render();
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode);
-void collision_detection(KeyObjects objA, SceneObjects objB);
+bool collision_detection(KeyObjects objA, SceneObjects objB);
 void leapUpdate();
 void update();
 void generateScene(Shader ourShader);
@@ -358,28 +358,44 @@ void update(){
     leapUpdate();
     
     for(int i = 0; i < 26; i ++){
-        collision_detection(KeyBoard[i], handObj);
-        collision_detection(KeyBoard[i], thumbObj);
-        collision_detection(KeyBoard[i], finger1Obj);
-        collision_detection(KeyBoard[i], finger2Obj);
-        collision_detection(KeyBoard[i], finger3Obj);
-        collision_detection(KeyBoard[i], finger4Obj);
+        if(collision_detection(KeyBoard[i], handObj) == true){
+            KeyBoard[i].setColliding(true);
+        }
+        if(collision_detection(KeyBoard[i], thumbObj) == true){
+            KeyBoard[i].setColliding(true);
+        }
+        if(collision_detection(KeyBoard[i], finger1Obj) == true){
+            KeyBoard[i].setColliding(true);
+        }
+        if(collision_detection(KeyBoard[i], finger2Obj) == true){
+            KeyBoard[i].setColliding(true);
+        }
+        if(collision_detection(KeyBoard[i], finger3Obj) == true){
+            KeyBoard[i].setColliding(true);
+        }
+        if(collision_detection(KeyBoard[i], finger4Obj) == true){
+            KeyBoard[i].setColliding(true);
+        }
+
+
+        
+        
         
     }
+    
 
 }
 /* This checks to see if the object of the first parameter collides with the object of the second parameter */
-void collision_detection(KeyObjects objA, SceneObjects objB){
+bool collision_detection(KeyObjects objA, SceneObjects objB){
     
     if(objB.getPosition().x > objA.getAABB().xmin && objB.getPosition().x < objA.getAABB().xmax &&
        objB.getPosition().y > objA.getAABB().ymin && objB.getPosition().y < objA.getAABB().ymax &&
        objB.getPosition().z > objA.getAABB().zmin && objB.getPosition().z < objA.getAABB().zmax)
     {
-        std::cout << objA.getKey() << std::endl;
-        objA.setColliding(true);
+       
+        return true;
     }else{
-   
-      
+        return false;
     }
     
 }
@@ -516,7 +532,6 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         for(int i = 0; i < 26; i++){
             KeyBoard[i].isUpper = !KeyBoard[i].isUpper;
             KeyBoard[i].update();
-            std::cout << KeyBoard[i].getKey() << std::endl;
         }
         
         
