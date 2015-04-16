@@ -358,33 +358,34 @@ void update(){
     leapUpdate();
     myglove.write(0, 0, 0, 0, 0);
     for(int i = 0; i < 26; i ++){
-        
         if(collision_detection(KeyBoard[i], handObj) == true){
             KeyBoard[i].setColliding(true);
         }
         else if(collision_detection(KeyBoard[i], thumbObj) == true){
             KeyBoard[i].setColliding(true);
+             myglove.write(9, 0, 0, 0, 0);
         }
         else if(collision_detection(KeyBoard[i], finger1Obj) == true){
             KeyBoard[i].setColliding(true);
-            myglove.write(9, 0, 0, 0, 0);
+            myglove.write(0, 9, 0, 0, 0);
         }
         else if(collision_detection(KeyBoard[i], finger2Obj) == true){
             KeyBoard[i].setColliding(true);
-             myglove.write(0, 9, 0, 0, 0);
+            myglove.write(0, 0, 9, 0, 0);
         }
         else if(collision_detection(KeyBoard[i], finger3Obj) == true){
             KeyBoard[i].setColliding(true);
-             myglove.write(0, 0, 9, 0, 0);
+            myglove.write(0, 0, 0, 9, 0);
         }
         else if(collision_detection(KeyBoard[i], finger4Obj) == true){
             KeyBoard[i].setColliding(true);
+            myglove.write(0, 0, 0, 0, 9);
         }
         else{
-             KeyBoard[i].setColliding(false);
-             myglove.write(0, 0, 0, 0, 0);
+            KeyBoard[i].setColliding(false);
+            
         }
-
+     
     }
     
 
@@ -548,9 +549,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         keyA.setPosition(glm::vec3(keyA.getPosition().x, keyA.getPosition().y, keyA.getPosition().z + testz));
     }
     if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-      
+        myglove.write(9, 0, 0, 0, 0);
     }
     if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
-        
+        myglove.write(1, 0, 0, 0, 0);
     }
 }
