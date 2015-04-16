@@ -349,9 +349,6 @@ int main()
     return 0;
 }
 
-void render(){
-    
-}
 void update(){
     
     //calls leapMotion update
