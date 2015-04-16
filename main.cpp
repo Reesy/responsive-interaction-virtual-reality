@@ -64,8 +64,8 @@ void SampleListener::onFrame(const Controller& controller) {
 }
 
 //variable declarations
-
-const GLuint WIDTH = 2560, HEIGHT = 1600;
+//2560, 1600 mac
+const GLuint WIDTH = 1920, HEIGHT = 1080;
 SampleListener listener;
 Controller controller;
 ImageList images;
@@ -264,8 +264,8 @@ int main()
         glm::mat4 projection;
         glm::vec4 worldCoords;
         
-        projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f);
-  
+      //  projection = glm::perspective(45.0f, (GLfloat)800 / (GLfloat)600, 0.1f, 100.0f); //currently working
+        projection = glm::perspective(45.0f, (GLfloat)WIDTH / (GLfloat)HEIGHT, 0.1f, 100.0f);
         view = glm::translate(view, glm::vec3(viewX, viewY, viewZ));
        
         
