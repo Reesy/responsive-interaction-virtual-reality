@@ -378,7 +378,7 @@ void update(){
             KeyBoard[i].setColliding(true);
         }
         else{
-          //   KeyBoard[i].setColliding(false);
+             KeyBoard[i].setColliding(false);
         }
 
     }
