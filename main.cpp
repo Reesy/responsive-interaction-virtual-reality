@@ -65,7 +65,7 @@ void SampleListener::onFrame(const Controller& controller) {
 
 //variable declarations
 //2560, 1600 mac
-const GLuint WIDTH = 1920, HEIGHT = 1080;
+const GLuint WIDTH = 800, HEIGHT = 600;
 SampleListener listener;
 Controller controller;
 ImageList images;
@@ -203,8 +203,8 @@ int main()
     
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-   // GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); //windowed
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); //windowed
+   // GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
     glfwMakeContextCurrent(window);
     //usedfor double buffering
     glfwSwapInterval(1);
@@ -385,10 +385,10 @@ void collision_detection(KeyObjects objA, SceneObjects objB){
 
 //This returns a value from the rift and maps it to the screen space
 float worldToScreen(float xLeap){
-    float leapStart = -200.0;
-    float leapEnd = 200.0;
-    float AppStart = -2.0;
-    float AppEnd = 2.0;
+    float leapStart = -300.0;
+    float leapEnd = 300.0;
+    float AppStart = -4.0;
+    float AppEnd = 4.0;
     float leapRange = leapEnd - leapStart;
     float AppRange  = AppEnd - AppStart;
 
@@ -433,9 +433,12 @@ void leapUpdate(){
     finger4Pitch = firstHand.fingers()[4].direction().pitch();
     finger4Yaw = firstHand.fingers()[4].direction().yaw();
     
+    
     handObj.setPosition(glm::vec3(worldToScreen(firstHand.palmPosition().x), worldToScreen(firstHand.palmPosition().y - 200), worldToScreen(firstHand.palmPosition().z)));
     
     thumbObj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[0].tipPosition().x), worldToScreen(firstHand.fingers()[0].tipPosition().y - 200), worldToScreen(firstHand.fingers()[0].tipPosition().z)));
+    
+   
     
     finger1Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[1].tipPosition().x), worldToScreen(firstHand.fingers()[1].tipPosition().y - 200), worldToScreen(firstHand.fingers()[1].tipPosition().z)));
     
