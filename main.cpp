@@ -358,29 +358,29 @@ void update(){
     leapUpdate();
     
     for(int i = 0; i < 26; i ++){
+      
         if(collision_detection(KeyBoard[i], handObj) == true){
             KeyBoard[i].setColliding(true);
         }
-        if(collision_detection(KeyBoard[i], thumbObj) == true){
+        else if(collision_detection(KeyBoard[i], thumbObj) == true){
             KeyBoard[i].setColliding(true);
         }
-        if(collision_detection(KeyBoard[i], finger1Obj) == true){
+        else if(collision_detection(KeyBoard[i], finger1Obj) == true){
             KeyBoard[i].setColliding(true);
         }
-        if(collision_detection(KeyBoard[i], finger2Obj) == true){
+        else if(collision_detection(KeyBoard[i], finger2Obj) == true){
             KeyBoard[i].setColliding(true);
         }
-        if(collision_detection(KeyBoard[i], finger3Obj) == true){
+        else if(collision_detection(KeyBoard[i], finger3Obj) == true){
             KeyBoard[i].setColliding(true);
         }
-        if(collision_detection(KeyBoard[i], finger4Obj) == true){
+        else if(collision_detection(KeyBoard[i], finger4Obj) == true){
             KeyBoard[i].setColliding(true);
+        }
+        else{
+          //   KeyBoard[i].setColliding(false);
         }
 
-
-        
-        
-        
     }
     
 
@@ -392,7 +392,6 @@ bool collision_detection(KeyObjects objA, SceneObjects objB){
        objB.getPosition().y > objA.getAABB().ymin && objB.getPosition().y < objA.getAABB().ymax &&
        objB.getPosition().z > objA.getAABB().zmin && objB.getPosition().z < objA.getAABB().zmax)
     {
-       
         return true;
     }else{
         return false;

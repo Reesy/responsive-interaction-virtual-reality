@@ -11,7 +11,7 @@
 
 KeyObjects::KeyObjects(){
     this->collidable = true;
- //   this->isColliding = true;
+    this->isColliding = false;
 }
 
 
@@ -136,7 +136,7 @@ void KeyObjects::Draw(glm::mat4 view, glm::mat4 projection, Shader ourShader){
     glUniformMatrix4fv(projectionLocation, 1, GL_FALSE, glm::value_ptr(projection));
     
    
-    if(isColliding == true){
+    if(this->isColliding == true){
         glUniform1f(glGetUniformLocation(ourShader.Program, "collide"), 1000.0f);
     }else{
         glUniform1f(glGetUniformLocation(ourShader.Program, "collide"), 1.0f);
