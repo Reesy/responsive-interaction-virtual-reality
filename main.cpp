@@ -20,9 +20,7 @@
 #include <GLM/gtx/quaternion.hpp>
 #include <LEAP/Leap.h>
 #include <LEAP/LeapMath.h>
-#include "TextureLoader.h"
 #include "Model.h"
-#include "HandModelLoader.h"
 #include "SceneObjects.h"
 #include "KeyObjects.h"
 #include "GloveController.h"
@@ -67,7 +65,7 @@ void SampleListener::onFrame(const Controller& controller) {
 
 //variable declarations
 
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 2560, HEIGHT = 1600;
 SampleListener listener;
 Controller controller;
 ImageList images;
@@ -183,12 +181,12 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
 
 
 
-GloveController myglove;
+//GloveController myglove;
 
 // The MAIN function, from here we start the application and run the game loop
 int main()
 {
-    myglove.write(10, 0, 0, 0, 0);
+   // myglove.write(10, 0, 0, 0, 0);
  
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
@@ -205,7 +203,8 @@ int main()
     
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr);
+   // GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); //windowed
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
     glfwMakeContextCurrent(window);
     //usedfor double buffering
     glfwSwapInterval(1);
@@ -232,7 +231,6 @@ int main()
     // Build and compile our shader program
     Shader ourShader("Resources/Shaders/VertexShader.vert", "Resources/Shaders/FragmentShader.frag");
 
-    HandModelLoader custom(ourShader);
     generateScene(ourShader);
     
     //this sets the camera
@@ -252,7 +250,7 @@ int main()
     while (!glfwWindowShouldClose(window)){
         
         glfwPollEvents();
-        myglove.write(9, 1, 9, 0, 0);
+     //   myglove.write(1, 5, 9, 0, 0);
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
