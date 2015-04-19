@@ -25,9 +25,6 @@
 #include "KeyObjects.h"
 #include "GloveController.h"
 
-
-//#include "Model.h"
-
 using namespace Leap;
 
 //forward declarations
@@ -64,8 +61,7 @@ void SampleListener::onFrame(const Controller& controller) {
     //  std::cout << "Frame available" << std::endl;
 }
 
-//variable declarations
-//2560, 1600 mac
+
 const GLuint WIDTH = 2560, HEIGHT = 1600;
 SampleListener listener;
 Controller controller;
@@ -73,9 +69,6 @@ ImageList images;
 Image LeftCam;
 Image RightCam;
 Frame frame;
-
-
-
 
 GLuint left_texture;
 GLuint right_texture;
@@ -350,6 +343,7 @@ int main()
             Target1.Draw(view, projection, sceneShader);
             Target2.Draw(view, projection, sceneShader);
             Target3.Draw(view, projection, sceneShader);
+            Target4.Draw(view, projection, sceneShader);
             
         }else{
             for(int i = 0; i < 26; i++){
@@ -375,13 +369,26 @@ void update(){
     myglove.write(0, 0, 0, 0, 0);
     if(TargetTest == true){
         
-        
-        
-        
-        
-        
-        
-        
+        if(collision_detection(Target1, handObj) == true){
+            Target1.setColliding(true);
+        }else{
+            Target1.setColliding(false);
+        }
+        if(collision_detection(Target2, handObj) == true){
+            Target2.setColliding(true);
+        }else{
+            Target2.setColliding(false);
+        }
+        if(collision_detection(Target3, handObj) == true){
+            Target3.setColliding(true);
+        }else{
+            Target3.setColliding(false);
+        }
+        if(collision_detection(Target4, handObj) == true){
+            Target4.setColliding(true);
+        }else{
+            Target4.setColliding(false);
+        }
     }else{
     
     
@@ -582,6 +589,15 @@ void generateTestScene(Shader ourShader){
     Target3.setLowerImage("Resources/Textures/Target.png");
     Target3.setUpperImage("Resources/Textures/Target.png");
     Target3.generate();
+    
+    Target4.setShaderUniforms(ourShader);
+    Target4.setPosition(glm::vec3(-2, -0.5, -1));
+    Target4.setAABB(0.5); //Must be called after position;
+    Target4.setRotation(glm::vec3(1, 0, 0));
+    Target4.setScale(glm::vec3(0.5, 0.5, 0.5));
+    Target4.setLowerImage("Resources/Textures/Target.png");
+    Target4.setUpperImage("Resources/Textures/Target.png");
+    Target4.generate();
     
     
 }
