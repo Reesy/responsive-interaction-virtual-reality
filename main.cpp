@@ -38,6 +38,7 @@ bool collision_detection(KeyObjects objA, SceneObjects objB);
 void leapUpdate();
 void update();
 void generateScene(Shader ourShader);
+void generateTestScene(Shader ourShader);
 float normalise(float currentRangeA, float currentRangeB, float newRangeA, float newRangeB, float inputValue);
 float worldToScreen(float inVal);
 glm::mat4 rotationbyquat(float x, float y, float z);
@@ -65,13 +66,16 @@ void SampleListener::onFrame(const Controller& controller) {
 
 //variable declarations
 //2560, 1600 mac
-const GLuint WIDTH = 800, HEIGHT = 600;
+const GLuint WIDTH = 2560, HEIGHT = 1600;
 SampleListener listener;
 Controller controller;
 ImageList images;
 Image LeftCam;
 Image RightCam;
 Frame frame;
+
+
+
 
 GLuint left_texture;
 GLuint right_texture;
@@ -93,6 +97,7 @@ float middleX, middleY, middleZ;
 float modelRotX, palmAngle, handRoll;
 float testx, testy, testz;
 
+bool TargetTest = false;
 bool CameraMove = false;
 Leap::Matrix rotationMatrix;
 Vector thumbTranslation;
@@ -108,6 +113,8 @@ SceneObjects finger4Obj;
 
 KeyObjects keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
 keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ;
+
+KeyObjects Target1, Target2, Target3, Target4;
 
 const char* lowerCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-q_simple-black_512x512.png",
@@ -190,7 +197,7 @@ int main()
  
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
-    
+    TargetTest = true;
     
     // Init GLFW
     glfwInit();
@@ -203,8 +210,8 @@ int main()
     
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); //windowed
-   // GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
+  //  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); //windowed
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
     glfwMakeContextCurrent(window);
     //usedfor double buffering
     glfwSwapInterval(1);
@@ -233,8 +240,12 @@ int main()
 
     Shader sceneShader("Resources/Shaders/KeyVertexShader.vert", "Resources/Shaders/KeyFragmentShader.frag");
     
-    generateScene(sceneShader);
-    
+    if(TargetTest == true){
+        generateTestScene(sceneShader);
+    }else{
+        generateScene(sceneShader);
+    }
+        
     //this sets the camera
     viewX = 0.0;
     viewY = 0.0;
@@ -335,13 +346,18 @@ int main()
             }
         }
         
-        
-        for(int i = 0; i < 26; i++){
+        if(TargetTest == true){
+            Target1.Draw(view, projection, sceneShader);
+            Target2.Draw(view, projection, sceneShader);
+            Target3.Draw(view, projection, sceneShader);
             
-             KeyBoard[i].Draw(view, projection, sceneShader);
+        }else{
+            for(int i = 0; i < 26; i++){
             
+                KeyBoard[i].Draw(view, projection, sceneShader);
+            
+            }
         }
-       
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
@@ -357,37 +373,49 @@ void update(){
     //calls leapMotion update
     leapUpdate();
     myglove.write(0, 0, 0, 0, 0);
-    for(int i = 0; i < 26; i ++){
-        if(collision_detection(KeyBoard[i], handObj) == true){
-            KeyBoard[i].setColliding(true);
-        }
-        else if(collision_detection(KeyBoard[i], thumbObj) == true){
-            KeyBoard[i].setColliding(true);
-             myglove.write(9, 0, 0, 0, 0);
-        }
-        else if(collision_detection(KeyBoard[i], finger1Obj) == true){
-            KeyBoard[i].setColliding(true);
-            myglove.write(0, 9, 0, 0, 0);
-        }
-        else if(collision_detection(KeyBoard[i], finger2Obj) == true){
-            KeyBoard[i].setColliding(true);
-            myglove.write(0, 0, 9, 0, 0);
-        }
-        else if(collision_detection(KeyBoard[i], finger3Obj) == true){
-            KeyBoard[i].setColliding(true);
-            myglove.write(0, 0, 0, 9, 0);
-        }
-        else if(collision_detection(KeyBoard[i], finger4Obj) == true){
-            KeyBoard[i].setColliding(true);
-            myglove.write(0, 0, 0, 0, 9);
-        }
-        else{
-            KeyBoard[i].setColliding(false);
-            
-        }
-     
-    }
+    if(TargetTest == true){
+        
+        
+        
+        
+        
+        
+        
+        
+    }else{
     
+    
+        for(int i = 0; i < 26; i ++){
+            if(collision_detection(KeyBoard[i], handObj) == true){
+            KeyBoard[i].setColliding(true);
+            }
+            else if(collision_detection(KeyBoard[i], thumbObj) == true){
+                KeyBoard[i].setColliding(true);
+                myglove.write(9, 0, 0, 0, 0);
+            }
+            else if(collision_detection(KeyBoard[i], finger1Obj) == true){
+                KeyBoard[i].setColliding(true);
+                myglove.write(0, 9, 0, 0, 0);
+            }
+            else if(collision_detection(KeyBoard[i], finger2Obj) == true){
+                KeyBoard[i].setColliding(true);
+                myglove.write(0, 0, 9, 0, 0);
+            }
+            else if(collision_detection(KeyBoard[i], finger3Obj) == true){
+                KeyBoard[i].setColliding(true);
+                myglove.write(0, 0, 0, 9, 0);
+            }
+            else if(collision_detection(KeyBoard[i], finger4Obj) == true){
+                KeyBoard[i].setColliding(true);
+                myglove.write(0, 0, 0, 0, 9);
+            }
+            else{
+                KeyBoard[i].setColliding(false);
+            
+            }
+     
+        }
+    }
 
 }
 /* This checks to see if the object of the first parameter collides with the object of the second parameter */
@@ -526,6 +554,37 @@ void generateScene(Shader ourShader){
     }
 }
 
+void generateTestScene(Shader ourShader){
+    
+    Target1.setShaderUniforms(ourShader);
+    Target1.setPosition(glm::vec3(-2, 2, -2));
+    Target1.setAABB(0.5); //Must be called after position;
+    Target1.setRotation(glm::vec3(1, 0, 0));
+    Target1.setScale(glm::vec3(0.5, 0.5, 0.5));
+    Target1.setLowerImage("Resources/Textures/Target.png");
+    Target1.setUpperImage("Resources/Textures/Target.png");
+    Target1.generate();
+    
+    Target2.setShaderUniforms(ourShader);
+    Target2.setPosition(glm::vec3(1.5, -1.5, -1));
+    Target2.setAABB(0.5); //Must be called after position;
+    Target2.setRotation(glm::vec3(1, 0, 0));
+    Target2.setScale(glm::vec3(0.5, 0.5, 0.5));
+    Target2.setLowerImage("Resources/Textures/Target.png");
+    Target2.setUpperImage("Resources/Textures/Target.png");
+    Target2.generate();
+    
+    Target3.setShaderUniforms(ourShader);
+    Target3.setPosition(glm::vec3(2, 2, -1));
+    Target3.setAABB(0.5); //Must be called after position;
+    Target3.setRotation(glm::vec3(1, 0, 0));
+    Target3.setScale(glm::vec3(0.5, 0.5, 0.5));
+    Target3.setLowerImage("Resources/Textures/Target.png");
+    Target3.setUpperImage("Resources/Textures/Target.png");
+    Target3.generate();
+    
+    
+}
 // Is called whenever a key is pressed/released via GLFW
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
