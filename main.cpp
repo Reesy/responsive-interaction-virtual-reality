@@ -61,8 +61,8 @@ void SampleListener::onFrame(const Controller& controller) {
     //  std::cout << "Frame available" << std::endl;
 }
 
-
-const GLuint WIDTH = 2560, HEIGHT = 1600;
+const GLuint WIDTH = 800, HEIGHT = 600;
+//const GLuint WIDTH = 2560, HEIGHT = 1600;
 SampleListener listener;
 Controller controller;
 ImageList images;
@@ -190,7 +190,7 @@ int main()
  
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
-    TargetTest = true;
+   // TargetTest = true;
     
     // Init GLFW
     glfwInit();
@@ -203,8 +203,8 @@ int main()
     
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-  //  GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); //windowed
-    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
+   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); //windowed
+ //   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
     glfwMakeContextCurrent(window);
     //usedfor double buffering
     glfwSwapInterval(1);
@@ -418,6 +418,7 @@ void update(){
             }
             else{
                 KeyBoard[i].setColliding(false);
+                myglove.flush();
             
             }
      
@@ -607,7 +608,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-        
+        myglove.flush();
         for(int i = 0; i < 26; i++){
             KeyBoard[i].isUpper = !KeyBoard[i].isUpper;
             KeyBoard[i].update();

@@ -22,7 +22,8 @@ class GloveController{
    
     //initialise the arduino
     GloveController();
-
+    
+    void flush();
     void write(int pin1, int pin2, int pin3, int pin4, int pin5);
 
     void close();

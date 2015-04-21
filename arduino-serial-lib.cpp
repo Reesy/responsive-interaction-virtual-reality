@@ -144,7 +144,7 @@ int arduinoSerialLib::serialport_read_until(int fd, char* buf, char until, int b
 //
 int arduinoSerialLib::serialport_flush(int fd)
 {
-    sleep(2); //required to make flush work, for some reason
+   // sleep(2); //required to make flush work, for some reason
     return tcflush(fd, TCIOFLUSH);
 }
 
