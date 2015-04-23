@@ -29,6 +29,7 @@ class KeyObjects : public SceneObjects{
     
     bool isUpper;
     bool isColliding;
+    bool collideLocked;
     char key, key2;
     
     GLuint VAO, VBO;
@@ -53,8 +54,10 @@ class KeyObjects : public SceneObjects{
     void setShaderUniforms(Shader myShader);
     void setKey(char inLetter, char inLetter2);
     char getKey();
-    bool getColliding();
     
+    bool getColliding();
+    bool getLockState();
+
     void setColliding(bool inCollision);
     void setCase(bool letterCase);
     void setUpperImage(const char* image1);

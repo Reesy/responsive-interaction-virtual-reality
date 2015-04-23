@@ -166,6 +166,7 @@ bool KeyObjects::getColliding(){
 }
 void KeyObjects::setColliding(bool inCollision){
     isColliding = inCollision;
+    collideLocked = inCollision;
 }
 void KeyObjects::setKey(char inChar, char inChar2){
 
@@ -186,6 +187,12 @@ void KeyObjects::setLowerImage(const char* image2){
     this->lowerImagePath = image2;
     
 }
+
+bool KeyObjects::getLockState(){
+    return this->collideLocked;
+}
+
+
 void KeyObjects::setShaderUniforms(Shader ourShader){
     collideLocation = glGetUniformLocation(ourShader.Program, "collide");
     modelLocation = glGetUniformLocation(ourShader.Program, "model");

@@ -90,8 +90,12 @@ float middleX, middleY, middleZ;
 float modelRotX, palmAngle, handRoll;
 float testx, testy, testz;
 
+std::vector< char > buildString;
+
 bool TargetTest = false;
 bool CameraMove = false;
+bool gestureLock = false;
+
 Leap::Matrix rotationMatrix;
 Vector thumbTranslation;
 Vector palmNormal;
@@ -107,7 +111,7 @@ SceneObjects finger4Obj;
 KeyObjects keyA, keyB, keyC, keyD, keyE, keyF, keyG, keyH, keyI, keyJ, keyK, keyL,
 keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, keyZ;
 
-KeyObjects Target1, Target2, Target3, Target4;
+KeyObjects Target1, Target2, Target3, Target4, spaceBar;
 
 const char* lowerCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-q_simple-black_512x512.png",
@@ -137,6 +141,7 @@ const char* lowerCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-n_simple-black_512x512.png",
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-m_simple-black_512x512.png"
 };
+
 
 const char* upperCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_uppercase-letter-q_simple-black_512x512.png",
@@ -351,6 +356,7 @@ int main()
                 KeyBoard[i].Draw(view, projection, sceneShader);
             
             }
+            spaceBar.Draw(view, projection, sceneShader);
         }
         // Swap the screen buffers
         glfwSwapBuffers(window);
@@ -390,38 +396,126 @@ void update(){
             Target4.setColliding(false);
         }
     }else{
-    
+        
+        
+   
+            if(collision_detection(spaceBar, handObj) == true){
+                if(spaceBar.collideLocked == false){
+                    buildString.push_back(spaceBar.getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
+                spaceBar.setColliding(true);
+                
+            }
+            else if(collision_detection(spaceBar, thumbObj) == true){
+                if(spaceBar.collideLocked == false){
+                    buildString.push_back(spaceBar.getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
+                spaceBar.setColliding(true);
+                myglove.write(9, 0, 0, 0, 0);
+                
+            }
+            else if(collision_detection(spaceBar, finger1Obj) == true){
+                if(spaceBar.collideLocked == false){
+                    buildString.push_back(spaceBar.getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
+                spaceBar.setColliding(true);
+                myglove.write(0, 9, 0, 0, 0);
+                
+            }
+            else if(collision_detection(spaceBar, finger2Obj) == true){
+                if(spaceBar.collideLocked == false){
+                    buildString.push_back(spaceBar.getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
+                spaceBar.setColliding(true);
+                myglove.write(0, 0, 9, 0, 0);
+                
+            }
+            else if(collision_detection(spaceBar, finger3Obj) == true){
+                if(spaceBar.collideLocked == false){
+                    buildString.push_back(spaceBar.getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
+                spaceBar.setColliding(true);
+                myglove.write(0, 0, 0, 9, 0);
+                
+            }
+            else if(collision_detection(spaceBar, finger4Obj) == true){
+                if(spaceBar.collideLocked == false){
+                    buildString.push_back(spaceBar.getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
+                spaceBar.setColliding(true);
+                myglove.write(0, 0, 0, 0, 9);
+                
+            }
+            else{
+                spaceBar.setColliding(false);
+            }
+
+        
+        
     
         for(int i = 0; i < 26; i ++){
             if(collision_detection(KeyBoard[i], handObj) == true){
-            KeyBoard[i].setColliding(true);
+                if(KeyBoard[i].collideLocked == false){
+                   buildString.push_back(KeyBoard[i].getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
+                KeyBoard[i].setColliding(true);
+            
             }
             else if(collision_detection(KeyBoard[i], thumbObj) == true){
+                if(KeyBoard[i].collideLocked == false){
+                    buildString.push_back(KeyBoard[i].getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
                 KeyBoard[i].setColliding(true);
                 myglove.write(9, 0, 0, 0, 0);
+                
             }
             else if(collision_detection(KeyBoard[i], finger1Obj) == true){
+                if(KeyBoard[i].collideLocked == false){
+                    buildString.push_back(KeyBoard[i].getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
                 KeyBoard[i].setColliding(true);
                 myglove.write(0, 9, 0, 0, 0);
+              
             }
             else if(collision_detection(KeyBoard[i], finger2Obj) == true){
+                if(KeyBoard[i].collideLocked == false){
+                    buildString.push_back(KeyBoard[i].getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
                 KeyBoard[i].setColliding(true);
                 myglove.write(0, 0, 9, 0, 0);
+              
             }
             else if(collision_detection(KeyBoard[i], finger3Obj) == true){
+                if(KeyBoard[i].collideLocked == false){
+                    buildString.push_back(KeyBoard[i].getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
                 KeyBoard[i].setColliding(true);
                 myglove.write(0, 0, 0, 9, 0);
+                
             }
             else if(collision_detection(KeyBoard[i], finger4Obj) == true){
+                if(KeyBoard[i].collideLocked == false){
+                    buildString.push_back(KeyBoard[i].getKey());
+                    std::cout << buildString.data() << std::endl;
+                }
                 KeyBoard[i].setColliding(true);
                 myglove.write(0, 0, 0, 0, 9);
+                
             }
             else{
                 KeyBoard[i].setColliding(false);
-                myglove.flush();
-            
             }
-     
         }
     }
 
@@ -444,8 +538,8 @@ bool collision_detection(KeyObjects objA, SceneObjects objB){
 float worldToScreen(float xLeap){
     float leapStart = -300.0;
     float leapEnd = 300.0;
-    float AppStart = -4.0;
-    float AppEnd = 4.0;
+    float AppStart = -5.0;
+    float AppEnd = 5.0;
     float leapRange = leapEnd - leapStart;
     float AppRange  = AppEnd - AppStart;
 
@@ -467,6 +561,28 @@ void leapUpdate(){
     HandList hands = frame.hands();
     
     Hand firstHand = hands[0];
+    
+    if(firstHand.pinchStrength() > 0.8 && buildString.size() > 1){
+        if(gestureLock == false){
+           // std::cout << "This is the pinch strength: "<< firstHand.pinchStrength() << std::endl;
+            buildString.pop_back();
+            buildString.shrink_to_fit();
+            std::cout << buildString.data() << std::endl;
+        }
+        gestureLock = true;
+    }else if(firstHand.grabStrength() > 0.8){
+        if(gestureLock == false){
+            for(int i = 0; i < 26; i++){
+                KeyBoard[i].isUpper = !KeyBoard[i].isUpper;
+                KeyBoard[i].update();
+            }
+        }
+        gestureLock = true;
+       
+    }else{
+        gestureLock = false;
+    }
+  
     
     //used for rotation/orientation of the hand
     pitch = firstHand.direction().pitch();
@@ -491,19 +607,19 @@ void leapUpdate(){
     finger4Yaw = firstHand.fingers()[4].direction().yaw();
     
     
-    handObj.setPosition(glm::vec3(worldToScreen(firstHand.palmPosition().x), worldToScreen(firstHand.palmPosition().y - 200), worldToScreen(firstHand.palmPosition().z)));
+    handObj.setPosition(glm::vec3(worldToScreen(firstHand.palmPosition().x), worldToScreen(firstHand.palmPosition().y - 150), worldToScreen(firstHand.palmPosition().z)));
     
-    thumbObj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[0].tipPosition().x), worldToScreen(firstHand.fingers()[0].tipPosition().y - 200), worldToScreen(firstHand.fingers()[0].tipPosition().z)));
+    thumbObj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[0].tipPosition().x), worldToScreen(firstHand.fingers()[0].tipPosition().y - 150), worldToScreen(firstHand.fingers()[0].tipPosition().z)));
     
    
     
-    finger1Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[1].tipPosition().x), worldToScreen(firstHand.fingers()[1].tipPosition().y - 200), worldToScreen(firstHand.fingers()[1].tipPosition().z)));
+    finger1Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[1].tipPosition().x), worldToScreen(firstHand.fingers()[1].tipPosition().y - 150), worldToScreen(firstHand.fingers()[1].tipPosition().z)));
     
-    finger2Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[2].tipPosition().x), worldToScreen(firstHand.fingers()[2].tipPosition().y - 200), worldToScreen(firstHand.fingers()[2].tipPosition().z)));
+    finger2Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[2].tipPosition().x), worldToScreen(firstHand.fingers()[2].tipPosition().y - 150), worldToScreen(firstHand.fingers()[2].tipPosition().z)));
     
-    finger3Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[3].tipPosition().x), worldToScreen(firstHand.fingers()[3].tipPosition().y - 200), worldToScreen(firstHand.fingers()[3].tipPosition().z)));
+    finger3Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[3].tipPosition().x), worldToScreen(firstHand.fingers()[3].tipPosition().y - 150), worldToScreen(firstHand.fingers()[3].tipPosition().z)));
     
-    finger4Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[4].tipPosition().x), worldToScreen(firstHand.fingers()[4].tipPosition().y - 200), worldToScreen(firstHand.fingers()[4].tipPosition().z)));
+    finger4Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[4].tipPosition().x), worldToScreen(firstHand.fingers()[4].tipPosition().y - 150), worldToScreen(firstHand.fingers()[4].tipPosition().z)));
     
     //this resets the AABB to the current position of the hand.
     handObj.setAABB(1);
@@ -534,7 +650,7 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
 //initialise scene
 void generateScene(Shader ourShader){
 
-    float keyPosX = -2.5; // left post position
+    float keyPosX = -2.5; // left most position
     float keyPosY = 1;
     for(int i = 0; i < 26; i++){
         //generates keyboards
@@ -542,7 +658,7 @@ void generateScene(Shader ourShader){
         KeyBoard[i].setPosition(glm::vec3(keyPosX, keyPosY, -2));
         KeyBoard[i].setAABB(0.5); //Must be called after position;
         KeyBoard[i].setRotation(glm::vec3(1, 0, 0));
-        KeyBoard[i].setScale(glm::vec3(0.5, 0.5, 0.5));
+        KeyBoard[i].setScale(glm::vec3(0.4, 0.4, 0.4));
         KeyBoard[i].setKey(LowerKeys[i], UpperKeys[i]);
         KeyBoard[i].setCase(true);
         KeyBoard[i].setLowerImage(lowerCaseImages[i]);
@@ -558,8 +674,21 @@ void generateScene(Shader ourShader){
             //resets key for newline
             keyPosX = -1.8;
         }
-        
     }
+    //space bar
+    
+    spaceBar.setShaderUniforms(ourShader);
+    spaceBar.setPosition(glm::vec3(0, -1, -1));
+    spaceBar.setAABB(0.5); //Must be called after position;
+    spaceBar.setRotation(glm::vec3(1, 0, 0));
+    spaceBar.setScale(glm::vec3(2, 0.4, 0.4));
+    spaceBar.setKey(' ', ' ');
+    spaceBar.setCase(true);
+    spaceBar.setLowerImage("Resources/Textures/space_bar.png");
+    spaceBar.setUpperImage("Resources/Textures/space_bar.png");
+    spaceBar.generate();
+    
+    
 }
 
 void generateTestScene(Shader ourShader){
@@ -608,7 +737,8 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
     if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
-        myglove.flush();
+        
+       
         for(int i = 0; i < 26; i++){
             KeyBoard[i].isUpper = !KeyBoard[i].isUpper;
             KeyBoard[i].update();
