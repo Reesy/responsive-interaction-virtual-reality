@@ -113,6 +113,7 @@ keyM, keyN, keyO,keyP, keyQ, keyR, keyS, keyT, keyU, keyV, keyW, keyX, keyY, key
 
 KeyObjects Target1, Target2, Target3, Target4, spaceBar;
 
+//These link to the lower case letter images required for the keyboard textures.
 const char* lowerCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-q_simple-black_512x512.png",
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-w_simple-black_512x512.png",
@@ -142,7 +143,7 @@ const char* lowerCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_lowercase-letter-m_simple-black_512x512.png"
 };
 
-
+//These link to the upper case letter images required for the keyboard textures.
 const char* upperCaseImages[26] = {
     "Resources/Textures/letterTexture/alphanum_uppercase-letter-q_simple-black_512x512.png",
     "Resources/Textures/letterTexture/alphanum_uppercase-letter-w_simple-black_512x512.png",
@@ -185,17 +186,17 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
                                 'z', 'x', 'c', 'v', 'b', 'n', 'm'};
 
 
-
+//Creates the GloveController object for the system to communicate with the arduino/haptic prototype
 GloveController myglove;
 
-// The MAIN function, from here we start the application and run the game loop
+// The MAIN function, from here we start the application and run the main thread
 int main()
 {
-   // myglove.write(10, 0, 0, 0, 0);
- 
+
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
-   // TargetTest = true;
+   
+    // TargetTest = true; //this is used for the test render scene
     
     // Init GLFW
     glfwInit();
@@ -208,7 +209,7 @@ int main()
     
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", nullptr, nullptr); //windowed
+   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Responsive Interaction in Virtual Reality", nullptr, nullptr); //windowed
  //   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
     glfwMakeContextCurrent(window);
     //usedfor double buffering
@@ -244,7 +245,7 @@ int main()
         generateScene(sceneShader);
     }
         
-    //this sets the camera
+    //this sets the camera orientation
     viewX = 0.0;
     viewY = 0.0;
     viewZ = -3.0;
@@ -257,11 +258,11 @@ int main()
     GLint projLoc = glGetUniformLocation(ourShader.Program, "projection");
     glm::mat4 test;
  
-    // Game loop
+    // main loop
     while (!glfwWindowShouldClose(window)){
         
         glfwPollEvents();
-     //   myglove.write(1, 5, 9, 0, 0);
+
         glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -289,53 +290,48 @@ int main()
 
             if(i == 0){  // Translations done to palm
                 model = glm::translate(model, handObj.getPosition());
-            //    model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
-           
                 worldCoords = model * glm::vec4(0, 0, 0, 1);
-             //   std::cout << worldCoords.x << std::endl;
                 model = model * glm::toMat4(CreateQuat(-yaw, -pitch, -roll));
-                
-                glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-                glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+                glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));  //these commands send the orientation of the hand
+                glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));     // to the shader
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
-                
                 palm.Draw(ourShader);
                 fingerTip.Draw(ourShader);
+            
             }else if(i == 1){  //Translations done to thumb
                 model = glm::translate(model, thumbObj.getPosition());
-          //      model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-thumbYaw, -thumbPitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
-            }else if(i == 2){
+            
+            }else if(i == 2){ //Translation done to finger 1
                 model = glm::translate(model, finger1Obj.getPosition());
-              //  model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger1Yaw, -finger1Pitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
-            }else if ( i == 3 ){
+            
+            }else if ( i == 3 ){ //Translation done to finger 2
                 model = glm::translate(model, finger2Obj.getPosition());
-               // model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger2Yaw, -finger2Pitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
-            }else if(i == 4){
+           
+            }else if(i == 4){ //Translation done to finger 3
                 model = glm::translate(model, finger3Obj.getPosition());
-               // model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger3Yaw, -finger3Pitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
                 glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
                 fingerTip.Draw(ourShader);
-            }else if(i == 5){
+           
+            }else if(i == 5){ //Translation done to finger 4
                 model = glm::translate(model, finger4Obj.getPosition());
-               // model = glm::scale(model, glm::vec3(0.5, 0.5, 0.5));
                 model = model * glm::toMat4(CreateQuat(-finger4Yaw, -finger4Pitch, 0));
                 glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
                 glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
@@ -361,7 +357,6 @@ int main()
         // Swap the screen buffers
         glfwSwapBuffers(window);
     }
-    //glove.close();
     // Terminate GLFW, clearing any resources allocated by GLFW.
     glfwTerminate();
    
@@ -397,8 +392,6 @@ void update(){
         }
     }else{
         
-        
-   
             if(collision_detection(spaceBar, handObj) == true){
                 if(spaceBar.collideLocked == false){
                     buildString.push_back(spaceBar.getKey());
@@ -542,12 +535,9 @@ float worldToScreen(float xLeap){
     float AppEnd = 5.0;
     float leapRange = leapEnd - leapStart;
     float AppRange  = AppEnd - AppStart;
-
     float firstResult = xLeap - leapStart;
     float secondResult = AppRange / leapRange ;
-    
     float finalResult = firstResult * secondResult + AppStart;
-
     return finalResult;
 }
 
@@ -611,8 +601,6 @@ void leapUpdate(){
     
     thumbObj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[0].tipPosition().x), worldToScreen(firstHand.fingers()[0].tipPosition().y - 150), worldToScreen(firstHand.fingers()[0].tipPosition().z)));
     
-   
-    
     finger1Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[1].tipPosition().x), worldToScreen(firstHand.fingers()[1].tipPosition().y - 150), worldToScreen(firstHand.fingers()[1].tipPosition().z)));
     
     finger2Obj.setPosition(glm::vec3(worldToScreen(firstHand.fingers()[2].tipPosition().x), worldToScreen(firstHand.fingers()[2].tipPosition().y - 150), worldToScreen(firstHand.fingers()[2].tipPosition().z)));
@@ -636,12 +624,10 @@ glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
     float fCosRoll(cos(inRoll*0.5f));
     float fCosPitchCosYaw(fCosPitch*fCosYaw);
     float fSinPitchSinYaw(fSinPitch*fSinYaw);
-    
     float X = fSinRoll * fCosPitchCosYaw     - fCosRoll * fSinPitchSinYaw;
     float Y = fCosRoll * fSinPitch * fCosYaw + fSinRoll * fCosPitch * fSinYaw;
     float Z = fCosRoll * fCosPitch * fSinYaw - fSinRoll * fSinPitch * fCosYaw;
     float W = fCosRoll * fCosPitchCosYaw     + fSinRoll * fSinPitchSinYaw;
-    
     glm::quat myQuat(X, Y, Z, W);
     
     return myQuat;

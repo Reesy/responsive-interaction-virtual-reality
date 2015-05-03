@@ -3,11 +3,11 @@ bool currentlyReading = false;
 int result = 0;
 int result2 = 0;
 
-int ledPin1 = 11;
-int ledPin2 = 10;
-int ledPin3 = 9;
-int ledPin4 = 6;
-int ledPin5 = 3;
+int ledPin1 = 11; //sets pin for vibration motor, used for thumb
+int ledPin2 = 10; //sets pin for vibration motor, used for finger1
+int ledPin3 = 9;  //sets pin for vibration motor, used for finger2
+int ledPin4 = 6;  //sets pin for vibration motor, used for finger3
+int ledPin5 = 3;  //sets pin for vibration motor, used for finger4
 int val = 0;   
 int vals[5];
 

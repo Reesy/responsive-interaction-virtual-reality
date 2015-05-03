@@ -3,6 +3,8 @@
 //
 // 2006-2013, Tod E. Kurt, http://todbot.com/blog/
 //
+// modified on 15/04/2015 by James Rees, added openGL wrapper
+
 
 #include "arduino-serial-lib.h"
 

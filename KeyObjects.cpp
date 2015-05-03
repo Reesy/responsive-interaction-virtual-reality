@@ -95,9 +95,6 @@ void KeyObjects::generate(){
 }
 void KeyObjects::update(){
     
-    
-    
-    
     if(this->isUpper == true){
         this->textureFilePath = this->upperImagePath;
     }else{

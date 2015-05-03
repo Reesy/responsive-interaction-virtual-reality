@@ -1,9 +1,7 @@
 /******************************************************
-    I obtained this code from learn-opengl.com on 11/03/2015
-    I saw no need to write my own model loader
-
-******************************************************/
-
+ I obtained this code from learn-opengl.com on 11/03/2015
+ 
+ ******************************************************/
 
 #pragma once
 // Std. Includes
