@@ -77,6 +77,8 @@ glm::vec3 EulerAngles;
 glm::mat4 rotMat;
 glm::mat4 palmRotation;
 
+int currentConfidence;
+
 float viewX, viewY, viewZ;
 float pitch, yaw, roll, handX, handY, handZ;
 float thumbPitch, thumbYaw;
@@ -89,9 +91,9 @@ float indexX, indexY, indexZ;
 float middleX, middleY, middleZ;
 float modelRotX, palmAngle, handRoll;
 float testx, testy, testz;
-
 std::vector< char > buildString;
 
+bool getConfidence = false;
 bool TargetTest = false;
 bool CameraMove = false;
 bool gestureLock = false;
@@ -196,7 +198,7 @@ int main()
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
     controller.addListener(listener);
    
-    // TargetTest = true; //this is used for the test render scene
+    TargetTest = true; //this is used for the test render scene
     
     // Init GLFW
     glfwInit();
@@ -209,7 +211,7 @@ int main()
     
     
     // Create a GLFWwindow object that we can use for GLFW's functions
-   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Responsive Interaction in Virtual Reality", nullptr, nullptr); //windowed
+    GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Responsive Interaction in Virtual Reality", nullptr, nullptr); //windowed
  //   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
     glfwMakeContextCurrent(window);
     //usedfor double buffering
@@ -611,7 +613,9 @@ void leapUpdate(){
     
     //this resets the AABB to the current position of the hand.
     handObj.setAABB(1);
-    
+    if(getConfidence == true){
+        currentConfidence += firstHand.confidence();
+    }
 }
 
 glm::quat CreateQuat(float inPitch, float inYaw, float inRoll){
@@ -724,11 +728,7 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         glfwSetWindowShouldClose(window, GL_TRUE);
     if (key == GLFW_KEY_SPACE && action == GLFW_PRESS){
         
-       
-        for(int i = 0; i < 26; i++){
-            KeyBoard[i].isUpper = !KeyBoard[i].isUpper;
-            KeyBoard[i].update();
-        }
+        getConfidence =! getConfidence;
         
         
     }
@@ -741,9 +741,9 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
         keyA.setPosition(glm::vec3(keyA.getPosition().x, keyA.getPosition().y, keyA.getPosition().z + testz));
     }
     if (key == GLFW_KEY_LEFT && action == GLFW_PRESS){
-        myglove.write(9, 0, 0, 0, 0);
+        std::cout << currentConfidence << std::endl;
     }
     if (key == GLFW_KEY_RIGHT && action == GLFW_PRESS){
-        myglove.write(1, 0, 0, 0, 0);
+        std::cout << currentConfidence << std::endl;
     }
 }
