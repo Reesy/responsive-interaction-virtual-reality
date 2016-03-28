@@ -9,6 +9,7 @@
 #include "KeyObjects.h"
 #include "TextureLoader.h"
 
+
 KeyObjects::KeyObjects(){
     this->collidable = true;
     this->isColliding = false;
@@ -89,8 +90,9 @@ void KeyObjects::generate(){
     
     //Textues are loaded here.
     
-    image = SOIL_load_image(this->textureFilePath, &width, &height, 0, SOIL_LOAD_RGB);
-    SOIL_free_image_data(image);
+   
+	image = stbi_load(this->textureFilePath, &width, &height, 0, 3);
+    stbi_image_free(image);
     this->keyTexture.Generate(width, height, image);
 }
 void KeyObjects::update(){
@@ -105,8 +107,9 @@ void KeyObjects::update(){
     
     //Textues are loaded here.
     
-    image = SOIL_load_image(this->textureFilePath, &width, &height, 0, SOIL_LOAD_RGB);
-    SOIL_free_image_data(image);
+ //   image = SOIL_load_image(this->textureFilePath, &width, &height, 0, SOIL_LOAD_RGB);
+	image = stbi_load(this->textureFilePath, &width, &height, 0, 3);
+	stbi_image_free(image);
     this->keyTexture.Generate(width, height, image);
     
     

@@ -9,7 +9,7 @@
 #include "GloveController.h"
 
 GloveController::GloveController(){
-    port = mySerial.serialport_init("/dev/cu.usbmodem1421", 9600);
+    port = mySerial.serialport_init("/dev/cu.usbmodem1421", 9600); //this may need to be modified to your specific device. 
     sleep(2);
     mySerial.serialport_write(port, ">");
 }
