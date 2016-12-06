@@ -12,7 +12,7 @@
 #include <vector>
 using namespace std;
 // GL Includes
-#include <GL/glew.h> // Contains all the necessery OpenGL includes
+#include <glad/glad.h> // Contains all the necessery OpenGL includes
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <assimp/ai_assert.h>

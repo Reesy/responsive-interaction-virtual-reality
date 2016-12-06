@@ -11,11 +11,11 @@
 
 #include <stdio.h>
 #include "SceneObjects.h"
-#include <GL/glew.h>
+#include <glad/glad.h>
 #include "TextureLoader.h"
 #include <string>
 #include "Shader.h"
-#include <SOIL.h>
+#include <stb_image.h>
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>

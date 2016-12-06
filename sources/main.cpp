@@ -1,13 +1,10 @@
-// GLEW
-#define GLEW_STATIC
-
-#include <GL/glew.h>
+#include <glad/glad.h>
 
 // GLFW
 #include <GLFW/glfw3.h>
 
 // Other Libs
-#include <SOIL.h>
+#include <stb.h>
 
 // Other includes
 #include <iostream>
@@ -192,7 +189,7 @@ char LowerKeys[26] = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
 GloveController myglove;
 
 // The MAIN function, from here we start the application and run the main thread
-int main()
+int main(int argc, char * argv[])
 {
 
     controller.setPolicy(Leap::Controller::POLICY_IMAGES);
@@ -214,15 +211,13 @@ int main()
     GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "Responsive Interaction in Virtual Reality", nullptr, nullptr); //windowed
  //   GLFWwindow* window = glfwCreateWindow(WIDTH, HEIGHT, "LearnOpenGL", glfwGetPrimaryMonitor(), nullptr);
     glfwMakeContextCurrent(window);
+
+	gladLoadGL();
     //usedfor double buffering
     glfwSwapInterval(1);
     // Set the required callback functions
     glfwSetKeyCallback(window, key_callback);
     
-    // Set this to true so GLEW knows to use a modern approach to retrieving fsunction pointers and extensions
-    glewExperimental = GL_TRUE;
-    // Initialize GLEW to setup the OpenGL Function pointers
-    glewInit();
     glEnable(GL_DEPTH_TEST);
     
     int windowWidth, windowHeight;
